@@ -230,37 +230,30 @@ class _PickScreenState extends State<PickScreen> {
                               ),
                             ),
                           ),
-                          ..._fingers.entries.map((entry) {
-                            final id = entry.key;
-                            final selected = _winnerId == id;
-                            final color = _fingerColors[id] ?? paleYellow;
+                          ..._fingers.entries.where((entry) => entry.key != _winnerId).map((entry) {
+                            final color = _fingerColors[entry.key] ?? paleYellow;
                             return Positioned(
-                              left: entry.value.dx - (selected ? 56 : 44),
-                              top: entry.value.dy - (selected ? 56 : 44),
+                              left: entry.value.dx - 44,
+                              top: entry.value.dy - 44,
                               child: IgnorePointer(
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 230),
-                                  width: selected ? 112 : 88,
-                                  height: selected ? 112 : 88,
-                                  decoration: BoxDecoration(
-                                    color: color.withValues(alpha: selected ? .42 : .22),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: color,
-                                      width: selected ? 5 : 3,
+                                child: AnimatedOpacity(
+                                  duration: const Duration(milliseconds: 350),
+                                  opacity: _decided ? .12 : 1,
+                                  child: Container(
+                                    width: 88,
+                                    height: 88,
+                                    decoration: BoxDecoration(
+                                      color: color.withValues(alpha: .22),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: color, width: 3),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: color.withValues(alpha: .16),
+                                          blurRadius: 19,
+                                        ),
+                                      ],
                                     ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: color.withValues(alpha: selected ? .60 : .16),
-                                        blurRadius: selected ? 36 : 19,
-                                        spreadRadius: selected ? 7 : 1,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Icon(
-                                    selected ? Icons.emoji_events : Icons.circle,
-                                    color: color,
-                                    size: selected ? 40 : 18,
+                                    child: Icon(Icons.circle, color: color, size: 18),
                                   ),
                                 ),
                               ),
@@ -302,7 +295,7 @@ class _PickScreenState extends State<PickScreen> {
                                           letterSpacing: -2.0,
                                         )),
                                     const SizedBox(height: 7),
-                                    const Text('Tja. Heute bist du dran.',
+                                    const Text('Der leuchtende Kreis zeigt, wer dran ist.',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Color(0xFFC1BFD5),
@@ -350,7 +343,7 @@ class _PickScreenState extends State<PickScreen> {
                             child: IgnorePointer(
                               child: Text(
                                 _decided
-                                    ? 'Der leuchtende Finger wurde ausgelost.'
+                                    ? 'Der hell markierte Finger muss! Sichtbar bis „Nochmal!“.'
                                     : hasCountdown
                                         ? 'Finger drauflassen, sonst beginnt die Zeit neu.'
                                         : 'Jede Person legt einen Finger auf die Fläche.',
@@ -361,6 +354,45 @@ class _PickScreenState extends State<PickScreen> {
                               ),
                             ),
                           ),
+                          // Draw the winning finger LAST so it cannot be hidden
+                          // behind the centered results card or other fingers.
+                          if (_winnerId != null && _fingers.containsKey(_winnerId))
+                            Positioned(
+                              left: _fingers[_winnerId]!.dx - 66,
+                              top: _fingers[_winnerId]!.dy - 66,
+                              child: IgnorePointer(
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 450),
+                                  curve: Curves.easeOutBack,
+                                  width: 132,
+                                  height: 132,
+                                  decoration: BoxDecoration(
+                                    color: (_fingerColors[_winnerId] ?? paleYellow)
+                                        .withValues(alpha: .88),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: Colors.white, width: 7),
+                                    boxShadow: [
+                                      const BoxShadow(
+                                        color: paleYellow,
+                                        blurRadius: 0,
+                                        spreadRadius: 8,
+                                      ),
+                                      BoxShadow(
+                                        color: (_fingerColors[_winnerId] ?? paleYellow)
+                                            .withValues(alpha: .85),
+                                        blurRadius: 48,
+                                        spreadRadius: 17,
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(
+                                    Icons.star_rounded,
+                                    color: background,
+                                    size: 62,
+                                  ),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),
