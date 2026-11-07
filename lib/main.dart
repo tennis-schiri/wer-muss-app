@@ -104,8 +104,8 @@ class _PickScreenState extends State<PickScreen> {
   }
 
   Offset _inside(Offset point) => Offset(
-        point.dx.clamp(31.0, max(31.0, _stageSize.width - 31)).toDouble(),
-        point.dy.clamp(31.0, max(31.0, _stageSize.height - 31)).toDouble(),
+        point.dx.clamp(45.0, max(45.0, _stageSize.width - 45)).toDouble(),
+        point.dy.clamp(45.0, max(45.0, _stageSize.height - 45)).toDouble(),
       );
 
   void _pointerDown(PointerDownEvent event) {
@@ -235,13 +235,13 @@ class _PickScreenState extends State<PickScreen> {
                             final selected = _winnerId == id;
                             final color = _fingerColors[id] ?? paleYellow;
                             return Positioned(
-                              left: entry.value.dx - (selected ? 43 : 29),
-                              top: entry.value.dy - (selected ? 43 : 29),
+                              left: entry.value.dx - (selected ? 56 : 44),
+                              top: entry.value.dy - (selected ? 56 : 44),
                               child: IgnorePointer(
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 230),
-                                  width: selected ? 86 : 58,
-                                  height: selected ? 86 : 58,
+                                  width: selected ? 112 : 88,
+                                  height: selected ? 112 : 88,
                                   decoration: BoxDecoration(
                                     color: color.withValues(alpha: selected ? .42 : .22),
                                     shape: BoxShape.circle,
@@ -260,7 +260,7 @@ class _PickScreenState extends State<PickScreen> {
                                   child: Icon(
                                     selected ? Icons.emoji_events : Icons.circle,
                                     color: color,
-                                    size: selected ? 35 : 15,
+                                    size: selected ? 40 : 18,
                                   ),
                                 ),
                               ),
