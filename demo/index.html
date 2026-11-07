@@ -14,13 +14,13 @@ html{background:var(--ink)}
 body{margin:0;min-height:100svh;background:radial-gradient(ellipse 65% 24% at 50% 0%,#282544 0%,transparent 100%),var(--ink);color:#fcfbff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
 button{font:inherit;cursor:pointer}
 button:focus-visible{outline:3px solid var(--lavender);outline-offset:3px}
-.app{max-width:550px;margin:0 auto;padding:22px 22px max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0;min-height:100svh}
-.bar{display:flex;justify-content:center;align-items:center;gap:16px;margin:0 0 23px}
+.app{max-width:550px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 16px max(12px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0;height:100svh;height:100dvh;min-height:0}
+.bar{display:flex;justify-content:center;align-items:center;gap:16px;margin:0 0 12px;flex-shrink:0}
 .brand-icon{width:53px;height:53px;object-fit:contain;border-radius:12px;flex:none}
 .wordmark{font-size:29px;font-weight:950;letter-spacing:-.075em}
 .bar-tag{font-size:10px;font-weight:850;letter-spacing:.1em;color:var(--lavender);background:#2e2c4b;border-radius:100px;padding:10px 12px;white-space:nowrap}
 h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-height:1.15;margin:0 0 7px}
-.stage{position:relative;background:#1d1d37;border:1px solid #414058;border-radius:29px;min-height:350px;height:clamp(360px,49svh,490px);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair;isolation:isolate}
+.stage{position:relative;background:#1d1d37;border:1px solid #414058;border-radius:29px;flex:1 1 auto;min-height:0;height:auto;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair;isolation:isolate}
 .stage::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.8;background:radial-gradient(circle at 90% 16%,#3d3857 2.5px,transparent 3.5px),radial-gradient(circle at 13% 80%,#424065 2.5px,transparent 3.5px),radial-gradient(circle at 21% 25%,#424065 2.5px,transparent 3.5px),radial-gradient(circle at 75% 71%,#424065 2.5px,transparent 3.5px),radial-gradient(circle at 54% 15%,#424065 2.5px,transparent 3.5px)}
 .stage-top{position:absolute;left:19px;top:21px;color:#aba8c3;display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.12em;font-weight:850;z-index:2;pointer-events:none}
 .stage-top::before{content:'';width:8px;height:8px;border-radius:100%;background:var(--mint)}
@@ -45,12 +45,12 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 .countdown-choice{border:0;border-radius:999px;padding:10px 14px;background:#292840;color:#e5e2f5;font-size:12px;font-weight:800;min-width:50px}
 .countdown-choice[aria-pressed="true"]{background:var(--lemon);color:var(--ink)}
 .countdown-choice:disabled{opacity:.45;cursor:default}
-.action{display:block;min-height:57px;width:100%;background:var(--lemon);color:var(--ink);border:0;border-radius:17px;margin-top:15px;font-size:14px;font-weight:950;letter-spacing:.03em;transition:transform .2s,filter .2s}
+.action{display:block;flex-shrink:0;min-height:54px;width:100%;background:var(--lemon);color:var(--ink);border:0;border-radius:17px;margin-top:15px;font-size:14px;font-weight:950;letter-spacing:.03em;transition:transform .2s,filter .2s}
 .action:hover{filter:brightness(1.05)}.action:active{transform:scale(.985)}
-.footer{margin-top:13px;text-align:center;font-size:10px;color:#9693af;line-height:1.5}
+.footer{flex-shrink:0;margin-top:8px;text-align:center;font-size:10px;color:#9693af;line-height:1.5}
 .footer .dot{display:inline-block;padding:0 5px;color:var(--lavender)}
-@media(max-width:420px){.app{padding:18px 16px max(18px,env(safe-area-inset-bottom))}.bar{margin-bottom:19px}.bar-tag{font-size:9px;padding:8px 9px}.stage{height:clamp(350px,48svh,440px)}.finger{width:88px;height:88px}}
-@media(max-height:735px){.bar{margin-bottom:14px}.stage{height:clamp(275px,43svh,380px);min-height:275px}.footer{margin-top:8px}}
+@media(max-width:420px){.brand-icon{width:46px;height:46px}.bar{margin-bottom:10px}.wordmark{font-size:25px}.finger{width:88px;height:88px}}
+@media(max-height:735px){.bar{margin-bottom:8px}.countdown-options{margin-bottom:7px}.footer{margin-top:6px}.action{margin-top:9px;min-height:48px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 
 .bar{position:relative}
