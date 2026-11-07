@@ -1,0 +1,25 @@
+name: Flutter prüfen
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  flutter-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Abhängigkeiten installieren
+        run: flutter pub get
+      - name: Quellcode analysieren
+        run: flutter analyze
+      - name: Tests ausführen
+        run: flutter test
