@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import 'selection.dart';
 import 'brand_icon.dart';
+import 'app_information.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -182,21 +183,44 @@ class _PickScreenState extends State<PickScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Wm04bIcon(size: 52),
-                  SizedBox(width: 12),
-                  Flexible(
-                    child: Text(
-                      'WER MUSS?!',
-                      style: TextStyle(
-                          fontSize: 29,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -1.1),
+              SizedBox(
+                height: 56,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Wm04bIcon(size: 48),
+                        SizedBox(width: 9),
+                        Flexible(
+                          child: Text(
+                            'WER MUSS?!',
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -1.1,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    Positioned(
+                      right: 0,
+                      child: IconButton(
+                        tooltip: 'Anleitung und rechtliche Hinweise',
+                        icon: const Icon(Icons.info_outline, color: paleYellow),
+                        onPressed: _fingers.isNotEmpty && !_decided
+                            ? null
+                            : () => Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => const AppInformationPage(),
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 12),
               Row(
