@@ -52,12 +52,6 @@ class _PickScreenState extends State<PickScreen> {
   static const blue = Color(0xFF85B9FF);
   static const playerColors = [paleYellow, lavender, salmon, mint, blue];
   static const duration = Duration(seconds: 3);
-  static const tasks = [
-    'Wer muss?',
-    'Wer zahlt?',
-    'Wer holt Snacks?',
-    'Wer räumt auf?',
-  ];
 
   final _rng = Random.secure();
   final Map<int, Offset> _fingers = {};
@@ -67,7 +61,6 @@ class _PickScreenState extends State<PickScreen> {
   double _remaining = 3;
   int? _winnerId;
   bool _demoMode = false;
-  String _task = tasks.first;
   Size _stageSize = const Size(360, 360);
   int _nextColorIndex = 0;
 
@@ -153,12 +146,6 @@ class _PickScreenState extends State<PickScreen> {
     });
   }
 
-  void _chooseTask(String task) {
-    if (_task == task) return;
-    _reset();
-    setState(() => _task = task);
-  }
-
   void _startDemo() {
     if (_decided || _fingers.isNotEmpty) _reset();
     final w = _stageSize.width;
@@ -192,68 +179,14 @@ class _PickScreenState extends State<PickScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('WER MUSS?!',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -0.7)),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 11, vertical: 7),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: const Color(0xFF2D2C46)),
-                    child: const Text('100 % ZUFALL',
-                        style: TextStyle(
-                            color: lavender,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 1)),
-                  ),
-                ],
+              const Center(
+                child: Text('WER MUSS?!',
+                    style: TextStyle(
+                        fontSize: 29,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -1.1)),
               ),
-              const SizedBox(height: 19),
-              const Text('Die Frage aller Fragen.',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 27,
-                    letterSpacing: -1.1,
-                  )),
-              const SizedBox(height: 5),
-              const Text('Thema wählen. Finger drauf. Schicksal abwarten.',
-                  style: TextStyle(color: Color(0xFFBBB9D0), fontSize: 12)),
-              const SizedBox(height: 19),
-              SizedBox(
-                height: 43,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: tasks.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 8),
-                  itemBuilder: (_, i) {
-                    final task = tasks[i];
-                    final selected = _task == task;
-                    return OutlinedButton(
-                      onPressed: () => _chooseTask(task),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor:
-                            selected ? background : const Color(0xFFDDDBEA),
-                        backgroundColor:
-                            selected ? paleYellow : const Color(0xFF25253D),
-                        side: BorderSide.none,
-                        shape: const StadiumBorder(),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                      ),
-                      child: Text(task,
-                          style: const TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w700)),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
               Expanded(
                 child: LayoutBuilder(builder: (context, bounds) {
                   _stageSize = bounds.biggest;
@@ -369,9 +302,9 @@ class _PickScreenState extends State<PickScreen> {
                                           letterSpacing: -2.0,
                                         )),
                                     const SizedBox(height: 7),
-                                    Text(_task,
+                                    const Text('Tja. Heute bist du dran.',
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             color: Color(0xFFC1BFD5),
                                             fontSize: 12)),
                                   ] else if (hasCountdown) ...[
