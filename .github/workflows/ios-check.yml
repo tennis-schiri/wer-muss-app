@@ -1,0 +1,45 @@
+name: iPhone-Build prüfen (manuell)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ios-check:
+    name: Flutter iOS ohne Signierung bauen
+    runs-on: macos-latest
+    timeout-minutes: 35
+    steps:
+      - name: Repository laden
+        uses: actions/checkout@v4
+
+      - name: Flutter bereitstellen
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Abhängigkeiten laden
+        run: flutter pub get
+
+      - name: Fehlende iOS-Projektdateien erzeugen
+        run: flutter create --platforms=ios --project-name wer_muss .
+
+      - name: Dart-Code analysieren
+        run: flutter analyze
+
+      - name: Tests ausführen
+        run: flutter test
+
+      - name: iPhone-Simulator-Version bauen
+        run: flutter build ios --simulator --debug
+
+      - name: Simulator-Build für Fehlersuche bereitstellen
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wer-muss-ios-simulator
+          path: build/ios/iphonesimulator/Runner.app
+          retention-days: 7
