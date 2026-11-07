@@ -52,11 +52,29 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 @media(max-width:420px){.app{padding:18px 16px max(18px,env(safe-area-inset-bottom))}.bar{margin-bottom:19px}.bar-tag{font-size:9px;padding:8px 9px}.stage{height:clamp(350px,48svh,440px)}.finger{width:88px;height:88px}}
 @media(max-height:735px){.bar{margin-bottom:14px}.stage{height:clamp(275px,43svh,380px);min-height:275px}.footer{margin-top:8px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+
+.bar{position:relative}
+.info-open{position:absolute;right:0;top:8px;width:38px;height:38px;border:1px solid #575475;border-radius:50%;background:#292840;color:var(--lemon);font-size:19px;font-weight:900;display:grid;place-items:center}
+.info-modal{position:fixed;inset:0;z-index:100;background:rgba(8,8,21,.85);display:flex;justify-content:center;align-items:center;padding:15px}
+.info-modal[hidden]{display:none}
+.info-card{position:relative;width:min(100%,460px);max-height:90svh;overflow:auto;background:#1d1d37;border:1px solid #55516d;border-radius:22px;padding:22px;color:#f9f8ff;box-shadow:0 22px 90px #0009}
+.info-card h2{font-size:25px;letter-spacing:-.04em;margin:0 42px 18px 0}
+.info-card h3{color:var(--lemon);font-size:15px;margin:20px 0 7px}
+.info-card p,.info-card li{font-size:13px;color:#d0cde0;line-height:1.65}
+.info-card ol{padding-left:20px}
+.info-card a{color:var(--lemon)}
+.info-close{position:absolute;top:14px;right:15px;border:0;background:#32314b;color:white;width:38px;height:38px;border-radius:50%;font-size:20px}
+.info-tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.info-tabs button{padding:10px 7px;background:#302e49;color:#f8f7ff;border:1px solid #575371;border-radius:11px;font-size:12px;font-weight:750}
+.info-tabs button[aria-selected=true]{background:var(--lemon);border-color:var(--lemon);color:var(--ink)}
+.info-panel[hidden]{display:none}
+.legal-warning{border-left:3px solid var(--salmon);padding:9px 12px;background:#352d3e;border-radius:6px}
+
 </style>
 </head>
 <body>
 <main class="app">
-  <header class="bar"><img class="brand-icon" src="./wm04b-logo.svg" alt="Wer muss?! Logo" width="53" height="53"><div class="wordmark">WER MUSS?!</div></header>
+  <header class="bar"><img class="brand-icon" src="./wm04b-logo.svg" alt="Wer muss?! Logo" width="53" height="53"><div class="wordmark">WER MUSS?!</div><button type="button" class="info-open" id="info-open" aria-label="Info und rechtliche Hinweise">i</button></header>
   <div class="countdown-options" role="group" aria-label="Countdown auswählen">
     <span class="countdown-label">Countdown:</span>
     <button class="countdown-choice" data-seconds="3" aria-pressed="true" type="button">3 s</button>
@@ -75,6 +93,43 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
   <button id="action" class="action" type="button">ALLEIN TESTEN · 4 FINGER</button>
   <div class="footer">Kein Login <span class="dot">•</span> Keine Werbung <span class="dot">•</span> Nur eine Entscheidung</div>
 </main>
+
+<div class="info-modal" id="info-modal" hidden>
+  <section class="info-card" role="dialog" aria-modal="true" aria-labelledby="info-title">
+    <button class="info-close" type="button" id="info-close" aria-label="Schließen">×</button>
+    <h2 id="info-title">Wer muss?! – Infos</h2>
+    <div class="info-tabs" role="tablist">
+      <button type="button" data-info-tab="help" aria-selected="true">Anleitung</button>
+      <button type="button" data-info-tab="legal" aria-selected="false">Impressum</button>
+      <button type="button" data-info-tab="privacy" aria-selected="false">Datenschutz</button>
+      <button type="button" data-info-tab="about" aria-selected="false">Über die App</button>
+    </div>
+    <div class="info-panel" data-info-panel="help">
+      <h3>So funktioniert's</h3>
+      <ol><li>Mindestens zwei Personen legen je einen Finger auf die Spielfläche.</li><li>Alle Finger bleiben während des Countdowns auf dem Display.</li><li>Wähle vor dem Start zwischen 3, 5 oder 10 Sekunden.</li><li>Der hell leuchtende Kreis markiert die zufällig ausgewählte Person.</li><li>Das Ergebnis bleibt bis „Nochmal!“ sichtbar.</li></ol>
+      <p>Die mögliche Anzahl gleichzeitig erkannter Finger hängt von deinem Gerät ab. Beim Hinzufügen oder Entfernen eines Fingers während des Countdowns beginnt dieser erneut.</p>
+    </div>
+    <div class="info-panel" data-info-panel="legal" hidden>
+      <h3>Impressum</h3>
+      <p><strong>Anbieter:</strong> Michael Wiedeck</p>
+      <p class="legal-warning">Entwurf: Die vollständige ladungsfähige Anschrift und bestätigte Kontaktangaben müssen vor einer öffentlichen Store-Veröffentlichung ergänzt und geprüft werden.</p>
+      <p>Weitere Informationen zum Anbieter: <a href="https://wiedeck.de/" target="_blank" rel="noopener noreferrer">wiedeck.de</a></p>
+    </div>
+    <div class="info-panel" data-info-panel="privacy" hidden>
+      <h3>Datenschutzhinweise – Entwurf</h3>
+      <p><strong>Verantwortlicher:</strong> Michael Wiedeck. Die vollständigen Kontaktangaben werden vor Veröffentlichung ergänzt.</p>
+      <p>Die geplante native App verarbeitet Berührungspunkte nur vorübergehend auf deinem Gerät, um zufällig eine Person auszulosen. Nach dem Neustart der Runde werden diese Daten verworfen. Eine Registrierung, ein eigenes Nutzerkonto, Werbung, Analyse-Tracking oder eine Übermittlung dieser Spieldaten an eigene Server sind nicht vorgesehen.</p>
+      <p>Bei der Nutzung dieser Browser-Testseite können durch den Hosting-Anbieter technisch notwendige Verbindungsdaten (etwa die IP-Adresse) verarbeitet werden. Art und Dauer der Speicherung sowie mögliche weitere Dienste werden vor der Veröffentlichung geprüft.</p>
+      <p class="legal-warning">Diese Fassung ist noch keine abschließend geprüfte Datenschutzerklärung für die App-Stores.</p>
+    </div>
+    <div class="info-panel" data-info-panel="about" hidden>
+      <h3>Über Wer muss?!</h3>
+      <p>Eine kleine Zufalls-App für die ganz großen Fragen. Ohne Anmeldung und ohne Werbung: Finger drauf, Countdown abwarten und schauen, wen es trifft.</p>
+      <p>Version: Prototyp v0.2 · Logo WM04b</p>
+    </div>
+  </section>
+</div>
+
 <script>
 (() => {
   'use strict';
@@ -228,6 +283,28 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
       render();
     });
   });
+
+  const infoModal = document.getElementById('info-modal');
+  const infoOpen = document.getElementById('info-open');
+  const infoClose = document.getElementById('info-close');
+  const infoTabs = [...document.querySelectorAll('[data-info-tab]')];
+  infoOpen.addEventListener('click', () => {
+    if (points.size > 0 && winner === null) return;
+    infoModal.hidden = false;
+    infoClose.focus();
+  });
+  function closeInfo() { infoModal.hidden = true; infoOpen.focus(); }
+  infoClose.addEventListener('click', closeInfo);
+  infoModal.addEventListener('click', e => { if (e.target === infoModal) closeInfo(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !infoModal.hidden) closeInfo();
+  });
+  infoTabs.forEach(tab => tab.addEventListener('click', () => {
+    infoTabs.forEach(item => item.setAttribute('aria-selected', String(item === tab)));
+    document.querySelectorAll('[data-info-panel]').forEach(panel => {
+      panel.hidden = panel.dataset.infoPanel !== tab.dataset.infoTab;
+    });
+  }));
   render();
 })();
 </script>
