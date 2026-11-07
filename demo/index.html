@@ -34,8 +34,10 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 .stage-center .result{font-size:clamp(40px,11vw,67px);color:var(--lemon)}
 .finger{position:absolute;width:88px;height:88px;transform:translate(-50%,-50%);border-radius:100%;z-index:4;pointer-events:none;display:grid;place-items:center;border:3px solid var(--finger-color);background:color-mix(in srgb,var(--finger-color) 22%,transparent);box-shadow:0 0 24px color-mix(in srgb,var(--finger-color) 25%,transparent);transition:width .25s,height .25s,box-shadow .25s,background .25s}
 .finger::after{content:'';width:12px;height:12px;background:var(--finger-color);border-radius:100%}
-.finger.winner{width:112px;height:112px;border-width:5px;background:color-mix(in srgb,var(--finger-color) 40%,transparent);box-shadow:0 0 42px color-mix(in srgb,var(--finger-color) 85%,transparent),0 0 0 14px color-mix(in srgb,var(--finger-color) 14%,transparent)}
-.finger.winner::after{content:'★';background:none;width:auto;height:auto;font-size:40px;font-weight:900;color:var(--finger-color)}
+.finger.winner{z-index:10;width:132px;height:132px;border:7px solid #fff;background:color-mix(in srgb,var(--finger-color) 78%,#101124);box-shadow:0 0 0 8px var(--lemon),0 0 0 20px color-mix(in srgb,var(--finger-color) 30%,transparent),0 0 62px 26px var(--finger-color);animation:winner-pop .8s ease-out}
+.finger.winner::after{content:'★';background:none;width:auto;height:auto;font-size:57px;font-weight:900;color:#111224;text-shadow:0 1px 0 #fff}
+@keyframes winner-pop{0%{scale:.75;filter:brightness(1.7)}60%{scale:1.15;filter:brightness(1.4)}100%{scale:1;filter:brightness(1)}}
+.finger.not-winner{opacity:.13;filter:grayscale(1)}
 .action{display:block;min-height:57px;width:100%;background:var(--lemon);color:var(--ink);border:0;border-radius:17px;margin-top:15px;font-size:14px;font-weight:950;letter-spacing:.03em;transition:transform .2s,filter .2s}
 .action:hover{filter:brightness(1.05)}.action:active{transform:scale(.985)}
 .footer{margin-top:13px;text-align:center;font-size:10px;color:#9693af;line-height:1.5}
@@ -99,7 +101,7 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
     layer.replaceChildren();
     for (const [id, finger] of points) {
       const el = document.createElement('div');
-      el.className = 'finger' + (id === winner ? ' winner' : '');
+      el.className = 'finger' + (id === winner ? ' winner' : (winner !== null ? ' not-winner' : ''));
       el.style.setProperty('--finger-color', finger.color);
       el.style.left = finger.x + 'px';
       el.style.top = finger.y + 'px';
@@ -112,8 +114,8 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
     stageTop.textContent = `SPIELFLÄCHE / ${points.size} FINGER`;
     stageCenter.classList.toggle('decided', winner !== null);
     if (winner !== null) {
-      stageCenter.innerHTML = '<div class="overline">DAS LOS HAT ENTSCHIEDEN</div><h2 class="result">DU MUSST!</h2><p class="tip">Tja. Heute bist du dran.</p>';
-      stageBottom.textContent = 'Der leuchtende Finger wurde ausgelost.';
+      stageCenter.innerHTML = '<div class="overline">DAS LOS HAT ENTSCHIEDEN</div><h2 class="result">DU MUSST!</h2><p class="tip">Der leuchtende Kreis zeigt, wer dran ist.</p>';
+      stageBottom.textContent = 'Der hell markierte Finger muss! Das Ergebnis bleibt bis „Nochmal!“ sichtbar.';
       action.textContent = 'NOCHMAL! ↻';
     } else if (points.size >= 2) {
       stageCenter.innerHTML = `<div class="overline">NICHT LOSLASSEN</div><div class="count">${Math.ceil(remaining / 1000)}</div>`;
