@@ -51,7 +51,9 @@ class _PickScreenState extends State<PickScreen> {
   static const mint = Color(0xFF71E6C8);
   static const blue = Color(0xFF85B9FF);
   static const playerColors = [paleYellow, lavender, salmon, mint, blue];
-  static const duration = Duration(seconds: 3);
+  static const countdownOptions = [3, 5, 10];
+  int _countdownSeconds = 3;
+  Duration get duration => Duration(seconds: _countdownSeconds);
 
   final _rng = Random.secure();
   final Map<int, Offset> _fingers = {};
@@ -76,7 +78,7 @@ class _PickScreenState extends State<PickScreen> {
     _ticker?.cancel();
     _ticker = null;
     _startedAt = null;
-    _remaining = 3;
+    _remaining = _countdownSeconds;
     if (_fingers.length < 2 || _decided) return;
     _startedAt = DateTime.now();
     _ticker = Timer.periodic(const Duration(milliseconds: 50), _advance);
@@ -141,7 +143,7 @@ class _PickScreenState extends State<PickScreen> {
       _winnerId = null;
       _demoMode = false;
       _startedAt = null;
-      _remaining = 3;
+      _remaining = _countdownSeconds;
       _nextColorIndex = 0;
     });
   }
@@ -186,7 +188,42 @@ class _PickScreenState extends State<PickScreen> {
                         fontWeight: FontWeight.w900,
                         letterSpacing: -1.1)),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Countdown:',
+                      style: TextStyle(
+                          fontSize: 12, color: Color(0xFFBBB9D0))),
+                  const SizedBox(width: 10),
+                  for (final seconds in countdownOptions) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3),
+                      child: ChoiceChip(
+                        label: Text('$seconds s'),
+                        selected: _countdownSeconds == seconds,
+                        onSelected: _fingers.isNotEmpty
+                            ? null
+                            : (_) => setState(() {
+                                  _countdownSeconds = seconds;
+                                  _remaining = seconds.toDouble();
+                                }),
+                        showCheckmark: false,
+                        selectedColor: paleYellow,
+                        backgroundColor: const Color(0xFF25253D),
+                        labelStyle: TextStyle(
+                          color: _countdownSeconds == seconds
+                              ? background
+                              : const Color(0xFFDDDBEA),
+                          fontWeight: FontWeight.w800,
+                        ),
+                        side: BorderSide.none,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 12),
               Expanded(
                 child: LayoutBuilder(builder: (context, bounds) {
                   _stageSize = bounds.biggest;
