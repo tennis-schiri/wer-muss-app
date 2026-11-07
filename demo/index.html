@@ -38,6 +38,11 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 .finger.winner::after{content:'★';background:none;width:auto;height:auto;font-size:57px;font-weight:900;color:#111224;text-shadow:0 1px 0 #fff}
 @keyframes winner-pop{0%{scale:.75;filter:brightness(1.7)}60%{scale:1.15;filter:brightness(1.4)}100%{scale:1;filter:brightness(1)}}
 .finger.not-winner{opacity:.13;filter:grayscale(1)}
+.countdown-options{display:flex;justify-content:center;align-items:center;gap:8px;margin:0 0 12px}
+.countdown-label{font-size:12px;color:#bebbd2;margin-right:4px}
+.countdown-choice{border:0;border-radius:999px;padding:10px 14px;background:#292840;color:#e5e2f5;font-size:12px;font-weight:800;min-width:50px}
+.countdown-choice[aria-pressed="true"]{background:var(--lemon);color:var(--ink)}
+.countdown-choice:disabled{opacity:.45;cursor:default}
 .action{display:block;min-height:57px;width:100%;background:var(--lemon);color:var(--ink);border:0;border-radius:17px;margin-top:15px;font-size:14px;font-weight:950;letter-spacing:.03em;transition:transform .2s,filter .2s}
 .action:hover{filter:brightness(1.05)}.action:active{transform:scale(.985)}
 .footer{margin-top:13px;text-align:center;font-size:10px;color:#9693af;line-height:1.5}
@@ -50,6 +55,12 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 <body>
 <main class="app">
   <header class="bar"><div class="wordmark">WER MUSS?!</div></header>
+  <div class="countdown-options" role="group" aria-label="Countdown auswählen">
+    <span class="countdown-label">Countdown:</span>
+    <button class="countdown-choice" data-seconds="3" aria-pressed="true" type="button">3 s</button>
+    <button class="countdown-choice" data-seconds="5" aria-pressed="false" type="button">5 s</button>
+    <button class="countdown-choice" data-seconds="10" aria-pressed="false" type="button">10 s</button>
+  </div>
   <div class="stage" id="stage" aria-label="Spielfläche: Hier mindestens zwei Finger gleichzeitig auflegen">
     <div class="stage-top" id="stage-top">SPIELFLÄCHE / 0 FINGER</div>
     <div class="stage-center" id="stage-center" aria-live="polite">
@@ -78,7 +89,8 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
   let timer = null;
   let winner = null;
   let demo = false;
-  const duration = 3000;
+  let duration = 3000;
+  const countdownChoices = [...document.querySelectorAll('[data-seconds]')];
 
   function randomIndex(size) {
     if (globalThis.crypto && crypto.getRandomValues) {
@@ -112,6 +124,7 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 
   function render(remaining = duration) {
     stageTop.textContent = `SPIELFLÄCHE / ${points.size} FINGER`;
+    countdownChoices.forEach(button => { button.disabled = points.size > 0; });
     stageCenter.classList.toggle('decided', winner !== null);
     if (winner !== null) {
       stageCenter.innerHTML = '<div class="overline">DAS LOS HAT ENTSCHIEDEN</div><h2 class="result">DU MUSST!</h2><p class="tip">Der leuchtende Kreis zeigt, wer dran ist.</p>';
@@ -203,6 +216,15 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
       points.set(-idx - 1, {x:x*w, y:y*h, color:palette[idx]});
     });
     restartCountdown();
+  });
+  countdownChoices.forEach(button => {
+    button.addEventListener('click', () => {
+      if (points.size > 0) return;
+      duration = Number(button.dataset.seconds) * 1000;
+      countdownChoices.forEach(choice =>
+        choice.setAttribute('aria-pressed', String(choice === button)));
+      render();
+    });
   });
   render();
 })();
