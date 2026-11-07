@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'selection.dart';
+import 'brand_icon.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -181,12 +182,21 @@ class _PickScreenState extends State<PickScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Center(
-                child: Text('WER MUSS?!',
-                    style: TextStyle(
-                        fontSize: 29,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -1.1)),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Wm04bIcon(size: 52),
+                  SizedBox(width: 12),
+                  Flexible(
+                    child: Text(
+                      'WER MUSS?!',
+                      style: TextStyle(
+                          fontSize: 29,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -1.1),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               Row(
