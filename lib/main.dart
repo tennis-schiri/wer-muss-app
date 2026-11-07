@@ -78,7 +78,7 @@ class _PickScreenState extends State<PickScreen> {
     _ticker?.cancel();
     _ticker = null;
     _startedAt = null;
-    _remaining = _countdownSeconds;
+    _remaining = _countdownSeconds.toDouble();
     if (_fingers.length < 2 || _decided) return;
     _startedAt = DateTime.now();
     _ticker = Timer.periodic(const Duration(milliseconds: 50), _advance);
@@ -143,7 +143,7 @@ class _PickScreenState extends State<PickScreen> {
       _winnerId = null;
       _demoMode = false;
       _startedAt = null;
-      _remaining = _countdownSeconds;
+      _remaining = _countdownSeconds.toDouble();
       _nextColorIndex = 0;
     });
   }
