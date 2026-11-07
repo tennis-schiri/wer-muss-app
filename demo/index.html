@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111224">
+<meta name="description" content="Wer muss?! – Mini-App-Prototyp mit Multitouch und Zufallsauswahl.">
+<title>Wer muss?! — Interaktive Demo</title>
+<style>
+:root{--ink:#111224;--panel:#1d1d37;--lemon:#f5f36d;--lavender:#b6a5ff;--mint:#71e6c8;--salmon:#ff9288;--blue:#85b9ff;--muted:#adaac7}
+*{box-sizing:border-box}
+html{background:var(--ink)}
+body{margin:0;min-height:100svh;background:radial-gradient(ellipse 65% 24% at 50% 0%,#282544 0%,transparent 100%),var(--ink);color:#fcfbff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--lavender);outline-offset:3px}
+.app{max-width:550px;margin:0 auto;padding:22px 22px max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0;min-height:100svh}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:0 0 23px}
+.wordmark{font-size:20px;font-weight:950;letter-spacing:-.075em}
+.bar-tag{font-size:10px;font-weight:850;letter-spacing:.1em;color:var(--lavender);background:#2e2c4b;border-radius:100px;padding:10px 12px;white-space:nowrap}
+h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-height:1.15;margin:0 0 7px}
+.subtitle{color:#bebbd2;font-size:13px;line-height:1.55;margin:0 0 23px}
+.task-list{display:flex;gap:8px;overflow-x:auto;white-space:nowrap;padding:0 0 19px;scrollbar-width:none}
+.task-list::-webkit-scrollbar{display:none}
+.task{border:0;border-radius:999px;padding:13px 17px;background:#292840;color:#e5e2f5;font-size:12px;font-weight:750;flex:none;transition:background .18s,transform .18s}
+.task[aria-pressed=true]{background:var(--lemon);color:var(--ink)}
+.task:active{transform:scale(.98)}
+.stage{position:relative;background:#1d1d37;border:1px solid #414058;border-radius:29px;min-height:350px;height:clamp(360px,49svh,490px);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair;isolation:isolate}
+.stage::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.8;background:radial-gradient(circle at 90% 16%,#3d3857 2.5px,transparent 3.5px),radial-gradient(circle at 13% 80%,#424065 2.5px,transparent 3.5px),radial-gradient(circle at 21% 25%,#424065 2.5px,transparent 3.5px),radial-gradient(circle at 75% 71%,#424065 2.5px,transparent 3.5px),radial-gradient(circle at 54% 15%,#424065 2.5px,transparent 3.5px)}
+.stage-top{position:absolute;left:19px;top:21px;color:#aba8c3;display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.12em;font-weight:850;z-index:2;pointer-events:none}
+.stage-top::before{content:'';width:8px;height:8px;border-radius:100%;background:var(--mint)}
+.stage-bottom{position:absolute;bottom:21px;left:15px;right:15px;text-align:center;font-size:11px;color:#a8a5be;pointer-events:none;z-index:3}
+.stage-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:44px 24px 50px;pointer-events:none;z-index:5}
+.stage-center.decided{isolation:isolate}
+.stage-center.decided::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92%,390px);height:151px;border-radius:22px;background:rgba(17,18,36,.94);border:1px solid #45445c;box-shadow:0 14px 40px rgba(0,0,0,.2);z-index:-1;pointer-events:none}
+.stage-center .overline{color:var(--lavender);font-weight:900;font-size:11px;letter-spacing:.16em;margin:0 0 13px}
+.stage-center h2{margin:0;font-size:clamp(30px,8vw,44px);font-weight:950;letter-spacing:-.065em;line-height:1.05}
+.stage-center .yellow{color:var(--lemon)}
+.stage-center .tip{margin:17px 0 0;color:#c1bfd5;font-size:13px}
+.stage-center .count{font-weight:950;font-size:clamp(105px,25vw,130px);color:var(--lemon);line-height:.9;letter-spacing:-.09em}
+.stage-center .result{font-size:clamp(40px,11vw,67px);color:var(--lemon)}
+.finger{position:absolute;width:65px;height:65px;transform:translate(-50%,-50%);border-radius:100%;z-index:4;pointer-events:none;display:grid;place-items:center;border:3px solid var(--finger-color);background:color-mix(in srgb,var(--finger-color) 22%,transparent);box-shadow:0 0 24px color-mix(in srgb,var(--finger-color) 25%,transparent);transition:width .25s,height .25s,box-shadow .25s,background .25s}
+.finger::after{content:'';width:12px;height:12px;background:var(--finger-color);border-radius:100%}
+.finger.winner{width:101px;height:101px;border-width:5px;background:color-mix(in srgb,var(--finger-color) 40%,transparent);box-shadow:0 0 42px color-mix(in srgb,var(--finger-color) 85%,transparent),0 0 0 14px color-mix(in srgb,var(--finger-color) 14%,transparent)}
+.finger.winner::after{content:'★';background:none;width:auto;height:auto;font-size:40px;font-weight:900;color:var(--finger-color)}
+.action{display:block;min-height:57px;width:100%;background:var(--lemon);color:var(--ink);border:0;border-radius:17px;margin-top:15px;font-size:14px;font-weight:950;letter-spacing:.03em;transition:transform .2s,filter .2s}
+.action:hover{filter:brightness(1.05)}.action:active{transform:scale(.985)}
+.footer{margin-top:13px;text-align:center;font-size:10px;color:#9693af;line-height:1.5}
+.footer .dot{display:inline-block;padding:0 5px;color:var(--lavender)}
+@media(max-width:420px){.app{padding:18px 16px max(18px,env(safe-area-inset-bottom))}.bar{margin-bottom:19px}.bar-tag{font-size:9px;padding:8px 9px}.subtitle{margin-bottom:20px}.stage{height:clamp(350px,48svh,440px)}.task{padding:12px 14px}.finger{width:58px;height:58px}}
+@media(max-height:735px){.bar{margin-bottom:14px}.subtitle{margin-bottom:15px}.task-list{padding-bottom:13px}.stage{height:clamp(275px,43svh,380px);min-height:275px}.footer{margin-top:8px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="bar"><div class="wordmark">WER MUSS?!</div><div class="bar-tag">100 % ZUFALL</div></header>
+  <h1>Die Frage aller Fragen.</h1>
+  <p class="subtitle">Thema wählen. Finger drauf. Schicksal abwarten.</p>
+  <div class="task-list" aria-label="Thema auswählen">
+    <button type="button" class="task" aria-pressed="true" data-task="Wer muss?">Wer muss?</button>
+    <button type="button" class="task" aria-pressed="false" data-task="Wer zahlt?">Wer zahlt?</button>
+    <button type="button" class="task" aria-pressed="false" data-task="Wer holt Snacks?">Wer holt Snacks?</button>
+    <button type="button" class="task" aria-pressed="false" data-task="Wer räumt auf?">Wer räumt auf?</button>
+  </div>
+  <div class="stage" id="stage" aria-label="Spielfläche: Hier mindestens zwei Finger gleichzeitig auflegen">
+    <div class="stage-top" id="stage-top">SPIELFLÄCHE / 0 FINGER</div>
+    <div class="stage-center" id="stage-center" aria-live="polite">
+      <h2>ALLE FINGER<br><span class="yellow">AUFS DISPLAY!</span></h2>
+      <p class="tip">Mindestens zwei Personen</p>
+    </div>
+    <div class="stage-bottom" id="stage-bottom">Jede Person legt einen Finger auf die Fläche.</div>
+    <div id="finger-layer" aria-hidden="true"></div>
+  </div>
+  <button id="action" class="action" type="button">ALLEIN TESTEN · 4 FINGER</button>
+  <div class="footer">Kein Login <span class="dot">•</span> Keine Werbung <span class="dot">•</span> Nur eine Entscheidung</div>
+</main>
+<script>
+(() => {
+  'use strict';
+  const stage = document.getElementById('stage');
+  const stageTop = document.getElementById('stage-top');
+  const stageCenter = document.getElementById('stage-center');
+  const stageBottom = document.getElementById('stage-bottom');
+  const layer = document.getElementById('finger-layer');
+  const action = document.getElementById('action');
+  const tasks = [...document.querySelectorAll('[data-task]')];
+  const palette = ['#f5f36d', '#b6a5ff', '#ff9288', '#71e6c8', '#85b9ff'];
+  const points = new Map();
+  let task = 'Wer muss?';
+  let nextColor = 0;
+  let startedAt = null;
+  let timer = null;
+  let winner = null;
+  let demo = false;
+  const duration = 3000;
+
+  function randomIndex(size) {
+    if (globalThis.crypto && crypto.getRandomValues) {
+      const max = 0x100000000;
+      const limit = Math.floor(max / size) * size;
+      const buff = new Uint32Array(1);
+      do { crypto.getRandomValues(buff); } while (buff[0] >= limit);
+      return buff[0] % size;
+    }
+    return Math.floor(Math.random() * size);
+  }
+
+  function stopTimer() {
+    if (timer !== null) clearInterval(timer);
+    timer = null;
+    startedAt = null;
+  }
+
+  function renderFingers() {
+    layer.replaceChildren();
+    for (const [id, finger] of points) {
+      const el = document.createElement('div');
+      el.className = 'finger' + (id === winner ? ' winner' : '');
+      el.style.setProperty('--finger-color', finger.color);
+      el.style.left = finger.x + 'px';
+      el.style.top = finger.y + 'px';
+      el.dataset.id = String(id);
+      layer.appendChild(el);
+    }
+  }
+
+  function render(remaining = duration) {
+    stageTop.textContent = `SPIELFLÄCHE / ${points.size} FINGER`;
+    stageCenter.classList.toggle('decided', winner !== null);
+    if (winner !== null) {
+      stageCenter.innerHTML = `<div class="overline">DAS LOS HAT ENTSCHIEDEN</div><h2 class="result">DU MUSST!</h2><p class="tip">${task === 'Wer muss?' ? 'Tja. Heute bist du dran.' : task}</p>`;
+      stageBottom.textContent = 'Der leuchtende Finger wurde ausgelost.';
+      action.textContent = 'NOCHMAL! ↻';
+    } else if (points.size >= 2) {
+      stageCenter.innerHTML = `<div class="overline">NICHT LOSLASSEN</div><div class="count">${Math.ceil(remaining / 1000)}</div>`;
+      stageBottom.textContent = 'Finger drauflassen, sonst beginnt die Zeit neu.';
+      action.textContent = 'ABBRECHEN / NEU STARTEN';
+    } else {
+      stageCenter.innerHTML = '<h2>ALLE FINGER<br><span class="yellow">AUFS DISPLAY!</span></h2><p class="tip">Mindestens zwei Personen</p>';
+      stageBottom.textContent = 'Jede Person legt einen Finger auf die Fläche.';
+      action.textContent = 'ALLEIN TESTEN · 4 FINGER';
+    }
+    renderFingers();
+  }
+
+  function tick() {
+    if (points.size < 2 || winner !== null || startedAt === null) return;
+    const remaining = Math.max(0, duration - (performance.now() - startedAt));
+    if (remaining === 0) {
+      const ids = [...points.keys()];
+      winner = ids[randomIndex(ids.length)];
+      stopTimer();
+      if (navigator.vibrate) navigator.vibrate([70, 30, 110]);
+      render(0);
+    } else {
+      render(remaining);
+    }
+  }
+
+  function restartCountdown() {
+    stopTimer();
+    if (points.size >= 2 && winner === null) {
+      startedAt = performance.now();
+      timer = setInterval(tick, 45);
+    }
+    render();
+  }
+
+  function reset() {
+    stopTimer();
+    points.clear();
+    winner = null;
+    demo = false;
+    nextColor = 0;
+    render();
+  }
+
+  function location(event) {
+    const r = stage.getBoundingClientRect();
+    return {
+      x: Math.min(r.width - 33, Math.max(33, event.clientX - r.left)),
+      y: Math.min(r.height - 33, Math.max(33, event.clientY - r.top)),
+    };
+  }
+
+  stage.addEventListener('pointerdown', e => {
+    if (demo || winner !== null || points.has(e.pointerId)) return;
+    e.preventDefault();
+    try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+    const p = location(e);
+    points.set(e.pointerId, {...p, color: palette[nextColor++ % palette.length]});
+    restartCountdown();
+  });
+  stage.addEventListener('pointermove', e => {
+    if (winner !== null || !points.has(e.pointerId) || demo) return;
+    const p = location(e);
+    const old = points.get(e.pointerId);
+    points.set(e.pointerId, {...old, ...p});
+    renderFingers();
+  });
+  function pointerFinished(e) {
+    if (winner !== null || demo || !points.has(e.pointerId)) return;
+    points.delete(e.pointerId);
+    restartCountdown();
+  }
+  stage.addEventListener('pointerup', pointerFinished);
+  stage.addEventListener('pointercancel', pointerFinished);
+  window.addEventListener('blur', () => { if (winner === null && !demo) reset(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden && winner === null) reset(); });
+  action.addEventListener('click', () => {
+    if (winner !== null || points.size > 0) { reset(); return; }
+    demo = true;
+    const w = stage.clientWidth, h = stage.clientHeight;
+    [
+      [.26, .33], [.73, .32], [.27, .73], [.72, .70]
+    ].forEach(([x,y], idx) => {
+      points.set(-idx - 1, {x:x*w, y:y*h, color:palette[idx]});
+    });
+    restartCountdown();
+  });
+  for (const el of tasks) {
+    el.addEventListener('click', () => {
+      task = el.dataset.task;
+      tasks.forEach(b => b.setAttribute('aria-pressed', String(b === el)));
+      reset();
+    });
+  }
+  render();
+})();
+</script>
+</body>
+</html>
