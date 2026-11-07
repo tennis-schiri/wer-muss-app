@@ -28,6 +28,8 @@ jobs:
           test -s demo/index.html
           test -s demo/README.txt
           test -s demo/wm04b-logo.svg
+          test -s demo/impressum.html
+          test -s demo/datenschutz.html
           grep -iq '<!doctype html>' demo/index.html
 
       - name: Browser-Demo sicher per FTPS hochladen
@@ -41,7 +43,7 @@ jobs:
           : "${FTP_HOST:?FTP_SERVER fehlt als Repository-Secret}"
           : "${FTP_USER:?FTP_USERNAME fehlt als Repository-Secret}"
           : "${FTP_PASSWORD:?FTP_PASSWORD fehlt als Repository-Secret}"
-          for file in index.html README.txt wm04b-logo.svg; do
+          for file in index.html README.txt wm04b-logo.svg impressum.html datenschutz.html; do
             echo "Übertrage $file …"
             curl --fail --silent --show-error --ssl-reqd --ftp-pasv \
               --user "${FTP_USER}:${FTP_PASSWORD}" \
