@@ -1,48 +1,43 @@
-# Wer muss?! — Flutter-Prototyp 0.1
+# Wer muss?! — Flutter-Mini-App (iOS zuerst)
 
-**Für iPhone und Android.** Eine Person wird aus allen gleichzeitig aufliegenden Fingern zufällig ausgewählt. Keine Anmeldung, kein Server, kein Tracking, keine Werbung.
+Eine kleine Zufalls-App für mehrere Finger auf **einem** Smartphone. Kein Login, keine Werbung, kein Backend.
 
-## Funktionen
+## Stand der Entwicklung
 
-- Mehrfinger-Erkennung auf einem Gerät mittels `Listener` (Pointer-IDs)
-- Auswahl erst ab **zwei gleichzeitig gehaltenen Fingern**
-- **3 Sekunden Countdown**, startet bei hinzugefügten oder entfernten Fingern neu
-- Zufällige Auswahl aus **genau den Fingern, die bei Ablauf noch aufliegen**
-- Ergebnis bleibt sichtbar, bis **„Nochmal!“** gedrückt wird
-- Vier Aufgaben-Vorlagen plus „Wer muss?“
-- **Demo mit 4 Personen** zum alleinigen Ausprobieren, ohne echten Mehrfinger-Touch
-- Offline, keine zusätzlichen Packages außer Flutter
+- Eigener Startbildschirm mit dem WM04b-Logo und „LOS GEHT’S!“
+- Großflächige Spielfläche mit dynamischen farbigen Kreisen an den Fingerpositionen
+- Mindestens zwei Finger, Auswahl der Countdown-Zeit **3 / 5 / 10 Sekunden**
+- Hinzufügen oder Entfernen eines Fingers setzt den Countdown zurück
+- Zufällig ausgeloster Finger wird groß und deutlich leuchtend markiert
+- Das Ergebnis bleibt bis „NOCHMAL!“ sichtbar
+- Allein testen mit vier simulierten Fingern
+- Info-Bereich mit Anleitung und als Entwurf gekennzeichneten Rechtstexten
+- iOS-Simulator-Test auf dem MacBook ist möglich; echte Mehrfinger-Tests auf einem iPhone stehen noch aus
 
-## Lokal starten
+## Auf dem MacBook testen
 
-Flutter SDK und Entwicklungsumgebung installieren: https://docs.flutter.dev/install
-
-Da der Flutter SDK in der Erstellungsumgebung nicht installiert war, sind die automatisch generierten Android/iOS-Projektordner noch nicht Bestandteil dieses Quellpakets. Einmalig im Projektverzeichnis ausführen:
+Projektordner in VS Code öffnen, dort **Terminal → Neues Terminal** wählen.
 
 ```bash
-flutter create --project-name wer_muss --org de.wiedeck --platforms=android,ios .
 flutter pub get
-flutter test
-flutter run
+flutter run -d 78EA524C-0B18-4812-B648-B31BA3C5D1F9
 ```
 
-`flutter create` ergänzt nur das plattformspezifische Gerüst. `lib/main.dart` und die App-Logik bleiben erhalten.
+Die ID gehört zum bisher eingerichteten iPhone-17-Simulator. Mit `flutter devices` lässt sie sich überprüfen.
 
-### iPhone
+Falls die iOS-Projektdateien im lokalen Repository fehlen, einmal im **VS-Code-Terminal** ausführen:
 
-Für einen echten iOS-Build ist ein Mac mit Xcode erforderlich. Für App Store Release zusätzlich ein Apple-Developer-Account und Code-Signierung. Siehe https://docs.flutter.dev/platform-integration/ios/setup
+```bash
+flutter create --platforms=ios --project-name wer_muss .
+```
 
-### Android
+Für den Test auf einem realen iPhone sind eine lokale iOS-Signierung über Xcode und die Geräteverbindung nötig. Für TestFlight ist die kostenpflichtige Apple-Developer-Mitgliedschaft erforderlich.
 
-Android SDK/Android Studio einrichten und mit `flutter run` auf einem angeschlossenen Gerät testen. Für Google Play wird später ein signiertes App Bundle benötigt.
+## Browser-Test
 
-## Wichtige Hinweise
+Die überarbeitete Browser-Demo liegt unter `demo/apps/wer-muss/index.html`, die Mini-App-Übersicht unter `demo/index.html`. Der manuelle Website-Upload läuft über
+[GitHub Actions](https://github.com/tennis-schiri/wer-muss-app/actions/workflows/deploy-test.yml).
 
-- Die **Browser-Demo ist separat**; sie dient dem visuellen und funktionalen Test.
-- Auf manchen Geräten begrenzen Systemgesten/Displaygröße die gleichzeitig erkennbaren Finger. Besonders an den Rändern kann es Einschränkungen geben.
-- Die Auswahl benutzt `Random.secure()` und `nextInt(n)`; jeder Teilnehmer hat bei einer Runde die gleiche Chance.
-- Noch **keine APK/IPA** und **keine Veröffentlichung**. Store-Einträge, Screenshots, App-Icon, juristische Texte und Tests auf echten Geräten fehlen noch.
+## Hinweise
 
-### Version 0.1 — bewusst schlank
-
-Keine Nutzerkonten, kein Multiplayer über das Internet, kein kostenpflichtiges Feature innerhalb der App. Preis 1,99 € wäre beim späteren Verkauf über den App Store/Play Store eine **Store-Einstellung**, keine Funktion im Quellcode.
+Die Flutter-Projektordner für die Zielplattformen können durch `flutter create` ergänzt werden. Die App und der Browser-Prototyp verwenden dieselbe Grundidee, besitzen aber separate Oberflächen-Implementierungen. Die maximale Zahl gleichzeitig erkannter Finger ist vom Gerät abhängig. Rechtstexte sind für einen Store-Release noch zu vervollständigen und zu prüfen.
