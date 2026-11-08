@@ -1,4 +1,4 @@
-name: Testseite manuell hochladen
+name: Wer-muss-Website und Mini-App-Tests manuell hochladen
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: Browser-Demo per FTPS hochladen
+    name: Website und Browser-Tests per FTPS hochladen
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -21,18 +21,29 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Demo-Dateien prüfen
+      - name: Website und Testseiten prüfen
         shell: bash
         run: |
           set -euo pipefail
-          test -s demo/index.html
-          test -s demo/README.txt
-          test -s demo/wm04b-logo.svg
-          test -s demo/impressum.html
-          test -s demo/datenschutz.html
+          for file in \
+            demo/index.html \
+            demo/apps/wer-muss/index.html \
+            demo/apps/punktlandung/index.html \
+            demo/apps/fingerchaos/index.html \
+            demo/apps/nicht-kleckern/index.html \
+            demo/apps/nur-noch-einmal/index.html \
+            demo/apps/voellig-daneben/index.html \
+            demo/assets/mini-apps.css \
+            demo/assets/mini-apps.js \
+            demo/wm04b-logo.svg \
+            demo/impressum.html \
+            demo/datenschutz.html; do
+            test -s "$file"
+          done
           grep -iq '<!doctype html>' demo/index.html
+          grep -iq 'Wer muss' demo/index.html
 
-      - name: Browser-Demo sicher per FTPS hochladen
+      - name: Alle Website-Dateien und Unterordner per FTPS hochladen
         shell: bash
         env:
           FTP_HOST: ${{ secrets.FTP_SERVER }}
@@ -43,11 +54,13 @@ jobs:
           : "${FTP_HOST:?FTP_SERVER fehlt als Repository-Secret}"
           : "${FTP_USER:?FTP_USERNAME fehlt als Repository-Secret}"
           : "${FTP_PASSWORD:?FTP_PASSWORD fehlt als Repository-Secret}"
-          for file in index.html README.txt wm04b-logo.svg impressum.html datenschutz.html; do
-            echo "Übertrage $file …"
+          while IFS= read -r -d '' file; do
+            relative="${file#demo/}"
+            echo "Übertrage $relative …"
             curl --fail --silent --show-error --ssl-reqd --ftp-pasv \
+              --ftp-create-dirs \
               --user "${FTP_USER}:${FTP_PASSWORD}" \
-              --upload-file "demo/$file" \
-              "ftp://${FTP_HOST}:21/$file"
-          done
-          echo "Testseite erfolgreich übertragen."
+              --upload-file "$file" \
+              "ftp://${FTP_HOST}:21/$relative"
+          done < <(find demo -type f -not -name '.DS_Store' -print0 | sort -z)
+          echo "Website und Browser-Tests erfolgreich übertragen."
