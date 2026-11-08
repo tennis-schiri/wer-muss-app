@@ -32,7 +32,164 @@ class WerMussApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const PickScreen(),
+      home: const WelcomeScreen(),
+    );
+  }
+}
+
+
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
+
+  static const _bg = Color(0xFF111224);
+  static const _accent = Color(0xFFF5F36D);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: _bg,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(22, 6, 22, 16),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  tooltip: 'Anleitung und rechtliche Hinweise',
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const AppInformationPage(),
+                    ),
+                  ),
+                  icon: const Icon(Icons.info_outline, color: _accent),
+                ),
+              ),
+              const Spacer(),
+              const Wm04bIcon(size: 112),
+              const SizedBox(height: 22),
+              const Text(
+                'WER MUSS?!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 44,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  letterSpacing: -2.2,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Eine Frage. Viele Finger.\nEine zufällige Entscheidung.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFFCDC9E0),
+                  height: 1.45,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 32),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 19, horizontal: 14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1D1D37),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: const Color(0xFF45435F)),
+                ),
+                child: const Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _PreviewFinger(color: Color(0xFFB6A5FF)),
+                        SizedBox(width: 14),
+                        _PreviewFinger(color: Color(0xFFF5F36D), selected: true),
+                        SizedBox(width: 14),
+                        _PreviewFinger(color: Color(0xFF71E6C8)),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Finger auflegen. Countdown abwarten.\nDer leuchtende Kreis entscheidet.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFFC7C3D9),
+                        fontSize: 13,
+                        height: 1.45,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              const Text(
+                'Ab 2 Personen  ·  3 / 5 / 10 Sekunden',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFFA9A5BF),
+                  fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 15),
+              SizedBox(
+                height: 58,
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).pushReplacement(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const PickScreen(),
+                    ),
+                  ),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: _accent,
+                    foregroundColor: _bg,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  child: const Text(
+                    'LOS GEHT’S!',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PreviewFinger extends StatelessWidget {
+  const _PreviewFinger({required this.color, this.selected = false});
+  final Color color;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: selected ? 68 : 60,
+      height: selected ? 68 : 60,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color.withValues(alpha: selected ? .55 : .20),
+        border: Border.all(
+          color: selected ? Colors.white : color,
+          width: selected ? 5 : 3,
+        ),
+        boxShadow: selected
+            ? [BoxShadow(color: color.withValues(alpha: .45), blurRadius: 22)]
+            : [],
+      ),
+      child: selected
+          ? const Icon(Icons.star_rounded, color: _bg, size: 34)
+          : Icon(Icons.circle, color: color, size: 13),
     );
   }
 }
@@ -179,31 +336,45 @@ class _PickScreenState extends State<PickScreen> {
       backgroundColor: background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 14),
+          padding: const EdgeInsets.fromLTRB(7, 2, 7, 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(
-                height: 56,
+                height: 44,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Wm04bIcon(size: 48),
-                        SizedBox(width: 9),
+                        Wm04bIcon(size: 38),
+                        SizedBox(width: 7),
                         Flexible(
                           child: Text(
                             'WER MUSS?!',
                             style: TextStyle(
-                              fontSize: 25,
+                              fontSize: 22,
                               fontWeight: FontWeight.w900,
                               letterSpacing: -1.1,
                             ),
                           ),
                         ),
                       ],
+                    ),
+                    Positioned(
+                      left: 0,
+                      child: IconButton(
+                        tooltip: 'Zur Startseite',
+                        onPressed: _fingers.isNotEmpty && !_decided
+                            ? null
+                            : () => Navigator.of(context).pushReplacement(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => const WelcomeScreen(),
+                                ),
+                              ),
+                        icon: const Icon(Icons.home_outlined, size: 22),
+                      ),
                     ),
                     Positioned(
                       right: 0,
@@ -222,17 +393,17 @@ class _PickScreenState extends State<PickScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 3),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Countdown:',
                       style: TextStyle(
                           fontSize: 12, color: Color(0xFFBBB9D0))),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 7),
                   for (final seconds in countdownOptions) ...[
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
                       child: ChoiceChip(
                         label: Text('$seconds s'),
                         selected: _countdownSeconds == seconds,
@@ -243,6 +414,9 @@ class _PickScreenState extends State<PickScreen> {
                                   _remaining = seconds.toDouble();
                                 }),
                         showCheckmark: false,
+                        visualDensity: VisualDensity.compact,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
                         selectedColor: paleYellow,
                         backgroundColor: const Color(0xFF25253D),
                         labelStyle: TextStyle(
@@ -257,7 +431,7 @@ class _PickScreenState extends State<PickScreen> {
                   ],
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 5),
               Expanded(
                 child: LayoutBuilder(builder: (context, bounds) {
                   _stageSize = bounds.biggest;
@@ -265,7 +439,7 @@ class _PickScreenState extends State<PickScreen> {
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                       color: panel,
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(20),
                       border: Border.all(
                           color: const Color(0xFF414058), width: 1),
                     ),
@@ -470,9 +644,9 @@ class _PickScreenState extends State<PickScreen> {
                   );
                 }),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 7),
               SizedBox(
-                height: 54,
+                height: 49,
                 child: FilledButton(
                   onPressed: _decided || _fingers.isNotEmpty ? _reset : _startDemo,
                   style: FilledButton.styleFrom(
@@ -492,11 +666,6 @@ class _PickScreenState extends State<PickScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 9),
-              const Text('Kein Login. Keine Werbung. Nur eine Entscheidung.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 10, color: Color(0xFF8F8DA6))),
             ],
           ),
         ),
