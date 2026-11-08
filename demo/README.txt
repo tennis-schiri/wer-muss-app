@@ -1,11 +1,14 @@
-WER MUSS?! — BROWSER-DEMO
+WER MUSS?! — MINI-APP-WERKSTATT
 
-index.html ist eine eigenständige, offline-fähige HTML-Datei ohne externe Inhalte.
+index.html ist die Startseite mit einer Übersicht aller Mini-Apps.
+Die sechs Browser-Testseiten findest du unter apps/<slug>/index.html.
 
-Auf einem Handy im Browser öffnen, das Thema wählen und 2+ Finger gleichzeitig auf die
-Spielfläche legen. 3 Sekunden halten. Der ausgeloste Finger leuchtet.
+Die ursprüngliche Wer-muss-Multitouch-Demo liegt unter apps/wer-muss/index.html.
+Die fünf neuen Testspiele nutzen die gemeinsame Gestaltung in assets/mini-apps.css
+und die gemeinsame Spiellogik in assets/mini-apps.js.
 
-Für einen Test ohne Freunde: „ALLEIN TESTEN · 4 FINGER“ antippen.
+Die Browser-Tests sind Prototypen, keine Store-Apps. Keine Anmeldung, keine
+externen Skripte. Bestwerte einzelner Spiele werden lokal im Browser gespeichert.
 
-Die Browser-Demo ist keine Store-App und muss nicht installiert werden.
-Für eine native App siehe das separate Flutter-Quellcodepaket.
+Der manuelle FTPS-Workflow überträgt die gesamte demo/-Struktur mitsamt
+Unterordnern in das konfigurierte FTP-Startverzeichnis.
