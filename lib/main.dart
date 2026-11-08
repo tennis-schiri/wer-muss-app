@@ -188,7 +188,7 @@ class _PreviewFinger extends StatelessWidget {
             : [],
       ),
       child: selected
-          ? const Icon(Icons.star_rounded, color: _bg, size: 34)
+          ? const Icon(Icons.star_rounded, color: Color(0xFF111224), size: 34)
           : Icon(Icons.circle, color: color, size: 13),
     );
   }
