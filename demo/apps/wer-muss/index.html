@@ -54,7 +54,7 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 
 .bar{position:relative}
-.go-home{position:absolute;left:0;top:8px;width:38px;height:38px;border:1px solid #575475;border-radius:50%;background:#292840;color:#e9e6fa;font-size:25px;display:grid;place-items:center}
+.go-home{position:absolute;left:0;top:8px;width:38px;height:38px;border:1px solid #575475;border-radius:50%;background:#292840;color:#e9e6fa;font-size:25px;display:grid;place-items:center;text-decoration:none}
 
 .info-open{position:absolute;right:0;top:8px;width:38px;height:38px;border:1px solid #575475;border-radius:50%;background:#292840;color:var(--lemon);font-size:19px;font-weight:900;display:grid;place-items:center}
 .info-modal{position:fixed;inset:0;z-index:100;background:rgba(8,8,21,.85);display:flex;justify-content:center;align-items:center;padding:15px}
@@ -93,11 +93,20 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 .welcome-start{width:100%;min-height:58px;border:0;border-radius:18px;background:var(--lemon);color:var(--ink);font-weight:950;letter-spacing:.02em;font-size:16px}
 @media(max-height:670px){.welcome-icon{width:92px;height:92px}.welcome h1{margin-top:12px}.welcome-preview{margin-top:15px;padding:12px}.welcome-preview p{margin-top:9px}.welcome-ring{width:50px;height:50px}.welcome-ring.selected{width:58px;height:58px}}
 
+/* Unified navigation for both the welcome screen and live multi-touch game. */
+.welcome-top{justify-content:space-between;align-items:center;gap:10px}
+.welcome-actions,.game-shortcuts{display:flex;align-items:center;gap:7px}
+.welcome-actions a,.welcome-actions button,.game-shortcuts a,.game-shortcuts button{display:grid;place-items:center;min-height:37px;padding:7px 11px;background:#302e49;border:1px solid #575475;border-radius:11px;color:#f9f8ff;font:800 12px Inter,ui-sans-serif,system-ui,sans-serif;text-decoration:none;white-space:nowrap}
+.welcome-actions button,.game-shortcuts button{background:var(--lemon);border-color:var(--lemon);color:var(--ink)}
+.game-shortcuts{flex-shrink:0;justify-content:center;margin:0 0 6px}
+.game-shortcuts a,.game-shortcuts button{flex:1;max-width:210px;min-height:36px}
+.welcome-actions a:focus-visible,.welcome-actions button:focus-visible,.game-shortcuts a:focus-visible,.game-shortcuts button:focus-visible,.go-home:focus-visible{outline:3px solid var(--lavender);outline-offset:2px}
+@media(max-width:350px){.welcome-actions a,.welcome-actions button,.game-shortcuts a,.game-shortcuts button{padding:6px 7px;font-size:11px}}
 </style>
 </head>
 <body>
 <section class="welcome" id="welcome" aria-labelledby="welcome-title">
-  <div class="welcome-top"><button type="button" id="welcome-info" class="welcome-info" aria-label="Anleitung und rechtliche Hinweise">i</button></div>
+  <div class="welcome-top"><nav class="welcome-actions" aria-label="Spielsteuerung"><button type="button" id="welcome-restart">↻ Neu starten</button><a href="../../index.html">⌂ Startseite</a></nav><button type="button" id="welcome-info" class="welcome-info" aria-label="Anleitung und rechtliche Hinweise">i</button></div>
   <div class="welcome-middle">
     <img class="welcome-icon" src="../../wm04b-logo.svg" alt="Wer muss?! Logo" width="112" height="112">
     <h1 id="welcome-title">WER MUSS?!</h1>
@@ -117,7 +126,8 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
   </div>
 </section>
 <main class="app" id="app" hidden>
-  <header class="bar"><button type="button" class="go-home" id="go-home" aria-label="Zur Startseite" title="Zur Startseite">⌂</button><img class="brand-icon" src="../../wm04b-logo.svg" alt="Wer muss?! Logo" width="53" height="53"><div class="wordmark">WER MUSS?!</div><button type="button" class="info-open" id="info-open" aria-label="Info und rechtliche Hinweise">i</button></header>
+  <header class="bar"><a class="go-home" id="go-home" href="../../index.html" aria-label="Zur Wer-muss-Startseite" title="Zur Wer-muss-Startseite">⌂</a><img class="brand-icon" src="../../wm04b-logo.svg" alt="Wer muss?! Logo" width="53" height="53"><div class="wordmark">WER MUSS?!</div><button type="button" class="info-open" id="info-open" aria-label="Info und rechtliche Hinweise">i</button></header>
+  <nav class="game-shortcuts" aria-label="Spielsteuerung"><button type="button" id="restart-app">↻ Neu starten</button><a href="../../index.html">⌂ Startseite</a></nav>
   <div class="countdown-options" role="group" aria-label="Countdown auswählen">
     <span class="countdown-label">Countdown:</span>
     <button class="countdown-choice" data-seconds="3" aria-pressed="true" type="button">3 s</button>
@@ -358,13 +368,9 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
     app.hidden = false;
     render();
   };
-  const showWelcome = () => {
-    reset();
-    app.hidden = true;
-    welcome.hidden = false;
-  };
   document.getElementById('welcome-start').addEventListener('click', showGame);
-  document.getElementById('go-home').addEventListener('click', showWelcome);
+  document.getElementById('restart-app').addEventListener('click', () => window.location.reload());
+  document.getElementById('welcome-restart').addEventListener('click', () => window.location.reload());
   render();
 })();
 </script>

@@ -57,4 +57,11 @@ jobs:
           if errors:
               raise SystemExit("Fehlende lokale Ziele:\n" + "\n".join(errors))
           print(f"{len(pages)} HTML-Dateien und interne Links geprüft.")
+          games = sorted((root / "apps").glob("*/index.html"))
+          assert len(games) == 6, f"Sechs Browser-Spiele erwartet, gefunden: {len(games)}"
+          for page in games:
+              html = page.read_text(encoding="utf-8")
+              assert 'id="restart-app"' in html, f"Neustart fehlt auf {page}"
+              assert 'href="../../index.html"' in html, f"Zur Startseite fehlt auf {page}"
+          print("Neustart und Startseiten-Link auf allen sechs Spielseiten vorhanden.")
           PY

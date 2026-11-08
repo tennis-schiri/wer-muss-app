@@ -7,6 +7,8 @@
   const remember = (k,v) => { try { localStorage.setItem('wm-mini-'+k,String(v)); } catch (_) {} };
   const recall = k => { try { return Number(localStorage.getItem('wm-mini-'+k)) || 0; } catch (_) { return 0; } };
   const status = s => { const el=$('status'); if(el) el.textContent=s; };
+  // Always reset active timers, scores and controls; persistent personal bests remain.
+  $('restart-app')?.addEventListener('click', () => window.location.reload());
 
   if(game === 'punktlandung') {
     const clock=$('clock'), action=$('main-action'), best=$('best'), diff=$('difference'), blind=$('blind');
