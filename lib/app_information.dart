@@ -61,7 +61,7 @@ class AppInformationPage extends StatelessWidget {
             _InfoContent(children: [
               _InfoHeading('Über Wer muss?!'),
               _InfoParagraph('Eine kleine Zufalls-App für die ganz großen Fragen. Finger drauf, Countdown abwarten und schauen, wen es trifft.'),
-              _InfoParagraph('Version: Prototyp v0.2'),
+              _InfoParagraph('Version: Prototyp v0.3'),
               _InfoParagraph('Logo: WM04b'),
             ]),
           ],
