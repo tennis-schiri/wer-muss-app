@@ -9,6 +9,15 @@
       "deviceId": "78EA524C-0B18-4812-B648-B31BA3C5D1F9",
       "flutterMode": "debug",
       "preLaunchTask": "Wer muss?! – GitHub aktualisieren"
+    },
+    {
+      "name": "Wer muss?! – iPad Air 11 (Update + Start)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "D956A88C-F694-4CE7-9A15-5C255CE4AF5F",
+      "flutterMode": "debug",
+      "preLaunchTask": "Wer muss?! – GitHub aktualisieren"
     }
   ]
 }
