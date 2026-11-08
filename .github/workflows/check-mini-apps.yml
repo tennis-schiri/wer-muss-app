@@ -1,0 +1,60 @@
+name: Mini-App-Browserseiten prüfen
+
+on:
+  push:
+    paths:
+      - 'demo/**'
+      - '.github/workflows/check-mini-apps.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: JavaScript-Syntax prüfen
+        run: node --check demo/assets/mini-apps.js
+
+      - name: Interne Links der Mini-App-Seiten prüfen
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.parse import urlsplit
+
+          root = Path("demo").resolve()
+          errors = []
+
+          class Links(HTMLParser):
+              def __init__(self, source):
+                  super().__init__()
+                  self.source = source
+
+              def handle_starttag(self, tag, attrs):
+                  for key, raw in attrs:
+                      if key not in ("src", "href") or not raw:
+                          continue
+                      link = urlsplit(raw)
+                      if link.scheme or link.netloc or raw.startswith(("#", "mailto:")):
+                          continue
+                      if not link.path:
+                          continue
+                      target = (self.source.parent / link.path).resolve()
+                      if not target.is_relative_to(root) or not target.exists():
+                          errors.append(f"{self.source.relative_to(root)}: {raw}")
+
+          pages = list(root.rglob("*.html"))
+          for page in pages:
+              Links(page).feed(page.read_text(encoding="utf-8"))
+          assert len(pages) >= 9, "Mindestens Startseite, sechs Tests und zwei rechtliche Seiten erwartet"
+          if errors:
+              raise SystemExit("Fehlende lokale Ziele:\n" + "\n".join(errors))
+          print(f"{len(pages)} HTML-Dateien und interne Links geprüft.")
+          PY
