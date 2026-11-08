@@ -17,6 +17,7 @@ Entwicklungsstände, browserbasierten Tests und die Übersicht liegen unter ders
 - `demo/apps/nicht-kleckern/index.html`: Balance-Demo, optionaler Sensor-Test
 - `demo/apps/nur-noch-einmal/index.html`: Ballon-Risiko-Demo
 - `demo/apps/voellig-daneben/index.html`: Schätzspiel-Demo für 2–4 Personen
+- `demo/assets/logos/`: freigegebene WM04b-nahe App-Icons PL05, FC05, NK05, NE05, VD05; direkt aus den Logo-Set-Präsentationen in Google Drive ausgeschnitten, nicht neu gezeichnet
 - `demo/assets/mini-apps.css`: gemeinsames Designsystem
 - `demo/assets/mini-apps.js`: Testspiel-Logik der fünf neuen Apps
 - `demo/wm04b-logo.svg`: bestehendes Wer-muss-Logo als Dachmarke
@@ -30,7 +31,7 @@ Die Browser-Tests sind bewusst Prototypen und keine fertigen Store-Apps.
 - Sekundärfarben: Lavendel `#b6a5ff`, Mint `#71e6c8`,
   Koralle `#ff9288`, Eisblau `#85b9ff`
 - Große, kontrastreiche Typografie, abgerundete Karten und Buttons
-- Gemeinsame Dachmarke WM04b, App-Monogramme in derselben Designsprache
+- Gemeinsame Dachmarke WM04b; die fünf App-Monogramm-Platzhalter wurden auf der Startseite und den Browser-Spielseiten durch die freigegebenen Original-Icons PL05, FC05, NK05, NE05, VD05 ersetzt
 - Logos/Icons der Einzel-Apps später konsequent von dieser Bildsprache ableiten
 - Mobil zuerst, große Touch-Ziele, keine fremden Fonts/Tracker für die Tests
 

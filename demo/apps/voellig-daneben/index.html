@@ -5,14 +5,14 @@
 <meta name="theme-color" content="#111224"><meta name="robots" content="noindex,nofollow">
 <meta name="description" content="Völlig daneben! – interaktiver Browser-Prototyp aus der Wer-muss-Mini-App-Werkstatt.">
 <title>Völlig daneben! – Wer muss?! Mini-Apps</title>
-<link rel="icon" type="image/svg+xml" href="../../wm04b-logo.svg">
+<link rel="icon" type="image/webp" href="../../assets/logos/vd05-icon.webp">
 <link rel="stylesheet" href="../../assets/mini-apps.css">
 </head>
 <body data-game="voellig-daneben">
 <header class="header"><div class="wrap header-inner"><a class="brand" href="../../index.html"><img src="../../wm04b-logo.svg" alt="" width="45" height="45"><span><span class="brand-name">WER MUSS?!</span><span class="brand-suffix">Mini-App-Werkstatt</span></span></a><nav class="nav" aria-label="Navigation"><a class="nav-accent" href="../../index.html#apps">Alle Apps ansehen</a></nav></div></header>
 <main class="game-shell">
 <a class="back-link" href="../../index.html#apps">← Zurück zur App-Übersicht</a>
-<div class="game-head"><div class="emblem blue" aria-hidden="true">?</div><div><span class="eyebrow">Browser-Test · Prototyp</span><h1>Völlig daneben!</h1><p>Wer schätzt am besten? Spiele mit 2 bis 4 Personen an einem Handy.</p></div></div>
+<div class="game-head"><img class="app-logo" src="../../assets/logos/vd05-icon.webp" alt="" width="82" height="82" decoding="async"><div><span class="eyebrow">Browser-Test · Prototyp</span><h1>Völlig daneben!</h1><p>Wer schätzt am besten? Spiele mit 2 bis 4 Personen an einem Handy.</p></div></div>
 <section class="game-board" aria-label="Spielbereich">
 <div class="tiny">SCHÄTZEN · WEITERGEBEN · AUFLÖSEN</div><div class="game-controls" role="group" aria-label="Mitspielerzahl"><button type="button" class="choice active" data-players="2">2 PERSONEN</button><button type="button" class="choice" data-players="3">3 PERSONEN</button><button type="button" class="choice" data-players="4">4 PERSONEN</button></div><div class="game-meta"><span>Frage: <strong id="round">1 / 5</strong></span><span id="scores">P1: 0 · P2: 0</span></div><div class="quiz-question" id="question"></div><label class="checkbox-line" id="player-label" for="guess">Person 1 – deine Schätzung</label><input id="guess" class="quiz-input" type="number" inputmode="numeric" step="1" min="0" placeholder="Deine Zahl" aria-label="Deine Schätzung"><div class="quiz-answer" id="reveal" aria-live="polite"></div><div class="game-status quiz-history" id="status" aria-live="polite"></div><div class="game-controls"><button class="btn primary" id="submit-guess" type="button">TIPP ABGEBEN</button><button class="btn primary" id="next" type="button" hidden>NÄCHSTE FRAGE</button></div>
 </section>
