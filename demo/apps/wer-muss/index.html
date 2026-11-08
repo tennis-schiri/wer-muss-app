@@ -14,10 +14,10 @@ html{background:var(--ink)}
 body{margin:0;min-height:100svh;background:radial-gradient(ellipse 65% 24% at 50% 0%,#282544 0%,transparent 100%),var(--ink);color:#fcfbff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
 button{font:inherit;cursor:pointer}
 button:focus-visible{outline:3px solid var(--lavender);outline-offset:3px}
-.app{max-width:550px;margin:0 auto;padding:max(12px,env(safe-area-inset-top)) 16px max(12px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0;height:100svh;height:100dvh;min-height:0}
-.bar{display:flex;justify-content:center;align-items:center;gap:16px;margin:0 0 12px;flex-shrink:0}
-.brand-icon{width:53px;height:53px;object-fit:contain;border-radius:12px;flex:none}
-.wordmark{font-size:29px;font-weight:950;letter-spacing:-.075em}
+.app{max-width:550px;margin:0 auto;padding:max(6px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0;height:100svh;height:100dvh;min-height:0}
+.bar{display:flex;justify-content:center;align-items:center;gap:12px;margin:0 0 6px;flex-shrink:0}
+.brand-icon{width:40px;height:40px;object-fit:contain;border-radius:12px;flex:none}
+.wordmark{font-size:23px;font-weight:950;letter-spacing:-.075em}
 .bar-tag{font-size:10px;font-weight:850;letter-spacing:.1em;color:var(--lavender);background:#2e2c4b;border-radius:100px;padding:10px 12px;white-space:nowrap}
 h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-height:1.15;margin:0 0 7px}
 .stage{position:relative;background:#1d1d37;border:1px solid #414058;border-radius:29px;flex:1 1 auto;min-height:0;height:auto;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair;isolation:isolate}
@@ -40,20 +40,22 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 .finger.winner::after{content:'★';background:none;width:auto;height:auto;font-size:57px;font-weight:900;color:#111224;text-shadow:0 1px 0 #fff}
 @keyframes winner-pop{0%{scale:.75;filter:brightness(1.7)}60%{scale:1.15;filter:brightness(1.4)}100%{scale:1;filter:brightness(1)}}
 .finger.not-winner{opacity:.13;filter:grayscale(1)}
-.countdown-options{display:flex;justify-content:center;align-items:center;gap:8px;margin:0 0 12px}
+.countdown-options{display:flex;justify-content:center;align-items:center;gap:6px;margin:0 0 6px}
 .countdown-label{font-size:12px;color:#bebbd2;margin-right:4px}
-.countdown-choice{border:0;border-radius:999px;padding:10px 14px;background:#292840;color:#e5e2f5;font-size:12px;font-weight:800;min-width:50px}
+.countdown-choice{border:0;border-radius:999px;padding:8px 12px;background:#292840;color:#e5e2f5;font-size:12px;font-weight:800;min-width:50px}
 .countdown-choice[aria-pressed="true"]{background:var(--lemon);color:var(--ink)}
 .countdown-choice:disabled{opacity:.45;cursor:default}
-.action{display:block;flex-shrink:0;min-height:54px;width:100%;background:var(--lemon);color:var(--ink);border:0;border-radius:17px;margin-top:15px;font-size:14px;font-weight:950;letter-spacing:.03em;transition:transform .2s,filter .2s}
+.action{display:block;flex-shrink:0;min-height:49px;width:100%;background:var(--lemon);color:var(--ink);border:0;border-radius:17px;margin-top:15px;font-size:14px;font-weight:950;letter-spacing:.03em;transition:transform .2s,filter .2s}
 .action:hover{filter:brightness(1.05)}.action:active{transform:scale(.985)}
-.footer{flex-shrink:0;margin-top:8px;text-align:center;font-size:10px;color:#9693af;line-height:1.5}
+.footer{flex-shrink:0;margin-top:5px;text-align:center;font-size:10px;color:#9693af;line-height:1.5}
 .footer .dot{display:inline-block;padding:0 5px;color:var(--lavender)}
-@media(max-width:420px){.brand-icon{width:46px;height:46px}.bar{margin-bottom:10px}.wordmark{font-size:25px}.finger{width:88px;height:88px}}
+@media(max-width:420px){.bar{margin-bottom:6px}.finger{width:88px;height:88px}}
 @media(max-height:735px){.bar{margin-bottom:8px}.countdown-options{margin-bottom:7px}.footer{margin-top:6px}.action{margin-top:9px;min-height:48px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 
 .bar{position:relative}
+.go-home{position:absolute;left:0;top:8px;width:38px;height:38px;border:1px solid #575475;border-radius:50%;background:#292840;color:#e9e6fa;font-size:25px;display:grid;place-items:center}
+
 .info-open{position:absolute;right:0;top:8px;width:38px;height:38px;border:1px solid #575475;border-radius:50%;background:#292840;color:var(--lemon);font-size:19px;font-weight:900;display:grid;place-items:center}
 .info-modal{position:fixed;inset:0;z-index:100;background:rgba(8,8,21,.85);display:flex;justify-content:center;align-items:center;padding:15px}
 .info-modal[hidden]{display:none}
@@ -70,11 +72,52 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 .info-panel[hidden]{display:none}
 .legal-warning{border-left:3px solid var(--salmon);padding:9px 12px;background:#352d3e;border-radius:6px}
 
+
+/* Full-screen intro for the standalone Wer muss?! browser prototype */
+.app[hidden],.welcome[hidden]{display:none}
+.welcome{min-height:100svh;height:100dvh;display:flex;flex-direction:column;padding:max(16px,env(safe-area-inset-top)) 20px max(18px,env(safe-area-inset-bottom));max-width:550px;margin:0 auto;text-align:center}
+.welcome-top{display:flex;justify-content:flex-end;flex:none;height:44px}
+.welcome-info{width:42px;height:42px;border-radius:50%;border:1px solid #575475;background:#292840;color:var(--lemon);font-size:20px;font-weight:900}
+.welcome-middle{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-height:0}
+.welcome-icon{width:112px;height:112px;border-radius:25px}
+.welcome h1{font-size:clamp(39px,10vw,47px);margin:20px 0 3px;letter-spacing:-.075em}
+.welcome-lead{font-size:16px;color:#cdc9e0;line-height:1.5;margin:0}
+.welcome-preview{width:100%;background:var(--panel);border:1px solid #45435f;border-radius:24px;padding:19px 12px;margin-top:28px}
+.welcome-rings{display:flex;gap:14px;justify-content:center;align-items:center}
+.welcome-ring{display:grid;place-items:center;width:60px;height:60px;border:3px solid var(--ring-color);border-radius:50%;background:color-mix(in srgb,var(--ring-color) 20%,transparent)}
+.welcome-ring.selected{width:68px;height:68px;border:5px solid white;background:color-mix(in srgb,var(--ring-color) 55%,transparent);box-shadow:0 0 22px color-mix(in srgb,var(--ring-color) 45%,transparent)}
+.welcome-ring.selected::after{content:'★';font-size:29px;color:var(--ink)}
+.welcome-preview p{font-size:13px;color:#c7c3d9;line-height:1.5;margin:16px 0 0}
+.welcome-bottom{flex:none}
+.welcome-bottom p{font-size:12px;color:#a9a5bf;margin:0 0 14px}
+.welcome-start{width:100%;min-height:58px;border:0;border-radius:18px;background:var(--lemon);color:var(--ink);font-weight:950;letter-spacing:.02em;font-size:16px}
+@media(max-height:670px){.welcome-icon{width:92px;height:92px}.welcome h1{margin-top:12px}.welcome-preview{margin-top:15px;padding:12px}.welcome-preview p{margin-top:9px}.welcome-ring{width:50px;height:50px}.welcome-ring.selected{width:58px;height:58px}}
+
 </style>
 </head>
 <body>
-<main class="app">
-  <header class="bar"><img class="brand-icon" src="../../wm04b-logo.svg" alt="Wer muss?! Logo" width="53" height="53"><div class="wordmark">WER MUSS?!</div><button type="button" class="info-open" id="info-open" aria-label="Info und rechtliche Hinweise">i</button></header>
+<section class="welcome" id="welcome" aria-labelledby="welcome-title">
+  <div class="welcome-top"><button type="button" id="welcome-info" class="welcome-info" aria-label="Anleitung und rechtliche Hinweise">i</button></div>
+  <div class="welcome-middle">
+    <img class="welcome-icon" src="../../wm04b-logo.svg" alt="Wer muss?! Logo" width="112" height="112">
+    <h1 id="welcome-title">WER MUSS?!</h1>
+    <p class="welcome-lead">Eine Frage. Viele Finger.<br>Eine zufällige Entscheidung.</p>
+    <div class="welcome-preview">
+      <div class="welcome-rings" aria-hidden="true">
+        <span class="welcome-ring" style="--ring-color:var(--lavender)"></span>
+        <span class="welcome-ring selected" style="--ring-color:var(--lemon)"></span>
+        <span class="welcome-ring" style="--ring-color:var(--mint)"></span>
+      </div>
+      <p>Finger auflegen. Countdown abwarten.<br>Der leuchtende Kreis entscheidet.</p>
+    </div>
+  </div>
+  <div class="welcome-bottom">
+    <p>Ab 2 Personen · 3 / 5 / 10 Sekunden</p>
+    <button type="button" class="welcome-start" id="welcome-start">LOS GEHT’S!</button>
+  </div>
+</section>
+<main class="app" id="app" hidden>
+  <header class="bar"><button type="button" class="go-home" id="go-home" aria-label="Zur Startseite" title="Zur Startseite">⌂</button><img class="brand-icon" src="../../wm04b-logo.svg" alt="Wer muss?! Logo" width="53" height="53"><div class="wordmark">WER MUSS?!</div><button type="button" class="info-open" id="info-open" aria-label="Info und rechtliche Hinweise">i</button></header>
   <div class="countdown-options" role="group" aria-label="Countdown auswählen">
     <span class="countdown-label">Countdown:</span>
     <button class="countdown-choice" data-seconds="3" aria-pressed="true" type="button">3 s</button>
@@ -289,12 +332,14 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
   const infoOpen = document.getElementById('info-open');
   const infoClose = document.getElementById('info-close');
   const infoTabs = [...document.querySelectorAll('[data-info-tab]')];
+  const welcomeInfo = document.getElementById('welcome-info');
+  welcomeInfo.addEventListener('click', () => { infoModal.hidden = false; infoClose.focus(); });
   infoOpen.addEventListener('click', () => {
     if (points.size > 0 && winner === null) return;
     infoModal.hidden = false;
     infoClose.focus();
   });
-  function closeInfo() { infoModal.hidden = true; infoOpen.focus(); }
+  function closeInfo() { infoModal.hidden = true; (welcome.hidden ? infoOpen : welcomeInfo).focus(); }
   infoClose.addEventListener('click', closeInfo);
   infoModal.addEventListener('click', e => { if (e.target === infoModal) closeInfo(); });
   document.addEventListener('keydown', e => {
@@ -306,6 +351,20 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
       panel.hidden = panel.dataset.infoPanel !== tab.dataset.infoTab;
     });
   }));
+  const welcome = document.getElementById('welcome');
+  const app = document.getElementById('app');
+  const showGame = () => {
+    welcome.hidden = true;
+    app.hidden = false;
+    render();
+  };
+  const showWelcome = () => {
+    reset();
+    app.hidden = true;
+    welcome.hidden = false;
+  };
+  document.getElementById('welcome-start').addEventListener('click', showGame);
+  document.getElementById('go-home').addEventListener('click', showWelcome);
   render();
 })();
 </script>
