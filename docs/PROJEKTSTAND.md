@@ -1,43 +1,43 @@
-# Wer muss?! — Projektstand v0.1
+# Wer muss?! — Projektstand
 
-Stand: 07.11.2026
+Stand: 08.11.2026
 
-## Ziel
-Humorvolle Mini-App für iOS und Android: Mehrere Personen legen gleichzeitig einen Finger auf dasselbe Display. Nach drei Sekunden wird zufällig einer der noch aufliegenden Finger ausgewählt.
+## Produkt und Konzept
+Wer muss?! ist eine eigenständige humorvolle Mini-App mit zufälliger
+Mehrfinger-Auswahl, Flutter-Prototyp für iPhone/Android und bestehender
+interaktiver Browser-Demo.
 
-- Flutter für iOS und Android
-- Offline, ohne Konto, Backend, Werbung oder Tracking
-- Geplanter Kaufpreis: 1,99 € einmalig (noch nicht verbindlich)
-- Aufgaben wie „Wer zahlt?“, „Wer holt Snacks?“ und „Wer räumt auf?“
+## Neue gemeinsame Mini-App-Zentrale
+Die Wer-muss-Website bündelt künftig die Testseiten und die Übersicht
+der weiteren Mini-Apps. Das gemeinsame Design basiert auf WM04b mit
+Nachtblau, Zitronengelb, Lavendel, Mint, Koralle und Eisblau.
 
-## Prototyp v0.1 (im vorherigen Chat erarbeitet)
-- Mehrfinger-Erkennung über Pointer-IDs, mindestens zwei Finger
-- 3-Sekunden-Countdown; Neustart bei veränderter Fingerzahl
-- Zufallsauswahl mit `Random.secure()` und `nextInt(n)`
-- Ergebnis bleibt bis „Nochmal!“ sichtbar
-- Solo-Demo mit vier simulierten Personen
-- Browser-Demo mit echten und simulierten Touch-Ereignissen
+Bereits als einfache Browser-Prototypen im Repository enthalten:
+- Wer muss?! (Original-Multitouch-Demo)
+- Punktlandung!
+- Fingerchaos
+- Nicht kleckern!
+- Nur noch einmal!
+- Völlig daneben!
 
-## Teststatus
-Die Browser-Demo wurde mit simulierten Teilnehmern und echten Touch-Ereignissen getestet. Die Flutter-App wurde noch nicht auf iPhone oder Android gebaut/getestet. Noch keine APK/IPA und kein Store-Eintrag.
+Zentrale Webseite: `demo/index.html`
+Alle App-Tests: `demo/apps/<slug>/index.html`
+Designsystem und Prototypenlogik: `demo/assets/`
 
-## Noch zu übernehmen
-Die im vorherigen Chat benannten Artefakte sind in diesem Chat bislang nicht als Quelldateien zugänglich:
-- `wer-muss-flutter-quellcode.zip`
-- `wer-muss-browser-demo.zip`
-- `wer-muss-vorschau-start.png`
-- `wer-muss-vorschau-ergebnis.png`
-- `wer-muss-vorschau-desktop.png`
-
-Bitte nicht anhand dieser Dokumentation so tun, als wäre der Original-Quellcode bereits importiert.
+## Entwicklung und Tests
+Die Browser-Seiten wurden im Repository abgelegt und auf vorhandene
+lokale Verlinkungen/Dateien geprüft. Noch keine realen Geräte- oder
+Browserläufe der fünf neuen Spiele und noch keine nativen Builds.
+Die bestehenden Flutter-Dateien der Wer-muss-App bleiben unverändert.
 
 ## Infrastruktur
 - Privates Repository: `tennis-schiri/wer-muss-app`
-- Geplant: ausschließlich eine geschützte interne Browser-Testseite, keine öffentliche Produktseite
-- Manuell auslösbarer GitHub-Actions-Deploy-Workflow nach Einrichtung der Subdomain
+- Manuell auslösbarer FTPS-Workflow: `.github/workflows/deploy-test.yml`
+- Das veröffentlichte Ziel hängt von den vorhandenen FTP-Secrets ab.
+- Der Workflow lädt den gesamten Inhalt von `demo/` inkl. Unterordnern hoch.
 
-## Nächste Schritte
-1. Originaldateien importieren.
-2. Flutter-Build und automatisierte Tests einrichten.
-3. Geschützte Test-Subdomain und manuellen Deploy einrichten.
-4. Finger-Animationen, Haptik und App-Icon überarbeiten.
+## Vor öffentlicher Veröffentlichung
+- Zieldomain und FTP-Wurzelverzeichnis kontrollieren
+- Impressum und Datenschutz vervollständigen und prüfen
+- Browser-Demos auf echten Geräten testen (insbesondere Sensor-/Mehrfinger-Funktionen)
+- Native Apps später eigenständig bauen, signieren und prüfen
