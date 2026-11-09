@@ -14,6 +14,19 @@ Eine kleine Zufalls-App für mehrere Finger auf **einem** Smartphone. Kein Login
 - Info-Bereich mit Anleitung und als Entwurf gekennzeichneten Rechtstexten
 - iOS-Simulator-Test auf dem MacBook ist möglich; echte Mehrfinger-Tests auf einem iPhone stehen noch aus
 
+## Sprache / language
+
+Die native Flutter-App und die sechs Browser-Spielprototypen unterstützen **Deutsch und Englisch**. Ein gut sichtbarer **DE/EN-Schalter** wechselt die Sprache ohne Neustart.
+
+- Erster Start: Deutsch bei deutscher Gerätesprache, sonst Englisch.
+- Manuelle Auswahl wird lokal gespeichert und hat künftig Vorrang.
+- Spielbildschirme, Statusmeldungen, Anleitung und native Info-Seiten sind übersetzt.
+- Die Sprachwahl der Browser-Prototypen wird über `localStorage` geteilt.
+- Native Flutter-App: `lib/language.dart`, `shared_preferences`, Flutter-Systemlokalisierung.
+- Mini-App-Seiten: `demo/assets/language.js`; die Hauptseite der Mini-App-Werkstatt bietet denselben Schalter.
+
+Das Bedienmuster ist auch für die übrigen Tennilo-Apps vorgesehen; die Umsetzung dort erfolgt separat.
+
 ## Auf dem MacBook testen
 
 Projektordner in VS Code öffnen, dort **Terminal → Neues Terminal** wählen.
