@@ -19,3 +19,6 @@
 .mini-lang button{min-width:34px;min-height:34px;border:0;background:transparent;color:#cac7dc;border-radius:9px;font-size:11px;font-weight:900}
 .mini-lang button[aria-pressed="true"]{background:#f5f36d;color:#111224}
 @media(max-width:500px){.nav .mini-lang{margin-left:auto}.mini-lang button{min-width:32px;min-height:32px}}
+
+/* Keep the language control visible on narrow workshop-home screens. */
+@media(max-width:560px){body:not([data-game]) .nav .nav-accent{display:none}}
