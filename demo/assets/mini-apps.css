@@ -12,3 +12,10 @@
 .game-toolbar button.restart-app{background:var(--lemon);border-color:var(--lemon);color:var(--ink)}
 .game-toolbar a:focus-visible,.game-toolbar button:focus-visible{outline:3px solid var(--lavender);outline-offset:2px}
 @media(max-width:500px){.game-toolbar{margin-bottom:20px}.game-toolbar a,.game-toolbar button{font-size:12px;padding:9px 6px}}
+
+
+/* Consistent DE/EN control on all mini-app prototypes. */
+.mini-lang{display:flex;align-items:center;gap:2px;padding:3px;background:#292840;border:1px solid #514b6b;border-radius:12px}
+.mini-lang button{min-width:34px;min-height:34px;border:0;background:transparent;color:#cac7dc;border-radius:9px;font-size:11px;font-weight:900}
+.mini-lang button[aria-pressed="true"]{background:#f5f36d;color:#111224}
+@media(max-width:500px){.nav .mini-lang{margin-left:auto}.mini-lang button{min-width:32px;min-height:32px}}
