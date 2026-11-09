@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/gestures.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,6 +29,12 @@ class WerMussApp extends StatelessWidget {
         notifier: appLanguage,
         child: MaterialApp(
           locale: Locale(language),
+          supportedLocales: const [Locale('de'), Locale('en')],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
       title: 'Wer muss?!',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
