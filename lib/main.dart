@@ -8,10 +8,12 @@ import 'package:flutter/services.dart';
 import 'selection.dart';
 import 'brand_icon.dart';
 import 'app_information.dart';
+import 'language.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await initializeAppLanguage();
   runApp(const WerMussApp());
 }
 
@@ -20,7 +22,12 @@ class WerMussApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ValueListenableBuilder<String>(
+      valueListenable: appLanguage,
+      builder: (context, language, child) => AppLanguageScope(
+        notifier: appLanguage,
+        child: MaterialApp(
+          locale: Locale(language),
       title: 'Wer muss?!',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -33,6 +40,8 @@ class WerMussApp extends StatelessWidget {
         ),
       ),
       home: const WelcomeScreen(),
+        ),
+      ),
     );
   }
 }
@@ -53,17 +62,21 @@ class WelcomeScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(22, 6, 22, 16),
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  tooltip: 'Anleitung und rechtliche Hinweise',
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const LanguageToggle(),
+                  const SizedBox(width: 8),
+                  IconButton(
+                  tooltip: tr(context, 'Anleitung und rechtliche Hinweise', 'Instructions and legal information'),
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
                       builder: (_) => const AppInformationPage(),
                     ),
                   ),
                   icon: const Icon(Icons.info_outline, color: _accent),
-                ),
+                  ),
+                ],
               ),
               const Spacer(),
               const Wm04bIcon(size: 112),
@@ -79,8 +92,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Eine Frage. Viele Finger.\nEine zufällige Entscheidung.',
+              Text(tr(context, 'Eine Frage. Viele Finger.\nEine zufällige Entscheidung.', 'One question. Many fingers.\nOne random decision.'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFFCDC9E0),
@@ -97,7 +109,7 @@ class WelcomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(color: const Color(0xFF45435F)),
                 ),
-                child: const Column(
+                child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -111,7 +123,7 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'Finger auflegen. Countdown abwarten.\nDer leuchtende Kreis entscheidet.',
+                      tr(context, 'Finger auflegen. Countdown abwarten.\nDer leuchtende Kreis entscheidet.', 'Place your fingers. Wait for the countdown.\nThe glowing circle decides.'),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color(0xFFC7C3D9),
@@ -123,8 +135,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              const Text(
-                'Ab 2 Personen  ·  3 / 5 / 10 Sekunden',
+              Text(tr(context, 'Ab 2 Personen  ·  3 / 5 / 10 Sekunden', '2+ players  ·  3 / 5 / 10 seconds'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFFA9A5BF),
@@ -148,8 +159,7 @@ class WelcomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18),
                     ),
                   ),
-                  child: const Text(
-                    'LOS GEHT’S!',
+                  child: Text(tr(context, 'LOS GEHT’S!', 'LET’S GO!'),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w900,
@@ -342,53 +352,44 @@ class _PickScreenState extends State<PickScreen> {
             children: [
               SizedBox(
                 height: 44,
-                child: Stack(
-                  alignment: Alignment.center,
+                child: Row(
                   children: [
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Wm04bIcon(size: 38),
-                        SizedBox(width: 7),
-                        Flexible(
-                          child: Text(
-                            'WER MUSS?!',
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -1.1,
+                    IconButton(
+                      tooltip: tr(context, 'Zur Startseite', 'Home'),
+                      icon: const Icon(Icons.home_outlined, size: 22),
+                      onPressed: _fingers.isNotEmpty && !_decided
+                          ? null
+                          : () => Navigator.of(context).pushReplacement(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const WelcomeScreen(),
+                              ),
                             ),
-                          ),
+                    ),
+                    const Wm04bIcon(size: 30),
+                    const SizedBox(width: 5),
+                    const Expanded(
+                      child: Text(
+                        'WER MUSS?!',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -0.9,
                         ),
-                      ],
-                    ),
-                    Positioned(
-                      left: 0,
-                      child: IconButton(
-                        tooltip: 'Zur Startseite',
-                        onPressed: _fingers.isNotEmpty && !_decided
-                            ? null
-                            : () => Navigator.of(context).pushReplacement(
-                                MaterialPageRoute<void>(
-                                  builder: (_) => const WelcomeScreen(),
-                                ),
-                              ),
-                        icon: const Icon(Icons.home_outlined, size: 22),
                       ),
                     ),
-                    Positioned(
-                      right: 0,
-                      child: IconButton(
-                        tooltip: 'Anleitung und rechtliche Hinweise',
-                        icon: const Icon(Icons.info_outline, color: paleYellow),
-                        onPressed: _fingers.isNotEmpty && !_decided
-                            ? null
-                            : () => Navigator.of(context).push(
-                                MaterialPageRoute<void>(
-                                  builder: (_) => const AppInformationPage(),
-                                ),
+                    const LanguageToggle(),
+                    IconButton(
+                      tooltip: tr(context,
+                        'Anleitung und rechtliche Hinweise',
+                        'Instructions and legal information'),
+                      icon: const Icon(Icons.info_outline, color: paleYellow),
+                      onPressed: _fingers.isNotEmpty && !_decided
+                          ? null
+                          : () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const AppInformationPage(),
                               ),
-                      ),
+                            ),
                     ),
                   ],
                 ),
@@ -397,7 +398,7 @@ class _PickScreenState extends State<PickScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Countdown:',
+                  Text(tr(context, 'Countdown:', 'Countdown:'),
                       style: TextStyle(
                           fontSize: 12, color: Color(0xFFBBB9D0))),
                   const SizedBox(width: 7),
@@ -464,7 +465,7 @@ class _PickScreenState extends State<PickScreen> {
                                   const Icon(Icons.circle, size: 8, color: mint),
                                   const SizedBox(width: 7),
                                   Text(
-                                    'SPIELFLÄCHE  /  $count FINGER',
+                                    tr(context, 'SPIELFLÄCHE  /  $count FINGER', 'PLAY AREA  /  $count FINGERS'),
                                     style: const TextStyle(
                                         color: Color(0xFFA6A3BC),
                                         fontWeight: FontWeight.w800,
@@ -524,14 +525,14 @@ class _PickScreenState extends State<PickScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (_decided) ...[
-                                    const Text('DAS LOS HAT ENTSCHIEDEN',
+                                    Text(tr(context, 'DAS LOS HAT ENTSCHIEDEN', 'THE DRAW HAS DECIDED'),
                                         style: TextStyle(
                                             fontSize: 10,
                                             color: lavender,
                                             letterSpacing: 1.6,
                                             fontWeight: FontWeight.w900)),
                                     const SizedBox(height: 10),
-                                    const Text('DU MUSST!',
+                                    Text(tr(context, 'DU MUSST!', 'YOU’RE IT!'),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 40,
@@ -540,13 +541,13 @@ class _PickScreenState extends State<PickScreen> {
                                           letterSpacing: -2.0,
                                         )),
                                     const SizedBox(height: 7),
-                                    const Text('Der leuchtende Kreis zeigt, wer dran ist.',
+                                    Text(tr(context, 'Der leuchtende Kreis zeigt, wer dran ist.', 'The glowing circle marks the chosen person.'),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Color(0xFFC1BFD5),
                                             fontSize: 12)),
                                   ] else if (hasCountdown) ...[
-                                    const Text('NICHT LOSLASSEN',
+                                    Text(tr(context, 'NICHT LOSLASSEN', 'KEEP HOLDING'),
                                         style: TextStyle(
                                             fontSize: 11,
                                             letterSpacing: 1.4,
@@ -559,19 +560,19 @@ class _PickScreenState extends State<PickScreen> {
                                             fontWeight: FontWeight.w900,
                                             color: paleYellow)),
                                   ] else ...[
-                                    const Text('ALLE FINGER',
+                                    Text(tr(context, 'ALLE FINGER', 'ALL FINGERS'),
                                         style: TextStyle(
                                             fontSize: 32,
                                             fontWeight: FontWeight.w900,
                                             letterSpacing: -1.4)),
-                                    const Text('AUFS DISPLAY!',
+                                    Text(tr(context, 'AUFS DISPLAY!', 'ON SCREEN!'),
                                         style: TextStyle(
                                             fontSize: 32,
                                             fontWeight: FontWeight.w900,
                                             color: paleYellow,
                                             letterSpacing: -1.4)),
                                     const SizedBox(height: 13),
-                                    const Text('Mindestens zwei Personen',
+                                    Text(tr(context, 'Mindestens zwei Personen', 'At least two players'),
                                         style: TextStyle(
                                             fontSize: 13,
                                             color: Color(0xFFC2C0D4))),
@@ -588,10 +589,10 @@ class _PickScreenState extends State<PickScreen> {
                             child: IgnorePointer(
                               child: Text(
                                 _decided
-                                    ? 'Der hell markierte Finger muss! Sichtbar bis „Nochmal!“.'
+                                    ? tr(context, 'Der hell markierte Finger muss! Sichtbar bis „Nochmal!“.', 'The highlighted finger is it! Visible until “Again!”.')
                                     : hasCountdown
-                                        ? 'Finger drauflassen, sonst beginnt die Zeit neu.'
-                                        : 'Jede Person legt einen Finger auf die Fläche.',
+                                        ? tr(context, 'Finger drauflassen, sonst beginnt die Zeit neu.', 'Keep holding, or the countdown restarts.')
+                                        : tr(context, 'Jede Person legt einen Finger auf die Fläche.', 'Everyone places one finger on the screen.'),
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                     fontSize: 11,
@@ -657,8 +658,8 @@ class _PickScreenState extends State<PickScreen> {
                   ),
                   child: Text(
                     _decided || _fingers.isNotEmpty
-                        ? 'NOCHMAL! ↻'
-                        : 'ALLEIN TESTEN  ·  4 FINGER',
+                        ? tr(context, 'NOCHMAL! ↻', 'AGAIN! ↻')
+                        : tr(context, 'ALLEIN TESTEN  ·  4 FINGER', 'TRY SOLO  ·  4 FINGERS'),
                     style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       letterSpacing: .3,
