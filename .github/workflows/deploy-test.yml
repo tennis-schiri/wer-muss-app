@@ -43,6 +43,32 @@ jobs:
           grep -iq '<!doctype html>' demo/index.html
           grep -iq 'Wer muss' demo/index.html
 
+      - name: Wasserzeichen vor Veröffentlichung prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          fingerprint='MW-WMA-2026-8d573e4b'
+          for page in \
+            demo/index.html \
+            demo/apps/wer-muss/index.html \
+            demo/apps/punktlandung/index.html \
+            demo/apps/fingerchaos/index.html \
+            demo/apps/nicht-kleckern/index.html \
+            demo/apps/nur-noch-einmal/index.html \
+            demo/apps/voellig-daneben/index.html \
+            demo/impressum.html \
+            demo/datenschutz.html; do
+            grep -Fq "<meta name=\"source-fingerprint\" content=\"${fingerprint}\">" "$page" || { echo "::error::Wasserzeichen fehlt: $page"; exit 1; }
+          done
+          for file in \
+            demo/assets/mini-apps.css \
+            demo/assets/mini-apps.js \
+            demo/assets/scroll-ui.css \
+            demo/assets/scroll-ui.js \
+            demo/assets/language.js; do
+            grep -Fq "$fingerprint" "$file" || { echo "::error::Wasserzeichen fehlt: $file"; exit 1; }
+          done
+
       - name: Alle Website-Dateien und Unterordner per FTPS hochladen
         shell: bash
         env:
