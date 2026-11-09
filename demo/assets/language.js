@@ -1,3 +1,4 @@
+/* Source fingerprint MW-WMA-2026-8d573e4b | Copyright (c) 2026 Michael Wiedeck. All rights reserved. */
 (() => {
   'use strict';
 
