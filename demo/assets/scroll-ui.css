@@ -1,3 +1,4 @@
+/* Source fingerprint MW-WMA-2026-8d573e4b | Copyright (c) 2026 Michael Wiedeck. All rights reserved. */
 /* Wer muss?! shared sticky navigation and contextual back-to-top control. */
 :root { --site-header-height: 82px; }
 html { scroll-padding-top: calc(var(--site-header-height) + 18px); }
