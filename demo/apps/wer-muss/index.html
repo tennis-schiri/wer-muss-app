@@ -102,11 +102,24 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 .game-shortcuts a,.game-shortcuts button{flex:1;max-width:210px;min-height:36px}
 .welcome-actions a:focus-visible,.welcome-actions button:focus-visible,.game-shortcuts a:focus-visible,.game-shortcuts button:focus-visible,.go-home:focus-visible{outline:3px solid var(--lavender);outline-offset:2px}
 @media(max-width:350px){.welcome-actions a,.welcome-actions button,.game-shortcuts a,.game-shortcuts button{padding:6px 7px;font-size:11px}}
+
+/* Shared compact DE/EN selector */
+.lang-toggle{display:flex;gap:2px;align-items:center;padding:2px;background:#292840;border:1px solid #4b4864;border-radius:11px;flex:none}
+.lang-toggle button{border:0;background:transparent;color:#c6c2d8;border-radius:8px;min-width:31px;min-height:29px;padding:4px;font-size:11px;font-weight:900}
+.lang-toggle button[aria-pressed="true"]{color:#111224;background:#f5f36d}
+.welcome-top .lang-toggle{margin-left:auto;margin-right:8px}
+.bar{justify-content:flex-start;gap:5px}
+.bar .go-home,.bar .info-open{position:static;flex:none}
+.bar .brand-icon{width:30px;height:30px}
+.bar .wordmark{margin-right:auto;font-size:clamp(16px,4.5vw,22px);white-space:nowrap}
+.bar .lang-toggle{margin-left:4px}
+@media(max-width:365px){.bar .brand-icon{display:none}.bar .wordmark{font-size:17px}.lang-toggle button{min-width:27px}}
+
 </style>
 </head>
 <body>
 <section class="welcome" id="welcome" aria-labelledby="welcome-title">
-  <div class="welcome-top"><nav class="welcome-actions" aria-label="Spielsteuerung"><button type="button" id="welcome-restart">↻ Neu starten</button><a href="../../index.html">⌂ Startseite</a></nav><button type="button" id="welcome-info" class="welcome-info" aria-label="Anleitung und rechtliche Hinweise">i</button></div>
+  <div class="welcome-top"><nav class="welcome-actions" aria-label="Spielsteuerung"><button type="button" id="welcome-restart">↻ Neu starten</button><a href="../../index.html">⌂ Startseite</a></nav><div class="lang-toggle" role="group" aria-label="Language / Sprache"><button type="button" data-language="de" aria-pressed="true">DE</button><button type="button" data-language="en" aria-pressed="false">EN</button></div><button type="button" id="welcome-info" class="welcome-info" aria-label="Anleitung und rechtliche Hinweise">i</button></div>
   <div class="welcome-middle">
     <img class="welcome-icon" src="../../wm04b-logo.svg" alt="Wer muss?! Logo" width="112" height="112">
     <h1 id="welcome-title">WER MUSS?!</h1>
@@ -126,7 +139,7 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
   </div>
 </section>
 <main class="app" id="app" hidden>
-  <header class="bar"><a class="go-home" id="go-home" href="../../index.html" aria-label="Zur Wer-muss-Startseite" title="Zur Wer-muss-Startseite">⌂</a><img class="brand-icon" src="../../wm04b-logo.svg" alt="Wer muss?! Logo" width="53" height="53"><div class="wordmark">WER MUSS?!</div><button type="button" class="info-open" id="info-open" aria-label="Info und rechtliche Hinweise">i</button></header>
+  <header class="bar"><a class="go-home" id="go-home" href="../../index.html" aria-label="Zur Wer-muss-Startseite" title="Zur Wer-muss-Startseite">⌂</a><img class="brand-icon" src="../../wm04b-logo.svg" alt="Wer muss?! Logo" width="53" height="53"><div class="wordmark">WER MUSS?!</div><div class="lang-toggle" role="group" aria-label="Language / Sprache"><button type="button" data-language="de" aria-pressed="true">DE</button><button type="button" data-language="en" aria-pressed="false">EN</button></div><button type="button" class="info-open" id="info-open" aria-label="Info und rechtliche Hinweise">i</button></header>
   <nav class="game-shortcuts" aria-label="Spielsteuerung"><button type="button" id="restart-app">↻ Neu starten</button><a href="../../index.html">⌂ Startseite</a></nav>
   <div class="countdown-options" role="group" aria-label="Countdown auswählen">
     <span class="countdown-label">Countdown:</span>
@@ -199,6 +212,104 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
   let duration = 3000;
   const countdownChoices = [...document.querySelectorAll('[data-seconds]')];
 
+  const translations = {
+  "↻ Neu starten": "↻ Restart",
+  "⌂ Startseite": "⌂ Home",
+  "Eine Frage. Viele Finger.": "One question. Many fingers.",
+  "Eine zufällige Entscheidung.": "One random decision.",
+  "Finger auflegen. Countdown abwarten.": "Place your fingers. Wait for the countdown.",
+  "Der leuchtende Kreis entscheidet.": "The glowing circle decides.",
+  "Ab 2 Personen · 3 / 5 / 10 Sekunden": "2+ players · 3 / 5 / 10 seconds",
+  "LOS GEHT’S!": "LET’S GO!",
+  "Countdown:": "Countdown:",
+  "ALLE FINGER": "ALL FINGERS",
+  "AUFS DISPLAY!": "ON THE SCREEN!",
+  "Mindestens zwei Personen": "At least two players",
+  "Jede Person legt einen Finger auf die Fläche.": "Everyone places one finger on the screen.",
+  "ALLEIN TESTEN · 4 FINGER": "TRY SOLO · 4 FINGERS",
+  "← ALLE APPS": "← ALL APPS",
+  "Kein Login": "No login",
+  "Keine Werbung": "No ads",
+  "Nur eine Entscheidung": "Just one decision",
+  "Wer muss?! – Infos": "Wer muss?! – Info",
+  "Anleitung": "How to play",
+  "Impressum": "Legal notice",
+  "Datenschutz": "Privacy",
+  "Über die App": "About",
+  "So funktioniert's": "How it works",
+  "Mindestens zwei Personen legen je einen Finger auf die Spielfläche.": "At least two players each place one finger on the play area.",
+  "Alle Finger bleiben während des Countdowns auf dem Display.": "Keep all fingers on the screen during the countdown.",
+  "Wähle vor dem Start zwischen 3, 5 oder 10 Sekunden.": "Choose a 3, 5 or 10-second countdown before starting.",
+  "Der hell leuchtende Kreis markiert die zufällig ausgewählte Person.": "The brightly glowing circle marks the randomly selected person.",
+  "Das Ergebnis bleibt bis „Nochmal!“ sichtbar.": "The result stays visible until you tap “Again!”.",
+  "Die mögliche Anzahl gleichzeitig erkannter Finger hängt von deinem Gerät ab. Beim Hinzufügen oder Entfernen eines Fingers während des Countdowns beginnt dieser erneut.": "The number of simultaneously recognized fingers depends on your device. Adding or removing a finger restarts the countdown.",
+  "Vollständiges Impressum öffnen": "Open full legal notice",
+  "Datenschutzhinweise": "Privacy notice",
+  "Die Auswahl erfolgt lokal auf diesem Gerät. Berührungspunkte werden für die Spielrunde verarbeitet und bei einem Neustart verworfen. Es gibt keinen Login, keine Werbung und kein Analyse-Tracking der Spielseiten. Der Hostinganbieter verarbeitet die für die Auslieferung technisch notwendigen Verbindungsdaten.": "Selection happens locally on this device. Touch positions are processed for the round and discarded when it is restarted. There is no login, advertising or analytics tracking on the game pages. The hosting provider processes technical connection data required to deliver this website.",
+  "Vollständige Datenschutzhinweise öffnen": "Open full privacy notice",
+  "Über Wer muss?!": "About Wer muss?!",
+  "Eine kleine Zufalls-App für die ganz großen Fragen. Ohne Anmeldung und ohne Werbung: Finger drauf, Countdown abwarten und schauen, wen es trifft.": "A small random-picker app for big decisions. No account, no ads: place your fingers, wait for the countdown and see who gets picked.",
+  "Version: Prototyp v0.2 · Logo WM04b": "Version: Prototype v0.4 · Logo WM04b",
+  "Zur Wer-muss-Startseite": "Back to Wer muss?! home",
+  "Anleitung und rechtliche Hinweise": "Instructions and legal information",
+  "Info und rechtliche Hinweise": "Info and legal notices",
+  "Schließen": "Close",
+  "Spielsteuerung": "Game controls",
+  "Countdown auswählen": "Choose countdown"
+};
+  const originalTextNodes = new WeakMap();
+  let language = (() => {
+    try {
+      const saved = localStorage.getItem('wer_muss_language');
+      if (saved === 'de' || saved === 'en') return saved;
+    } catch (_) {}
+    return navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en';
+  })();
+  const t = (de, en) => language === 'en' ? en : de;
+  function translateStaticText() {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      if (node.parentElement?.closest('script,style')) continue;
+      let original = originalTextNodes.get(node);
+      if (original === undefined) {
+        original = node.nodeValue;
+        originalTextNodes.set(node, original);
+      }
+      const plain = original.trim();
+      const translated = translations[plain];
+      if (translated !== undefined) {
+        node.nodeValue = language === 'en'
+          ? original.replace(plain, translated)
+          : original;
+      }
+    }
+    for (const element of document.querySelectorAll('[aria-label],[title]')) {
+      for (const attribute of ['aria-label', 'title']) {
+        const sourceKey = 'langSource' + attribute.replace(/[^a-z]/gi, '');
+        const original = element.dataset[sourceKey] ?? element.getAttribute(attribute);
+        if (!original) continue;
+        element.dataset[sourceKey] = original;
+        const translated = translations[original];
+        if (translated) element.setAttribute(attribute, language === 'en' ? translated : original);
+      }
+    }
+    document.documentElement.lang = language;
+    document.querySelectorAll('[data-language]').forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.language === language));
+    });
+  }
+  function setLanguage(next) {
+    if (next !== 'de' && next !== 'en') return;
+    language = next;
+    try { localStorage.setItem('wer_muss_language', language); } catch (_) {}
+    translateStaticText();
+    render();
+  }
+  document.querySelectorAll('[data-language]').forEach(button => {
+    button.addEventListener('click', () => setLanguage(button.dataset.language));
+  });
+
+
   function randomIndex(size) {
     if (globalThis.crypto && crypto.getRandomValues) {
       const max = 0x100000000;
@@ -230,21 +341,21 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
   }
 
   function render(remaining = duration) {
-    stageTop.textContent = `SPIELFLÄCHE / ${points.size} FINGER`;
+    stageTop.textContent = `${t('SPIELFLÄCHE', 'PLAY AREA')} / ${points.size} ${t('FINGER', 'FINGERS')}`;
     countdownChoices.forEach(button => { button.disabled = points.size > 0; });
     stageCenter.classList.toggle('decided', winner !== null);
     if (winner !== null) {
-      stageCenter.innerHTML = '<div class="overline">DAS LOS HAT ENTSCHIEDEN</div><h2 class="result">DU MUSST!</h2><p class="tip">Der leuchtende Kreis zeigt, wer dran ist.</p>';
-      stageBottom.textContent = 'Der hell markierte Finger muss! Das Ergebnis bleibt bis „Nochmal!“ sichtbar.';
-      action.textContent = 'NOCHMAL! ↻';
+      stageCenter.innerHTML = `<div class="overline">${t('DAS LOS HAT ENTSCHIEDEN', 'THE DRAW HAS DECIDED')}</div><h2 class="result">${t('DU MUSST!', 'YOU’RE IT!')}</h2><p class="tip">${t('Der leuchtende Kreis zeigt, wer dran ist.', 'The glowing circle marks the chosen person.')}</p>`;
+      stageBottom.textContent = t('Der hell markierte Finger muss! Das Ergebnis bleibt bis „Nochmal!“ sichtbar.', 'The highlighted finger is it! Visible until “Again!”.');
+      action.textContent = t('NOCHMAL! ↻', 'AGAIN! ↻');
     } else if (points.size >= 2) {
-      stageCenter.innerHTML = `<div class="overline">NICHT LOSLASSEN</div><div class="count">${Math.ceil(remaining / 1000)}</div>`;
-      stageBottom.textContent = 'Finger drauflassen, sonst beginnt die Zeit neu.';
-      action.textContent = 'ABBRECHEN / NEU STARTEN';
+      stageCenter.innerHTML = `<div class="overline">${t('NICHT LOSLASSEN', 'KEEP HOLDING')}</div><div class="count">${Math.ceil(remaining / 1000)}</div>`;
+      stageBottom.textContent = t('Finger drauflassen, sonst beginnt die Zeit neu.', 'Keep holding, or the countdown restarts.');
+      action.textContent = t('ABBRECHEN / NEU STARTEN', 'CANCEL / START OVER');
     } else {
-      stageCenter.innerHTML = '<h2>ALLE FINGER<br><span class="yellow">AUFS DISPLAY!</span></h2><p class="tip">Mindestens zwei Personen</p>';
-      stageBottom.textContent = 'Jede Person legt einen Finger auf die Fläche.';
-      action.textContent = 'ALLEIN TESTEN · 4 FINGER';
+      stageCenter.innerHTML = `<h2>${t('ALLE FINGER', 'ALL FINGERS')}<br><span class="yellow">${t('AUFS DISPLAY!', 'ON THE SCREEN!')}</span></h2><p class="tip">${t('Mindestens zwei Personen', 'At least two players')}</p>`;
+      stageBottom.textContent = t('Jede Person legt einen Finger auf die Fläche.', 'Everyone places one finger on the screen.');
+      action.textContent = t('ALLEIN TESTEN · 4 FINGER', 'TRY SOLO · 4 FINGERS');
     }
     renderFingers();
   }
@@ -367,6 +478,7 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
   document.getElementById('welcome-start').addEventListener('click', showGame);
   document.getElementById('restart-app').addEventListener('click', () => window.location.reload());
   document.getElementById('welcome-restart').addEventListener('click', () => window.location.reload());
+  translateStaticText();
   render();
 })();
 </script>
