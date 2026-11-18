@@ -141,7 +141,29 @@
   "Fingerchaos Testseite öffnen": "Open Fingerchaos browser demo",
   "Nicht kleckern! Testseite öffnen": "Open Nicht kleckern! browser demo",
   "Nur noch einmal! Testseite öffnen": "Open Nur noch einmal! browser demo",
-  "Völlig daneben! Testseite öffnen": "Open Völlig daneben! browser demo"
+  "Völlig daneben! Testseite öffnen": "Open Völlig daneben! browser demo",
+  "Die Spaß-App-Sammlung": "The fun app collection",
+  "JUXILO Startseite": "JUXILO home",
+  "Alle Apps": "All apps",
+  "Wer muss?! testen": "Try Wer muss?!",
+  "JUXILO / MINI-APPS FÜR ZWISCHENDURCH": "JUXILO / MINI-APPS FOR QUICK FUN",
+  "MINI-APPS FÜR ZWISCHENDURCH": "MINI-APPS FOR QUICK FUN",
+  "Mehr Spaß.": "More fun.",
+  "Weniger Ernst.": "Less serious.",
+  "Sechs kleine Apps für spontane Entscheidungen, schnelle Reaktionen und ziemlich alberne Momente. Jede anders. Alle zum Ausprobieren.": "Six little apps for spur-of-the-moment decisions, quick reactions and wonderfully silly moments. Each one is different. All are ready to try.",
+  "Apps entdecken": "Explore the apps",
+  "Wer muss?! direkt testen": "Play Wer muss?! now",
+  "Spielideen": "game ideas",
+  "Im Browser testen": "Try in your browser",
+  "DIE JUXILO-SAMMLUNG": "THE JUXILO COLLECTION",
+  "Such dir deinen Spaß aus.": "Find your kind of fun.",
+  "Sechs eigenständige Spiele. Sechs verschiedene Ideen. Und garantiert mehr als eine Möglichkeit, sich zu amüsieren.": "Six individual games. Six different ideas. Plenty of ways to have fun.",
+  "Schon neugierig? Dann probier’s aus!": "Curious? Give it a try!",
+  "JUXILO ist die gemeinsame Heimat unserer Spaß-Apps. Hier kannst du frühe Browser-Versionen testen – kostenlos und ohne Benutzerkonto. Die späteren iPhone- und Android-Apps bleiben eigenständige Produkte.": "JUXILO is home to our fun-app collection. Try early browser versions here – free and without an account. The later iPhone and Android apps will remain independent products.",
+  "Kleine Apps. Großer Spaß.": "Little apps. Big fun.",
+  "JUXILO · Kleine Apps. Großer Spaß.": "JUXILO · Little apps. Big fun.",
+  "Zur JUXILO-Übersicht": "Back to JUXILO",
+  "⌂ Alle Apps": "⌂ All apps"
 };
   const originalNodes = new WeakMap();
   const originalAttributes = new WeakMap();
