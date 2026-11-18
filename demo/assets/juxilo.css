@@ -314,3 +314,36 @@ body[data-game] .mini-lang button[aria-pressed="true"] { background: #ffc700; co
 @media (prefers-reduced-motion: reduce) {
   .hero-actions a, .juxilo-apps .app-card { transition: none!important; }
 }
+
+/* Compact game pages still clearly belong to JUXILO, without changing their own logos. */
+body[data-game] .juxilo-brand img { width: 47px; height: 47px; }
+body[data-game] .header { padding: 12px 0; }
+body[data-game] .game-shell { padding-top: 25px; }
+body[data-game] .game-head h1 { color: #fffaff; }
+body[data-game] .footer strong { color: #ffc700; letter-spacing: .04em; }
+
+/* Legal pages share the master brand, while legal content stays unchanged. */
+body.juxilo-legal {
+  --bg: #1b072b;
+  --yellow: #ffc700;
+  --lav: #d2a9f8;
+  --line: #633875;
+  background: radial-gradient(ellipse 95% 32% at 70% 0%, #65227b50 0%, transparent 80%), #1b072b;
+}
+body.juxilo-legal .header { background: #1b072bf2; border-bottom-color: #663b76; padding: 11px 0; }
+body.juxilo-legal .brand .brand-name { color: #fff9ff; font-size: 25px; }
+body.juxilo-legal .brand .brand-suffix { font-size: 9px; color: #dfaddf; margin-top: 5px; }
+body.juxilo-legal .back { background: #381a4b; border-color: #754581; }
+body.juxilo-legal .eyebrow { color: #ffc700; }
+body.juxilo-legal .footer { border-top-color: #633875; }
+
+@media (max-width: 540px) {
+  body[data-game] .juxilo-brand img { width: 40px; height: 40px; }
+  body[data-game] .juxilo-brand .brand-name { font-size: 22px; }
+  body[data-game] .juxilo-brand .brand-suffix { display: none; }
+  body[data-game] .header-inner { gap: 6px; }
+  body[data-game] .nav { gap: 5px; }
+  body.juxilo-legal .juxilo-brand img { width: 43px; height: 43px; }
+  body.juxilo-legal .juxilo-brand .brand-suffix { display: none; }
+  body.juxilo-legal .brand .brand-name { font-size: 22px; }
+}
