@@ -163,7 +163,8 @@
   "Kleine Apps. Großer Spaß.": "Little apps. Big fun.",
   "JUXILO · Kleine Apps. Großer Spaß.": "JUXILO · Little apps. Big fun.",
   "Zur JUXILO-Übersicht": "Back to JUXILO",
-  "⌂ Alle Apps": "⌂ All apps"
+  "⌂ Alle Apps": "⌂ All apps",
+  "· Kleine Apps. Großer Spaß.": "· Little apps. Big fun."
 };
   const originalNodes = new WeakMap();
   const originalAttributes = new WeakMap();
