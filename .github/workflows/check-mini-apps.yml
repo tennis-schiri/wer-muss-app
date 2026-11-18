@@ -21,6 +21,16 @@ jobs:
       - name: JavaScript-Syntax prüfen
         run: node --check demo/assets/mini-apps.js
 
+      - name: JUXILO-Sprachwechsel und Scrollnavigation prüfen
+        run: |
+          node --check demo/assets/language.js
+          node --check demo/assets/scroll-ui.js
+          test -s demo/assets/juxilo.css
+          for logo in icon logo-dark logo-light logo-horizontal app-icon; do
+            test -s "demo/assets/juxilo-jx04-${logo}.svg"
+          done
+          grep -q 'JUXILO' demo/index.html
+
       - name: Interne Links der Mini-App-Seiten prüfen
         shell: bash
         run: |
