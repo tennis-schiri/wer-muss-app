@@ -77,6 +77,35 @@ jobs:
             grep -Fq "$fingerprint" "$file" || { echo "::error::Wasserzeichen fehlt: $file"; exit 1; }
           done
 
+      - name: FTP-Server auf Erreichbarkeit prüfen
+        shell: bash
+        env:
+          FTP_HOST: ${{ secrets.FTP_SERVER }}
+        run: |
+          set -euo pipefail
+          : "${FTP_HOST:?FTP_SERVER fehlt als Repository-Secret}"
+          if [[ "$FTP_HOST" == *"://"* || "$FTP_HOST" == *"/"* || "$FTP_HOST" == *":"* || "$FTP_HOST" == *[[:space:]]* ]]; then
+            echo "::error::FTP_SERVER muss nur den Server-Hostnamen enthalten (ohne Protokoll, Port oder Verzeichnis). Siehe ALL-INKL KAS -> FTP."
+            exit 1
+          fi
+          if ! getent ahostsv4 "$FTP_HOST" >/dev/null && ! getent ahostsv6 "$FTP_HOST" >/dev/null; then
+            echo "::error::FTP_SERVER ist im GitHub-Runner nicht per DNS auflösbar. Bitte den Servernamen unter ALL-INKL KAS -> FTP mit dem GitHub-Secret FTP_SERVER vergleichen."
+            exit 1
+          fi
+          reachable=false
+          for attempt in 1 2 3; do
+            if nc -z -w 10 "$FTP_HOST" 21 >/dev/null 2>&1; then
+              reachable=true
+              break
+            fi
+            if (( attempt < 3 )); then sleep 4; fi
+          done
+          if [[ "$reachable" != "true" ]]; then
+            echo "::error::FTP-Server ist über Port 21 von GitHub Actions aus nicht erreichbar. KAS -> FTP: korrekten Server-Hostnamen kontrollieren, FTP/FTPS-Freigabe bzw. Server-Firewall prüfen. Es wurden keine Dateien übertragen."
+            exit 1
+          fi
+          echo "FTP-Server auf Port 21 erreichbar; FTPS-Upload startet."
+
       - name: Alle Website-Dateien und Unterordner per FTPS hochladen
         shell: bash
         env:
@@ -92,7 +121,7 @@ jobs:
             relative="${file#demo/}"
             echo "Übertrage $relative …"
             curl --fail --silent --show-error --ssl-reqd --ftp-pasv \
-              --ftp-create-dirs \
+              --ftp-create-dirs --connect-timeout 15 --max-time 90 --retry 2 --retry-delay 3 \
               --user "${FTP_USER}:${FTP_PASSWORD}" \
               --upload-file "$file" \
               "ftp://${FTP_HOST}:21/$relative"
