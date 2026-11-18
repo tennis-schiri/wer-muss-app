@@ -1,4 +1,4 @@
-name: Wer-muss-Website und Mini-App-Tests manuell hochladen
+name: JUXILO-Spaß-Apps – Testseite manuell hochladen
 
 on:
   workflow_dispatch:
@@ -34,14 +34,22 @@ jobs:
             demo/apps/nur-noch-einmal/index.html \
             demo/apps/voellig-daneben/index.html \
             demo/assets/mini-apps.css \
+            demo/assets/juxilo.css \
             demo/assets/mini-apps.js \
             demo/wm04b-logo.svg \
+            demo/assets/juxilo.css \
+            demo/assets/juxilo-jx04-icon.svg \
+            demo/assets/juxilo-jx04-logo-light.svg \
+            demo/assets/juxilo-jx04-logo-dark.svg \
+            demo/assets/juxilo-jx04-logo-horizontal.svg \
+            demo/assets/juxilo-jx04-app-icon.svg \
             demo/impressum.html \
             demo/datenschutz.html; do
             test -s "$file"
           done
           grep -iq '<!doctype html>' demo/index.html
           grep -iq 'Wer muss' demo/index.html
+          grep -iq 'JUXILO' demo/index.html
 
       - name: Wasserzeichen vor Veröffentlichung prüfen
         shell: bash
