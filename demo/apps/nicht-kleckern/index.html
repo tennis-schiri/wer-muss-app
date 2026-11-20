@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="../../assets/mini-apps.css">
 <link rel="stylesheet" href="../../assets/juxilo.css">
 <link rel="stylesheet" href="../../assets/phone-frames.css">
+<link rel="stylesheet" href="../../assets/cartoon-coffee.css">
 <link rel="stylesheet" href="../../assets/scroll-ui.css">
 </head>
 <body data-game="nicht-kleckern">
@@ -32,7 +33,27 @@
   <div class="device-glass">
     <div class="device-statusbar" aria-hidden="true"><span>9:41</span><span class="device-island"></span><span class="device-signal">▮▮▮ <span class="device-battery"></span></span></div>
     <div class="device-viewport"><section class="game-board" aria-label="Spielbereich">
-<div class="tiny">HALTE DEN KAFFEE IN DER TASSE</div><div class="cup-scene"><div class="cup-handle" aria-hidden="true"></div><div class="cup" id="cup" aria-hidden="true"><div class="coffee" id="coffee"></div></div></div><div class="game-meta"><span>Übrig: <strong id="level">100 %</strong></span><span>Zeit: <strong id="left">20,0 s</strong></span><span>Bestwert: <strong id="best">–</strong></span></div><div class="game-status" id="status" aria-live="polite">Mit LINKS und RECHTS gegen das Schwappen steuern.</div><div class="game-controls"><button class="btn soft" type="button" data-steer="-1">◀ LINKS</button><button class="btn soft" type="button" data-steer="1">RECHTS ▶</button></div><div class="game-controls"><button class="btn primary" id="main-action" type="button">STARTEN</button><button class="btn" id="sensor-btn" type="button">HANDY-SENSOR TESTEN</button></div>
+<div class="tiny">HALTE DEN KAFFEE IN DER TASSE</div><div class="cup-scene" id="cup-scene" role="img" aria-label="Cartoon-Kaffeetasse mit schwappendem Kaffee">
+  <div class="cup-shadow" aria-hidden="true"></div>
+  <div class="cup-assembly" id="cup" aria-hidden="true">
+    <div class="cup-handle"></div>
+    <div class="cup-body">
+      <div class="cup-inside">
+        <div class="coffee" id="coffee">
+          <span class="coffee-surface"></span>
+          <span class="coffee-shine"></span>
+          <span class="coffee-bubble coffee-bubble-one"></span>
+          <span class="coffee-bubble coffee-bubble-two"></span>
+        </div>
+      </div>
+      <div class="cup-rim"></div>
+      <div class="cup-face"><span class="cup-eye"></span><span class="cup-eye"></span><span class="cup-mouth"></span></div>
+    </div>
+    <span class="coffee-splash coffee-splash-one"></span>
+    <span class="coffee-splash coffee-splash-two"></span>
+    <span class="coffee-splash coffee-splash-three"></span>
+  </div>
+</div><div class="game-meta"><span>Übrig: <strong id="level">100 %</strong></span><span>Zeit: <strong id="left">20,0 s</strong></span><span>Bestwert: <strong id="best">–</strong></span></div><div class="game-status" id="status" aria-live="polite">Mit LINKS und RECHTS gegen das Schwappen steuern.</div><div class="game-controls"><button class="btn soft" type="button" data-steer="-1">◀ LINKS</button><button class="btn soft" type="button" data-steer="1">RECHTS ▶</button></div><div class="game-controls"><button class="btn primary" id="main-action" type="button">STARTEN</button><button class="btn" id="sensor-btn" type="button">HANDY-SENSOR TESTEN</button></div>
 </section></div>
     <div class="device-home-bar" aria-hidden="true"></div>
   </div>
