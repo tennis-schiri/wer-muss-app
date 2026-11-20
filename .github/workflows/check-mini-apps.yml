@@ -21,6 +21,11 @@ jobs:
       - name: JavaScript-Syntax prüfen
         run: node --check demo/assets/mini-apps.js
 
+      - name: Handybedienung aller sechs Apps prüfen
+        run: |
+          node --check demo/tests/mobile-readiness.test.cjs
+          node demo/tests/mobile-readiness.test.cjs
+
       - name: Kaffee-Physik und Verschütten automatisch testen
         run: node demo/tests/coffee-physics.test.cjs
 
