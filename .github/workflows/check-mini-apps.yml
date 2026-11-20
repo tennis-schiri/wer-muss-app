@@ -21,6 +21,9 @@ jobs:
       - name: JavaScript-Syntax prüfen
         run: node --check demo/assets/mini-apps.js
 
+      - name: Kaffee-Physik und Verschütten automatisch testen
+        run: node demo/tests/coffee-physics.test.cjs
+
       - name: JUXILO-Sprachwechsel und Scrollnavigation prüfen
         run: |
           node --check demo/assets/language.js
@@ -67,8 +70,11 @@ jobs:
           nk = (demo / 'apps' / 'nicht-kleckern' / 'index.html').read_text(encoding='utf-8')
           assert 'cartoon-coffee.css' in nk, 'Cartoon-Kaffee-Styling fehlt in der spielbaren Demo'
           assert 'class="cup-assembly"' in nk and 'id="cup-scene"' in nk, 'Neue Tassenform fehlt'
-          assert 'id="coffee"' in nk and 'coffee-surface' in nk, 'Dynamische Kaffeeoberfläche fehlt'
-          assert 'coffee-sloshing' in (demo / 'assets' / 'mini-apps.js').read_text(encoding='utf-8'), 'Schwapp-Animation nicht mit Spiel verbunden'
+          assert 'id="coffee"' in nk and 'id="coffee-foam"' in nk and 'class="coffee-fluid"' in nk, 'Dynamische SVG-Kaffeeoberfläche fehlt'
+          assert 'coffee-stream-left' in nk and 'coffee-stream-right' in nk, 'Links-/Rechtsüberlauf fehlt'
+          assert 'function surfaceState()' in (demo / 'assets' / 'mini-apps.js').read_text(encoding='utf-8'), 'Realistische Flüssigkeitsoberfläche fehlt'
+          assert 'spilling-left' in (demo / 'assets' / 'mini-apps.js').read_text(encoding='utf-8'), 'Linker Überlauf nicht mit Spiel verbunden'
+          assert 'spilling-right' in (demo / 'assets' / 'mini-apps.js').read_text(encoding='utf-8'), 'Rechter Überlauf nicht mit Spiel verbunden'
           assert 'mini-coffee-smile' in home, 'Neue Kaffee-Vorschau fehlt'
           assert (demo / 'assets' / 'cartoon-coffee.css').stat().st_size > 2000, 'Cartoon-Tassen-CSS fehlt'
           pl = (demo / 'apps' / 'punktlandung' / 'index.html').read_text(encoding='utf-8')
