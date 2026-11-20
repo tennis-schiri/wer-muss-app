@@ -26,7 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           node --check site/assets/site.js
-          for file in site/index.html site/impressum.html site/datenschutz.html site/assets/site.css site/assets/juxilo-logo.svg site/assets/juxilo-icon.svg site/assets/juxilo-favicon.svg site/robots.txt site/sitemap.xml; do
+          for file in site/index.html site/impressum.html site/datenschutz.html site/assets/site.css site/assets/juxilo-logo.svg site/assets/juxilo-icon.svg site/assets/juxilo-favicon.svg site/favicon.ico site/assets/favicon-32.png site/robots.txt site/sitemap.xml; do
             test -s "$file"
           done
           grep -q 'JUXILO' site/index.html
