@@ -25,6 +25,8 @@ jobs:
         run: |
           node --check demo/assets/language.js
           node --check demo/assets/scroll-ui.js
+          node --check demo/assets/mini-apps.js
+          test -s demo/assets/cartoon-coffee.css
           test -s demo/assets/juxilo.css
           for logo in icon logo-dark logo-light logo-horizontal app-icon; do
             test -s "demo/assets/juxilo-jx04-${logo}.svg"
@@ -62,6 +64,13 @@ jobs:
           assert wm.index('class="wm-phone-content"') < wm.index('id="stage"')
           assert '?fullscreen=1' in wm, 'Vollbildmodus für Mehrfinger-Test fehlt'
           assert (demo / 'assets' / 'phone-frames.css').stat().st_size > 1000
+          nk = (demo / 'apps' / 'nicht-kleckern' / 'index.html').read_text(encoding='utf-8')
+          assert 'cartoon-coffee.css' in nk, 'Cartoon-Kaffee-Styling fehlt in der spielbaren Demo'
+          assert 'class="cup-assembly"' in nk and 'id="cup-scene"' in nk, 'Neue Tassenform fehlt'
+          assert 'id="coffee"' in nk and 'coffee-surface' in nk, 'Dynamische Kaffeeoberfläche fehlt'
+          assert 'coffee-sloshing' in (demo / 'assets' / 'mini-apps.js').read_text(encoding='utf-8'), 'Schwapp-Animation nicht mit Spiel verbunden'
+          assert 'mini-coffee-smile' in home, 'Neue Kaffee-Vorschau fehlt'
+          assert (demo / 'assets' / 'cartoon-coffee.css').stat().st_size > 2000, 'Cartoon-Tassen-CSS fehlt'
           print('Sechs Smartphone-Vorschauen, sechs spielbare Handy-Demos und Vollbildmodus geprüft.')
           PY
 
