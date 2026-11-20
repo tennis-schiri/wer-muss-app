@@ -221,7 +221,11 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 </div>
 
 <script>
-  if (new URLSearchParams(window.location.search).get('fullscreen') === '1') {
+  // An actual phone needs its full touchscreen for multiple fingers.
+  // Keep the decorative phone mockup on desktop; ?mockup=1 can preview it on mobile.
+  const wmParams = new URLSearchParams(window.location.search);
+  const wmRealPhone = window.matchMedia('(max-width: 600px) and (pointer: coarse)').matches;
+  if (wmParams.get('fullscreen') === '1' || (wmRealPhone && wmParams.get('mockup') !== '1')) {
     document.body.classList.add('wm-fullscreen');
   }
 </script>
