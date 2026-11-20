@@ -313,9 +313,9 @@
     const question=$('question'),label=$('player-label'),input=$('guess'),submit=$('submit-guess'),reveal=$('reveal'),roundEl=$('round'),scores=$('scores'),next=$('next'),numberButtons=[...document.querySelectorAll('[data-players]')];
     let players=2,round=0,guesses=[],points=[];
     function scoreText(){return points.map((p,i)=>'P'+(i+1)+': '+p).join(' · ');}
-    function start(){round=0;points=Array(players).fill(0);renderRound();}
-    function renderRound(){guesses=[];question.textContent=questions[round%questions.length].q;roundEl.textContent=(round+1)+' / 5';reveal.textContent='';next.hidden=true;input.hidden=false;submit.hidden=false;label.hidden=false;input.value='';label.textContent='Person 1 von '+players+' – deine Schätzung';scores.textContent=scoreText();status('Tipps bleiben bis zur Auflösung geheim.');input.focus();}
-    function submitGuess(){const value=Number(input.value);if(!Number.isFinite(value)||input.value.trim()===''||value<0){status('Bitte eine Zahl ab 0 eingeben.');return;}guesses.push(value);input.value='';if(guesses.length<players){label.textContent='Person '+(guesses.length+1)+' von '+players+' – deine Schätzung';status('Tipp gespeichert. Nächste Person ist dran.');input.focus();return;}
+    function start(){round=0;points=Array(players).fill(0);renderRound(false);}
+    function renderRound(focusInput=false){guesses=[];question.textContent=questions[round%questions.length].q;roundEl.textContent=(round+1)+' / 5';reveal.textContent='';next.hidden=true;input.hidden=false;submit.hidden=false;label.hidden=false;input.value='';label.textContent='Person 1 von '+players+' – deine Schätzung';scores.textContent=scoreText();status('Tipps bleiben bis zur Auflösung geheim.');if(focusInput)input.focus({preventScroll:true});}
+    function submitGuess(){const value=Number(input.value);if(!Number.isFinite(value)||input.value.trim()===''||value<0){status('Bitte eine Zahl ab 0 eingeben.');return;}guesses.push(value);input.value='';if(guesses.length<players){label.textContent='Person '+(guesses.length+1)+' von '+players+' – deine Schätzung';status('Tipp gespeichert. Nächste Person ist dran.');input.focus({preventScroll:true});return;}
       const item=questions[round%questions.length],distances=guesses.map(v=>Math.abs(v-item.a)),min=Math.min(...distances);
       const winners=distances.map((d,i)=>d===min?i:-1).filter(i=>i>=0);winners.forEach(i=>points[i]++);
       reveal.textContent='Richtig: '+item.a.toLocaleString('de-DE')+' '+item.u;
@@ -324,7 +324,7 @@
       input.hidden=true;submit.hidden=true;label.hidden=true;next.hidden=false;next.textContent=round===4?'NEUES SPIEL':'NÄCHSTE FRAGE';
     }
     submit.addEventListener('click',submitGuess);input.addEventListener('keydown',e=>{if(e.key==='Enter')submitGuess();});
-    next.addEventListener('click',()=>{round++;if(round>=5){start();return;}renderRound();});
+    next.addEventListener('click',()=>{round++;if(round>=5){start();return;}renderRound(true);});
     numberButtons.forEach(btn=>btn.addEventListener('click',()=>{players=Number(btn.dataset.players);numberButtons.forEach(b=>b.classList.toggle('active',b===btn));start();}));
     start();
   }
