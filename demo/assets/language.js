@@ -164,7 +164,16 @@
   "JUXILO · Kleine Apps. Großer Spaß.": "JUXILO · Little apps. Big fun.",
   "Zur JUXILO-Übersicht": "Back to JUXILO",
   "⌂ Alle Apps": "⌂ All apps",
-  "· Kleine Apps. Großer Spaß.": "· Little apps. Big fun."
+  "· Kleine Apps. Großer Spaß.": "· Little apps. Big fun.",
+  "Interaktive Demo im Smartphone-Rahmen": "Interactive demo in a smartphone frame",
+  "Die Demo ist": "The demo is",
+  "direkt im Handy spielbar": "playable right inside the phone",
+  ". Innerhalb des Displays kannst du bei Bedarf scrollen.": ". Scroll inside the phone screen if needed.",
+  "RUNDE 03 / 05": "ROUND 03 / 05",
+  "Wie viele Sekunden hat ein Tag?": "How many seconds are in a day?",
+  "HALTEN!": "HOLD!",
+  "LOS GEHT’S!": "LET’S GO!",
+  "9:41": "9:41"
 };
   const originalNodes = new WeakMap();
   const originalAttributes = new WeakMap();
