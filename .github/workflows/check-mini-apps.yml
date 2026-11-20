@@ -31,6 +31,34 @@ jobs:
           done
           grep -q 'JUXILO' demo/index.html
 
+      - name: Smartphone-Vorschauen und spielbare Handy-Demos prüfen
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          demo = Path('demo')
+          home = (demo / 'index.html').read_text(encoding='utf-8')
+          assert home.count('class="mini-phone-preview"') == 6, 'Es müssen sechs eigene Handy-Vorschauen erscheinen.'
+          assert home.count('class="mini-phone-hardware"') == 6, 'Jede App-Kachel braucht einen Handy-Rahmen.'
+          for slug in ['punktlandung', 'fingerchaos', 'nicht-kleckern', 'nur-noch-einmal', 'voellig-daneben']:
+              page = (demo / 'apps' / slug / 'index.html').read_text(encoding='utf-8')
+              assert 'phone-frames.css' in page, f'Smartphone-Styles fehlen in {slug}'
+              assert page.count('class="device-phone"') == 1, f'Kein eindeutiger interaktiver Handy-Rahmen in {slug}'
+              assert page.count('class="device-viewport"') == 1, f'Kein scrollbarer Handy-Bildschirm in {slug}'
+              assert page.index('class="device-viewport"') < page.index('class="game-board"'), f'Spielfeld liegt außerhalb des Handys in {slug}'
+              assert page.count('class="game-board"') == 1, f'Spielfeld mehrfach vorhanden in {slug}'
+              assert 'id="restart-app"' in page, f'Neustart fehlt in {slug}'
+          wm = (demo / 'apps' / 'wer-muss' / 'index.html').read_text(encoding='utf-8')
+          assert wm.count('class="wm-phone-outer"') == 1
+          assert wm.count('class="wm-phone-content"') == 1
+          assert wm.count('id="stage"') == 1
+          assert wm.index('class="wm-phone-content"') < wm.index('id="stage"')
+          assert '?fullscreen=1' in wm, 'Vollbildmodus für Mehrfinger-Test fehlt'
+          assert (demo / 'assets' / 'phone-frames.css').stat().st_size > 1000
+          print('Sechs Smartphone-Vorschauen, sechs spielbare Handy-Demos und Vollbildmodus geprüft.')
+          PY
+
       - name: Interne Links der Mini-App-Seiten prüfen
         shell: bash
         run: |
