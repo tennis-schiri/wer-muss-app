@@ -54,3 +54,66 @@ html[lang=de] [data-lang-content=en], html[lang=en] [data-lang-content=de]{displ
 @media(max-width:900px){.site-shell{width:min(100% - 60px,1380px)}.hero{grid-template-columns:1fr;min-height:unset;gap:0;padding:65px 0 27px}.hero-art{min-height:370px;max-width:520px;width:100%;justify-self:center;margin:20px 0 15px}.art-card{max-width:390px;aspect-ratio:1.14}.hero-copy{text-align:center}.eyebrow{justify-content:center}.hero-description{margin:24px auto}.launch-status{justify-content:center}}
 @media(max-width:540px){.site-shell{width:min(100% - 34px,1380px)}.site-header{padding-top:19px;gap:8px}.brand{max-width:195px}.brand img{max-height:62px;width:195px}.language-toggle button{min-width:37px;padding:9px 10px}.hero{padding:36px 0 26px}.eyebrow{font-size:10px;margin-bottom:23px;letter-spacing:.14em}h1{font-size:clamp(46px,11vw,65px)}.hero-description{font-size:15px;line-height:1.65;margin:24px auto 23px}.hero-art{min-height:270px;width:min(100%,350px);margin:12px auto 18px}.art-card{max-width:290px;border-radius:29px;aspect-ratio:1.05}.art-star{font-size:26px}.tagline{font-size:9px;letter-spacing:.1em;gap:9px;margin-bottom:23px}.site-footer{flex-direction:column;gap:12px;padding:22px 0}.legal-wrap{padding:36px 0 55px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.language-toggle button{transition:none}}
+
+
+/* JX04 mascot: a quiet float with one playful wiggle every few seconds. */
+.hero-art .art-card {
+  transform-origin:50% 55%;
+  animation:jx04-card-float 8s ease-in-out infinite;
+  will-change:transform;
+}
+.hero-art .art-card img {
+  transform-origin:49% 58%;
+  animation:jx04-mascot-wave 8s cubic-bezier(.2,.65,.3,1) infinite;
+  will-change:transform;
+}
+.hero-art .art-star {
+  animation:jx04-sparkle 4.8s ease-in-out infinite;
+}
+.hero-art .star-two { animation-delay:-1.7s; }
+.hero-art .star-three { animation-delay:-3.2s; }
+.hero-art .orbit-one { animation:jx04-orbit-one 34s linear infinite; }
+.hero-art .orbit-two { animation:jx04-orbit-two 43s linear infinite; }
+.hero-art:hover .art-card img {
+  animation:jx04-mascot-hello 1s cubic-bezier(.22,.7,.3,1) both;
+}
+@keyframes jx04-card-float {
+  0%,100% { transform:translateY(0) rotate(5deg); }
+  48% { transform:translateY(-10px) rotate(3.5deg); }
+}
+@keyframes jx04-mascot-wave {
+  0%,13%,32%,100% { transform:translateY(0) rotate(0deg) scale(1); }
+  16% { transform:translateY(-11px) rotate(-7deg) scale(1.025,.985); }
+  20% { transform:translateY(-15px) rotate(8deg) scale(1.035); }
+  24% { transform:translateY(-8px) rotate(-5deg) scale(1.02); }
+  28% { transform:translateY(0) rotate(2deg) scale(.99,1.015); }
+}
+@keyframes jx04-mascot-hello {
+  0%,100% { transform:translateY(0) rotate(0deg) scale(1); }
+  25% { transform:translateY(-17px) rotate(-11deg) scale(1.045); }
+  55% { transform:translateY(-7px) rotate(11deg) scale(1.04); }
+  78% { transform:translateY(-3px) rotate(-5deg) scale(1.01); }
+}
+@keyframes jx04-sparkle {
+  0%,100% { opacity:.48; scale:.83; }
+  35% { opacity:1; scale:1.18; }
+  62% { opacity:.72; scale:1; }
+}
+@keyframes jx04-orbit-one {
+  from { transform:rotate(-18deg); }
+  to { transform:rotate(342deg); }
+}
+@keyframes jx04-orbit-two {
+  from { transform:rotate(26deg); }
+  to { transform:rotate(-334deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-art .art-card,
+  .hero-art .art-card img,
+  .hero-art .art-star,
+  .hero-art .art-orbit {
+    animation:none!important;
+    will-change:auto;
+  }
+  .hero-art .art-card { transform:rotate(5deg); }
+}
