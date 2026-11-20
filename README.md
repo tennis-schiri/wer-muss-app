@@ -46,10 +46,13 @@ flutter create --platforms=ios --project-name wer_muss .
 
 Für den Test auf einem realen iPhone sind eine lokale iOS-Signierung über Xcode und die Geräteverbindung nötig. Für TestFlight ist die kostenpflichtige Apple-Developer-Mitgliedschaft erforderlich.
 
-## Browser-Test
+## JUXILO-Websites und Browser-Test
 
-Die überarbeitete Browser-Demo liegt unter `demo/apps/wer-muss/index.html`, die Mini-App-Übersicht unter `demo/index.html`. Der manuelle Website-Upload läuft über
-[GitHub Actions](https://github.com/tennis-schiri/wer-muss-app/actions/workflows/deploy-test.yml).
+- **`juxilo.de`**: Öffentlich sichtbare Vorschauseite aus `site/`, ohne Links oder Details zu den Demos.
+- **`demo.juxilo.de`**: Eigenständige Browser-Tests aus `demo/`, sechs Apps inklusive Smartphone-Ansichten.
+- **Getrennte FTPS-Zugänge und manuelle GitHub-Actions-Workflows** für beide Domains.
+
+Die Domains, Secrets und manuellen Uploads sind in [JUXILO_DEPLOY.md](JUXILO_DEPLOY.md) beschrieben. Die Flutter-App und ihre iOS-Simulator-Konfiguration bleiben davon unberührt.
 
 ## Hinweise
 
