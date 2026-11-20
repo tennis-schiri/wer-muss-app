@@ -41,6 +41,12 @@ jobs:
           home = (demo / 'index.html').read_text(encoding='utf-8')
           assert home.count('class="mini-phone-preview"') == 6, 'Es müssen sechs eigene Handy-Vorschauen erscheinen.'
           assert home.count('class="mini-phone-hardware"') == 6, 'Jede App-Kachel braucht einen Handy-Rahmen.'
+          assert 'class="app-card featured' not in home, 'Keine JUXILO-App darf größer hervorgehoben werden.'
+          assert home.count('class="app-card app-') == 6, 'Alle Apps müssen das identische Kartenlayout verwenden.'
+          assert home.count('class="status preview">BROWSER-TEST</span>') == 6, 'Alle Apps brauchen denselben Kartenstatus.'
+          phones = (demo / 'assets' / 'phone-frames.css').read_text(encoding='utf-8')
+          assert 'grid-auto-rows: 1fr;' in phones, 'Einheitlich hohe Kachelreihen fehlen.'
+          assert '.app-card.featured' not in phones, 'Spezialgrößen für die erste App sind noch aktiv.'
           for slug in ['punktlandung', 'fingerchaos', 'nicht-kleckern', 'nur-noch-einmal', 'voellig-daneben']:
               page = (demo / 'apps' / slug / 'index.html').read_text(encoding='utf-8')
               assert 'phone-frames.css' in page, f'Smartphone-Styles fehlen in {slug}'
