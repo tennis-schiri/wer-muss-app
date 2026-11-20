@@ -143,38 +143,144 @@
   }
 
   if(game === 'nicht-kleckern') {
-    const action=$('main-action'),coffee=$('coffee'),cup=$('cup'),cupScene=$('cup-scene'),left=$('left'),level=$('level'),sensor=$('sensor-btn');
-    let active=false,remaining=100,tilt=0,velocity=0,wind=0,input=0,gamma=null,started=0,last=0,raf=0,windAt=0;
-    let best=recall('nicht-kleckern');$('best').textContent=best?Math.round(best)+' %':'–';
-    function render(){cup.style.setProperty('--cup-angle',tilt.toFixed(1)+'deg');coffee.style.setProperty('--coffee-angle',(-tilt*1.4).toFixed(1)+'deg');coffee.style.setProperty('--coffee-level',clamp(remaining*.8,0,80)+'%');cupScene.classList.toggle('coffee-sloshing',active && Math.abs(tilt)>8);level.textContent=Math.round(remaining)+' %';}
-    function done(){active=false;cupScene.classList.remove('coffee-sloshing');cancelAnimationFrame(raf);action.textContent='NOCHMAL BALANCIEREN';status('Geschafft! '+Math.round(remaining)+' % Kaffee gerettet.');if(remaining>best){best=remaining;remember('nicht-kleckern',best);$('best').textContent=Math.round(best)+' %';}}
-    function tick(now){if(!active)return;const dt=Math.min((now-last)/1000,.07);last=now;if(now-windAt>1200){wind=Math.random()*2-1;windAt=now;}
+    const action=$('main-action'), coffee=$('coffee'), foam=$('coffee-foam'), sheen=$('coffee-sheen');
+    const cup=$('cup'), cupScene=$('cup-scene'), left=$('left'), level=$('level'), sensor=$('sensor-btn');
+    let active=false, remaining=100, tilt=0, velocity=0, wind=0, input=0, gamma=null;
+    let started=0, last=0, raf=0, windAt=0;
+    // Spring-damped inertial motion gives the liquid its own momentum.
+    let wave=0, waveVelocity=0, previousTilt=0;
+    let best=recall('nicht-kleckern');
+    $('best').textContent=best?Math.round(best)+' %':'–';
+
+    function surfaceState() {
+      // All coordinates are in the cup interior's 100x100 SVG viewBox.
+      // At 100% remaining the cup looks about 80% full, with a realistic air gap.
+      const baseY=100-remaining*.8;
+      // A world-level liquid surface slopes in the opposite direction to the cup.
+      const rise=Math.tan(tilt*Math.PI/180)*50+wave;
+      const leftY=baseY+rise, rightY=baseY-rise;
+      const lipY=4; // The inside of the rim, NOT the top of the decorative cup.
+      return {
+        leftY,rightY,
+        overLeft:Math.max(0,lipY-leftY),
+        overRight:Math.max(0,lipY-rightY)
+      };
+    }
+
+    function updateLiquid(dt) {
+      const rotationSpeed=(tilt-previousTilt)/Math.max(dt,.008);
+      previousTilt=tilt;
+      // Faster changes excite a small oscillating wave. It decays when balanced.
+      waveVelocity+=(-27*wave-6.2*waveVelocity+1.25*rotationSpeed)*dt;
+      wave=clamp(wave+waveVelocity*dt,-14,14);
+
+      const surface=surfaceState();
+      // Only liquid *above* the corresponding rim can escape. As volume drops,
+      // the liquid level descends and an unchanged tilt eventually stops spilling.
+      const over=surface.overLeft+surface.overRight;
+      if(over>0) {
+        const rate=over*(.92+Math.min(.7,Math.abs(rotationSpeed)/130));
+        remaining=clamp(remaining-rate*dt,0,100);
+      }
+    }
+
+    function render() {
+      cup.style.setProperty('--cup-angle',tilt.toFixed(2)+'deg');
+      const state=surfaceState();
+      const crest=clamp(waveVelocity*.1,-4,4);
+      const {leftY,rightY,overLeft,overRight}=state;
+      // A gently curved, continuously redrawn free surface; the coffee itself
+      // is NOT rotated as one rigid rectangle with the ceramic cup.
+      const upper='M 0 '+leftY.toFixed(2)
+        +' C 25 '+(leftY+crest).toFixed(2)
+        +' 75 '+(rightY-crest).toFixed(2)
+        +' 100 '+rightY.toFixed(2);
+      coffee.setAttribute('d',upper+' L 100 104 L 0 104 Z');
+      foam.setAttribute('d',upper);
+      const shineLeft=leftY+(rightY-leftY)*.1+10;
+      const shineRight=leftY+(rightY-leftY)*.35+10;
+      sheen.setAttribute('d','M 10 '+shineLeft.toFixed(2)
+        +' Q 23 '+((shineLeft+shineRight)/2-2).toFixed(2)
+        +' 35 '+shineRight.toFixed(2));
+
+      const spillingLeft=active&&overLeft>.4&&remaining>0;
+      const spillingRight=active&&overRight>.4&&remaining>0;
+      cupScene.classList.toggle('spilling-left',spillingLeft);
+      cupScene.classList.toggle('spilling-right',spillingRight);
+      cupScene.classList.toggle('coffee-sloshing',active&&Math.abs(wave)>3);
+      cupScene.style.setProperty('--spill-left-alpha',clamp(overLeft/8,.35,1).toFixed(2));
+      cupScene.style.setProperty('--spill-right-alpha',clamp(overRight/8,.35,1).toFixed(2));
+      level.textContent=Math.round(remaining)+' %';
+    }
+
+    function done() {
+      active=false;
+      cancelAnimationFrame(raf);
+      render(); // Stop streams and droplets after the round ends.
+      action.textContent='NOCHMAL BALANCIEREN';
+      status('Geschafft! '+Math.round(remaining)+' % Kaffee gerettet.');
+      if(remaining>best) {
+        best=remaining;
+        remember('nicht-kleckern',best);
+        $('best').textContent=Math.round(best)+' %';
+      }
+    }
+    function tick(now) {
+      if(!active)return;
+      const dt=clamp((now-last)/1000,.001,.06);
+      last=now;
+      if(now-windAt>1200) {wind=Math.random()*2-1;windAt=now;}
       const device=gamma!==null?clamp(gamma/32,-1,1):0;
       velocity=(velocity+((wind*.48)+(input*1.1)+(device*.7))*dt*17)*.95;
       tilt=clamp(tilt+velocity*dt*18,-26,26);
-      const spill=Math.max(0,Math.abs(tilt)-7)*dt*.48;
-      remaining=clamp(remaining-spill,0,100);
-      const seconds=Math.max(0,20-(now-started)/1000);left.textContent=seconds.toFixed(1).replace('.',',')+' s';render();
-      if(seconds<=0||remaining<=0){done();return;}raf=requestAnimationFrame(tick);
+      updateLiquid(dt);
+      const seconds=Math.max(0,20-(now-started)/1000);
+      left.textContent=seconds.toFixed(1).replace('.',',')+' s';
+      render();
+      if(seconds<=0||remaining<=0){done();return;}
+      raf=requestAnimationFrame(tick);
     }
-    action.addEventListener('click',()=>{cancelAnimationFrame(raf);active=true;remaining=100;tilt=velocity=wind=0;started=last=performance.now();windAt=0;action.textContent='RUNDE NEU STARTEN';status('Gegensteuern! Halte die Tasse möglichst gerade.');raf=requestAnimationFrame(tick);});
+    action.addEventListener('click',()=>{
+      cancelAnimationFrame(raf);
+      active=true;
+      remaining=100;
+      tilt=velocity=wind=wave=waveVelocity=previousTilt=0;
+      started=last=performance.now();
+      windAt=0;
+      left.textContent='20,0 s';
+      action.textContent='RUNDE NEU STARTEN';
+      status('Gegensteuern! Halte die Tasse möglichst gerade.');
+      render();
+      raf=requestAnimationFrame(tick);
+    });
     document.querySelectorAll('[data-steer]').forEach(btn=>{
       const value=Number(btn.dataset.steer);
       const on=e=>{e.preventDefault();input=value;try{btn.setPointerCapture(e.pointerId);}catch(_){}};
       const off=()=>{if(input===value)input=0;};
-      btn.addEventListener('pointerdown',on);btn.addEventListener('pointerup',off);btn.addEventListener('pointercancel',off);btn.addEventListener('lostpointercapture',off);
+      btn.addEventListener('pointerdown',on);
+      btn.addEventListener('pointerup',off);
+      btn.addEventListener('pointercancel',off);
+      btn.addEventListener('lostpointercapture',off);
     });
     document.addEventListener('keydown',e=>{if(e.code==='ArrowLeft')input=-1;if(e.code==='ArrowRight')input=1;});
     document.addEventListener('keyup',e=>{if((e.code==='ArrowLeft'&&input===-1)||(e.code==='ArrowRight'&&input===1))input=0;});
-    sensor.addEventListener('click',async()=>{if(!('DeviceOrientationEvent' in window)){status('Kein Bewegungssensor verfügbar. Pfeiltasten nutzen.');return;}
-      try{if(typeof DeviceOrientationEvent.requestPermission==='function'){const p=await DeviceOrientationEvent.requestPermission();if(p!=='granted'){status('Sensorsperre aktiv. Du kannst die Pfeiltasten nutzen.');return;}}
-        window.addEventListener('deviceorientation',e=>{if(typeof e.gamma==='number')gamma=e.gamma;});sensor.disabled=true;sensor.textContent='SENSOR AKTIV';status('Bewegungssensor aktiviert. Alternativ Pfeile nutzen.');
-      }catch(_){status('Sensor nicht verfügbar. Pfeiltasten funktionieren trotzdem.');}
+    sensor.addEventListener('click',async()=>{
+      if(!('DeviceOrientationEvent' in window)){status('Kein Bewegungssensor verfügbar. Pfeiltasten nutzen.');return;}
+      try {
+        if(typeof DeviceOrientationEvent.requestPermission==='function') {
+          const p=await DeviceOrientationEvent.requestPermission();
+          if(p!=='granted'){status('Sensorsperre aktiv. Du kannst die Pfeiltasten nutzen.');return;}
+        }
+        window.addEventListener('deviceorientation',e=>{if(typeof e.gamma==='number')gamma=e.gamma;});
+        sensor.disabled=true;
+        sensor.textContent='SENSOR AKTIV';
+        status('Bewegungssensor aktiviert. Alternativ Pfeile nutzen.');
+      } catch (_) {status('Sensor nicht verfügbar. Pfeiltasten funktionieren trotzdem.');}
     });
     render();
   }
 
-  if(game === 'nur-noch-einmal') {
+    if(game === 'nur-noch-einmal') {
     const balloon=$('balloon'),hold=$('hold'),points=$('points'),risk=$('risk'),best=$('best');
     let size=1,held=false,start=0,frames=0,bank=0,potential=0;
     best.textContent=recall('nur-noch-einmal');
