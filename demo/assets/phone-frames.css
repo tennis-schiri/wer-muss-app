@@ -154,33 +154,29 @@
 .mini-quiz-question{display:grid;place-items:center;flex:1;min-height:96px;font-size:11px;font-weight:950;line-height:1.25}
 .mini-quiz-input{width:94%;border:1px solid #675e84;padding:9px 4px;border-radius:7px;font-size:10px;font-weight:850;color:#aaa4c2;background:#131427}
 
-/* Featured first card uses a two-column magazine layout. */
-.juxilo-apps .app-card.featured {
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 166px;
-  grid-template-rows:auto 1fr;
-  column-gap:18px;
-  align-items:start;
-  min-height:445px;
+/* All six demos are equal members of the collection: three-by-two, then two columns, then one. */
+.juxilo-apps .app-grid {
+  grid-auto-rows: 1fr;
+  align-items: stretch;
 }
-.juxilo-apps .app-card.featured .card-top{grid-column:1/-1;grid-row:1}
-.juxilo-apps .app-card.featured .mini-phone-preview{grid-column:2;grid-row:2;margin:5px auto 0;width:156px}
-.juxilo-apps .app-card.featured .card-body{grid-column:1;grid-row:2;align-self:end;padding-top:20px;margin-top:0}
-.juxilo-apps .app-card:not(.featured) .mini-phone-preview{order:1}
-.juxilo-apps .app-card:not(.featured) .card-top{order:0}
-.juxilo-apps .app-card:not(.featured) .card-body{order:2}
-.juxilo-apps .app-card:not(.featured){min-height:570px;}
-@media(max-width:760px){
-  .juxilo-apps .app-card.featured{grid-template-columns:minmax(0,1fr) 150px}
+.juxilo-apps .app-card {
+  height: 100%;
+  min-height: 570px;
+  display: flex;
+  flex-direction: column;
 }
-@media(max-width:520px){
-  .juxilo-apps .app-card.featured {display:flex;flex-direction:column;min-height:0}
-  .juxilo-apps .app-card.featured .mini-phone-preview {order:1;margin:18px auto 3px;width:151px}
-  .juxilo-apps .app-card.featured .card-body {order:2;padding-top:25px}
-  .juxilo-apps .app-card:not(.featured) {min-height:0}
+.juxilo-apps .app-card .card-top { order: 0; }
+.juxilo-apps .app-card .mini-phone-preview { order: 1; }
+.juxilo-apps .app-card .card-body {
+  order: 2;
+  margin-top: auto;
+  padding-top: 24px;
 }
-@media(prefers-reduced-motion:reduce){
-  .juxilo-apps .app-card .mini-phone-preview{transition:none}
+@media (max-width: 520px) {
+  .juxilo-apps .app-card { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .juxilo-apps .app-card .mini-phone-preview { transition: none; }
 }
 
 /* Live smartphone case for the five regular web games. */
