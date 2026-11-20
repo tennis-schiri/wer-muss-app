@@ -1,6 +1,12 @@
 # Wer muss?! — Flutter-Mini-App (iOS zuerst)
 
-Eine kleine Zufalls-App für mehrere Finger auf **einem** Smartphone. Kein Login, keine Werbung, kein Backend.
+Eine kleine Zufalls-App für mehrere Finger auf **einem** Smartphone. Kein Login, kein Backend. Die bisherige Testversion ist werbefrei; für die späteren nativen JUXILO-Veröffentlichungen ist ein kostenloses, werbefinanziertes Modell geplant.
+
+## JUXILO-Geschäftsmodell (beschlossen 20.11.2026)
+
+Alle sechs JUXILO-Apps sollen bei Veröffentlichung **kostenlos** und ohne gesperrte Spielmodi erhältlich sein. Die Finanzierung ist über **dezente Werbung außerhalb aktiver Spielrunden** und eine **optionale einmalige Werbefrei-Schaltung (Zielpreis 2,99 € pro App)** vorgesehen. Keine Abos, keine Pflichtvideos, keine Registrierung; Offline-Spiel bleibt möglich. Die **Werbe- und Kauftechnik ist noch nicht eingebaut**. Bei Veröffentlichung sind Datenschutz/Einwilligung, Store-Vorgaben und Kauf-Wiederherstellung zu erfüllen.
+
+Verbindliche Produktentscheidung, Anzeigenregeln und Implementierungs-Checkliste: [JUXILO_MONETARISIERUNG.md](JUXILO_MONETARISIERUNG.md).
 
 ## Stand der Entwicklung
 
