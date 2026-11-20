@@ -1,6 +1,12 @@
 name: JUXILO – juxilo.de live hochladen
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'site/**'
+      - '.github/workflows/deploy-juxilo-site.yml'
   workflow_dispatch:
 
 permissions:
