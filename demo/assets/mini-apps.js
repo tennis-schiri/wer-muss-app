@@ -129,16 +129,33 @@
   if(game === 'fingerchaos') {
     const area=$('tap-zone'), good=$('tap-target'), bad=$('tap-trap'), action=$('main-action'), scoreEl=$('score'), left=$('left'), best=$('best');
     let active=false,score=0,ends=0,timer=null;best.textContent=recall('fingerchaos');
-    function place(node){
+    function place(node,other){
       const w=area.clientWidth,h=area.clientHeight;
-      const x=40+Math.random()*Math.max(1,w-80),y=40+Math.random()*Math.max(1,h-80);
+      const radius=Math.max(22,(node.offsetWidth||66)/2);
+      const margin=Math.min(40,Math.max(radius+4,26));
+      const minX=Math.min(margin,w/2),minY=Math.min(margin,h/2);
+      const otherX=other&&Number.parseFloat(other.style.left);
+      const otherY=other&&Number.parseFloat(other.style.top);
+      const safetyGap=radius+(other?.offsetWidth||66)/2+13;
+      let x=minX,y=minY;
+      for(let attempt=0;attempt<24;attempt++){
+        x=minX+Math.random()*Math.max(0,w-2*minX);
+        y=minY+Math.random()*Math.max(0,h-2*minY);
+        if(!Number.isFinite(otherX)||!Number.isFinite(otherY)
+          ||Math.hypot(x-otherX,y-otherY)>=safetyGap)break;
+        if(attempt===23){
+          // The wrong circle must not hide the right one on a small screen.
+          x=otherX<w/2?w-minX:minX;
+          y=otherY<h/2?h-minY:minY;
+        }
+      }
       node.style.left=x+'px';node.style.top=y+'px';
     }
     function end(){active=false;clearInterval(timer);timer=null;good.hidden=true;bad.hidden=true;action.textContent='NEUE RUNDE';status('Zeit abgelaufen! '+score+' Punkte.');if(score>recall('fingerchaos')){remember('fingerchaos',score);best.textContent=score;}}
     function tick(){const sec=Math.max(0,(ends-performance.now())/1000);left.textContent=sec.toFixed(1).replace('.',',')+' s';if(sec<=0)end();}
-    action.addEventListener('click',()=>{clearInterval(timer);active=true;score=0;scoreEl.textContent='0';ends=performance.now()+20000;action.textContent='NEU STARTEN';status('Tippe MINT. Meide KORALLE!');good.hidden=false;bad.hidden=false;place(good);place(bad);timer=setInterval(tick,80);tick();});
-    good.addEventListener('click',()=>{if(!active)return;score++;scoreEl.textContent=score;good.style.width=good.style.height=Math.max(38,66-score)+'px';place(good);place(bad);});
-    bad.addEventListener('click',()=>{if(!active)return;score=Math.max(0,score-2);scoreEl.textContent=score;status('Falscher Kreis: −2 Punkte!');place(bad);});
+    action.addEventListener('click',()=>{clearInterval(timer);active=true;score=0;scoreEl.textContent='0';ends=performance.now()+20000;action.textContent='NEU STARTEN';status('Tippe MINT. Meide KORALLE!');good.hidden=false;bad.hidden=false;place(good,bad);place(bad,good);timer=setInterval(tick,80);tick();});
+    good.addEventListener('click',()=>{if(!active)return;score++;scoreEl.textContent=score;good.style.width=good.style.height=Math.max(44,66-score)+'px';place(good,bad);place(bad,good);});
+    bad.addEventListener('click',()=>{if(!active)return;score=Math.max(0,score-2);scoreEl.textContent=score;status('Falscher Kreis: −2 Punkte!');place(bad,good);});
     good.hidden=true;bad.hidden=true;left.textContent='20,0 s';
   }
 
