@@ -1,4 +1,4 @@
-# JUXILO – zwei Websites, getrennte Live-Uploads
+# JUXILO – zwei Websites, getrennte automatische Live-Uploads
 
 ## Welche Website ist welche?
 
@@ -29,10 +29,20 @@ Für den eigenen FTP-Zugang von **demo.juxilo.de**:
 
 Die FTP-Anmeldedaten gehören ausschließlich in die GitHub-Secrets, niemals in den Repository-Code oder den Chat.
 
-## Manueller Live-Upload (in dieser Reihenfolge)
+## Automatischer Live-Upload und manueller Fallback
+
+Seit **20.11.2026** sind beide Workflows zusätzlich zu `workflow_dispatch` auf `push` für Branch `main` und den jeweiligen Dateipfad konfiguriert:
+
+1. Änderungen unter `site/**` (oder an `.github/workflows/deploy-juxilo-site.yml`) starten automatisch den FTPS-Upload für **juxilo.de**.
+2. Änderungen unter `demo/**` (oder an `.github/workflows/deploy-test.yml`) starten automatisch den FTPS-Upload für **demo.juxilo.de**.
+3. Reine Änderungen an `README.md` oder Konzeptdateien starten **keinen** Upload; einzelne App-Code-Änderungen außerhalb der Webordner werden durch diese Workflows **nicht** veröffentlicht.
+
+Für einen erneuten manuellen Upload (z. B. nach Netzwerkfehlern) bleiben beide Links verfügbar:
 
 1. [**juxilo.de veröffentlichen**](https://github.com/tennis-schiri/wer-muss-app/actions/workflows/deploy-juxilo-site.yml) → **Run workflow**. Überträgt ausschließlich `site/`.
 2. [**demo.juxilo.de veröffentlichen**](https://github.com/tennis-schiri/wer-muss-app/actions/workflows/deploy-test.yml) → **Run workflow**. Überträgt ausschließlich `demo/`.
+
+**Wichtig:** Automatisch ausgelöst ist nicht gleich erfolgreich hochgeladen. Bei fehlenden Secrets, FTP-Problemen oder fehlgeschlagenen Checks zeigt GitHub Actions einen Fehler. Der grüne Workflow-Lauf muss weiterhin geprüft werden. Die Anzeigen-/In-App-Kauf-Implementierung ist noch nicht live und wird durch einen Website-Upload nicht installiert.
 
 Jeder Workflow prüft vor dem Hochladen Dateivollständigkeit und FTP-Erreichbarkeit (Port 21, explizites FTPS). Ein grüner GitHub-Actions-Lauf bestätigt den FTP-Upload, nicht automatisch die korrekte DNS-, SSL- oder Webverzeichnis-Zuordnung.
 
