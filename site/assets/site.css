@@ -74,8 +74,10 @@ html[lang=de] [data-lang-content=en], html[lang=en] [data-lang-content=de]{displ
 .hero-art .star-three { animation-delay:-3.2s; }
 .hero-art .orbit-one { animation:jx04-orbit-one 34s linear infinite; }
 .hero-art .orbit-two { animation:jx04-orbit-two 43s linear infinite; }
-.hero-art:hover .art-card img {
-  animation:jx04-mascot-hello 1s cubic-bezier(.22,.7,.3,1) both;
+@media (hover:hover) and (pointer:fine) {
+  .hero-art:hover .art-card img {
+    animation:jx04-mascot-hello 1s cubic-bezier(.22,.7,.3,1) both;
+  }
 }
 @keyframes jx04-card-float {
   0%,100% { transform:translateY(0) rotate(5deg); }
