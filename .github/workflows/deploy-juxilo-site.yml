@@ -26,10 +26,14 @@ jobs:
         run: |
           set -euo pipefail
           node --check site/assets/site.js
-          for file in site/index.html site/impressum.html site/datenschutz.html site/assets/site.css site/assets/juxilo-logo.svg site/assets/juxilo-icon.svg site/assets/juxilo-favicon.svg site/favicon.ico site/assets/favicon-32.png site/robots.txt site/sitemap.xml; do
+          for file in site/index.html site/impressum.html site/datenschutz.html site/assets/site.css site/assets/showcase.css site/assets/juxilo-logo.svg site/assets/juxilo-icon.svg site/assets/juxilo-favicon.svg site/favicon.ico site/assets/favicon-32.png site/robots.txt site/sitemap.xml; do
             test -s "$file"
           done
           grep -q 'JUXILO' site/index.html
+          test "$(grep -o 'class="teaser-card teaser-card--' site/index.html | wc -l)" -eq 6
+          for icon in wer-muss.svg punktlandung.webp fingerchaos.webp nicht-kleckern.webp nur-noch-einmal.webp voellig-daneben.webp; do
+            test -s "site/assets/icons/$icon"
+          done
           if grep -Ein 'demo\.juxilo\.de|test\.wer-muss\.wiedeck\.de|href="[^"]*/apps/' site/*.html; then
             echo "::error::Auf juxilo.de darf kein Link zur Demo stehen."
             exit 1
