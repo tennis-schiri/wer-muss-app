@@ -4,6 +4,7 @@
 
   // All mini apps use the same language preference as the Wer muss?! demo.
   const translations = {
+  "JUXILO ist die gemeinsame Heimat unserer Spaß-Apps. Hier kannst du frühe Browser-Versionen kostenlos, werbefrei und ohne Benutzerkonto testen. Auch die späteren eigenständigen iPhone- und Android-Apps sind als kostenlose Downloads geplant – mit dezenter Werbung und einer freiwilligen einmaligen Werbefrei-Schaltung.": "JUXILO is home to our fun mini-apps. You can test early browser versions for free, without ads or an account. The future standalone iPhone and Android apps are also planned as free downloads, with unobtrusive ads and an optional one-time purchase to remove them.",
   "Mini-App-Werkstatt": "Mini-app workshop",
   "Alle Apps ansehen": "View all apps",
   "↻ Neu starten": "↻ Restart",
