@@ -71,6 +71,17 @@ jobs:
           assert 'coffee-sloshing' in (demo / 'assets' / 'mini-apps.js').read_text(encoding='utf-8'), 'Schwapp-Animation nicht mit Spiel verbunden'
           assert 'mini-coffee-smile' in home, 'Neue Kaffee-Vorschau fehlt'
           assert (demo / 'assets' / 'cartoon-coffee.css').stat().st_size > 2000, 'Cartoon-Tassen-CSS fehlt'
+          pl = (demo / 'apps' / 'punktlandung' / 'index.html').read_text(encoding='utf-8')
+          assert all(f'data-target="{value}"' in pl for value in ('5','10','15')), 'Zielzeit-Vorgaben fehlen'
+          assert 'id="custom-target"' in pl and 'inputmode="decimal"' in pl, 'Freie Zielzeit oder Dezimaltastatur fehlt'
+          assert 'id="custom-target-hint"' in pl, 'Hinweis zur Nachkommastelle fehlt'
+          assert 'mini-time-custom' in home, 'Eigene Zielzeit in Handy-Vorschau fehlt'
+          js = (demo / 'assets' / 'mini-apps.js').read_text(encoding='utf-8')
+          assert 'function parseCustom()' in js and 'Number(value.replace' in js, 'Dezimaleingabe wird nicht verarbeitet'
+          assert 'usingCustom' in js and 'customInput.disabled=true' in js, 'Eigene Zielzeit wird während des Laufs nicht gesperrt'
+          assert 'formatTarget(target)' in js, 'Zielzeit wird nicht auf eine Nachkommastelle formatiert'
+          lang = (demo / 'assets' / 'language.js').read_text(encoding='utf-8')
+          assert '"Eigene Zeit": "Custom time"' in lang, 'Englische Beschriftung fehlt'
           print('Sechs Smartphone-Vorschauen, sechs spielbare Handy-Demos und Vollbildmodus geprüft.')
           PY
 
