@@ -452,3 +452,85 @@ body.wm-fullscreen{background:#111224;}
 .wm-fullscreen .wm-phone-status,.wm-fullscreen .wm-phone-home{display:none}
 .wm-fullscreen .wm-phone-content>.welcome{padding: max(16px, env(safe-area-inset-top)) 20px max(18px,env(safe-area-inset-bottom))}
 .wm-fullscreen .wm-phone-content>.app{padding:max(6px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}
+
+
+/* Mobile devices are already phones. Keep the glossy device frame on desktops,
+   but give the REAL phone its entire usable width/height instead of nested scrolling. */
+@media (max-width: 600px) {
+  body[data-game] .device-demo {
+    width:100%;
+    display:block;
+    margin:14px 0 0;
+  }
+  body[data-game] .device-phone {
+    width:100%;
+    height:auto;
+    aspect-ratio:auto;
+    padding:0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    filter:none;
+  }
+  body[data-game] .device-phone::before,
+  body[data-game] .device-phone::after { display:none; }
+  body[data-game] .device-glass {
+    display:block;
+    height:auto;
+    border:0;
+    border-radius:0;
+    overflow:visible;
+    background:transparent;
+    box-shadow:none;
+  }
+  body[data-game] .device-statusbar,
+  body[data-game] .device-home-bar { display:none; }
+  body[data-game] .device-viewport {
+    display:block;
+    height:auto;
+    min-height:0;
+    flex:none;
+    overflow:visible;
+    overscroll-behavior:auto;
+    touch-action:auto;
+    -webkit-overflow-scrolling:auto;
+    background:transparent;
+  }
+  body[data-game] .device-viewport .game-board {
+    height:auto;
+    min-height:0;
+    overflow:visible;
+    padding:20px 15px 26px;
+    border:1px solid #665279;
+    border-radius:24px;
+    background:radial-gradient(ellipse at 85% 8%,#393052,#211b35 80%);
+  }
+  body[data-game] .device-demo-tip {display:none;}
+  body[data-game="fingerchaos"] .device-viewport .tap-zone {
+    height:clamp(245px,42svh,380px);
+    margin-top:17px;
+    touch-action:manipulation;
+  }
+  body[data-game="fingerchaos"] .tap-target,
+  body[data-game="fingerchaos"] .tap-trap {
+    touch-action:manipulation;
+  }
+  body[data-game="nicht-kleckern"] [data-steer] {
+    touch-action:none;
+    user-select:none;
+    -webkit-user-select:none;
+    min-height:52px;
+  }
+  body[data-game="nur-noch-einmal"] .hold-button {
+    touch-action:none;
+    min-height:60px;
+  }
+  body[data-game="voellig-daneben"] .device-viewport .quiz-question {
+    min-height:65px;
+    margin:14px auto;
+  }
+  body[data-game="voellig-daneben"] .device-viewport .quiz-history {
+    min-height:35px;
+  }
+}
