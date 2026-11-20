@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /
+# JUXILO browser demos remain accessible directly by URL.
