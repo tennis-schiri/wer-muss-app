@@ -1,6 +1,12 @@
 name: JUXILO – demo.juxilo.de live hochladen
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'demo/**'
+      - '.github/workflows/deploy-test.yml'
   workflow_dispatch:
 
 permissions:
