@@ -72,6 +72,10 @@ jobs:
           assert (root / 'favicon.ico').read_bytes().startswith(b'\x00\x00\x01\x00'), 'Favicon.ico hat keinen korrekten ICO-Header'
           assert (root / 'assets' / 'favicon-32.png').read_bytes().startswith(b'\x89PNG\r\n\x1a\n'), 'Favicon-PNG fehlt oder ist beschädigt'
           homepage = (root / 'index.html').read_text(encoding='utf-8').lower()
+          css = (root / 'assets' / 'site.css').read_text(encoding='utf-8')
+          assert '@keyframes jx04-mascot-wave' in css, 'JUXILO-J-Animation fehlt'
+          assert '@keyframes jx04-mascot-hello' in css, 'JUXILO-J-Hover-Animation fehlt'
+          assert 'prefers-reduced-motion: reduce' in css, 'Animation muss Bewegung reduzieren respektieren'
           for marker in ['wer muss?!', 'fingerchaos', 'punktlandung', 'nicht kleckern', 'nur noch einmal', 'völlig daneben']:
               if marker in homepage:
                   errors.append('Die öffentliche Vorschauseite nennt ein Spiel: ' + marker)
