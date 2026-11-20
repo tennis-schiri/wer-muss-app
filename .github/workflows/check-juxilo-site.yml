@@ -1,0 +1,78 @@
+name: JUXILO – Vorschauseite prüfen
+
+on:
+  push:
+    paths:
+      - 'site/**'
+      - '.github/workflows/check-juxilo-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Website-Dateien und JavaScript prüfen
+        run: |
+          set -euo pipefail
+          node --check site/assets/site.js
+          for file in site/index.html site/impressum.html site/datenschutz.html site/assets/site.css site/assets/juxilo-logo.svg site/assets/juxilo-icon.svg site/assets/juxilo-favicon.svg site/robots.txt site/sitemap.xml; do
+            test -s "$file"
+          done
+
+      - name: Vorschauseite ohne Demo-Verweise und defekte Links prüfen
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          from urllib.parse import urlsplit
+
+          root = Path('site').resolve()
+          html_files = list(root.rglob('*.html'))
+          assert len(html_files) == 3, 'Erwartet: Startseite, Impressum, Datenschutz'
+          errors = []
+
+          class Links(HTMLParser):
+              def __init__(self, page):
+                  super().__init__()
+                  self.page = page
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  for key in ('src', 'href'):
+                      value = attrs.get(key)
+                      if not value:
+                          continue
+                      low = value.lower()
+                      if 'demo.juxilo.de' in low or 'test.wer-muss.wiedeck.de' in low or '/apps/' in low:
+                          errors.append(f'Verbotener Demo-Verweis: {self.page.name}: {value}')
+                      url = urlsplit(value)
+                      if url.scheme or url.netloc or value.startswith(('#', 'mailto:', 'tel:')):
+                          continue
+                      if url.path:
+                          path = (self.page.parent / url.path).resolve()
+                          if url.path.endswith('/'):
+                              path /= 'index.html'
+                          if not path.is_relative_to(root) or not path.exists():
+                              errors.append(f'Defekter lokaler Link: {self.page.name}: {value}')
+
+          for page in html_files:
+              html = page.read_text(encoding='utf-8')
+              assert 'MW-JUXILO-2026' in html, f'Wasserzeichen fehlt: {page}'
+              Links(page).feed(html)
+          homepage = (root / 'index.html').read_text(encoding='utf-8').lower()
+          for marker in ['wer muss?!', 'fingerchaos', 'punktlandung', 'nicht kleckern', 'nur noch einmal', 'völlig daneben']:
+              if marker in homepage:
+                  errors.append('Die öffentliche Vorschauseite nennt ein Spiel: ' + marker)
+          for f in (root / 'assets').glob('*.svg'):
+              svg = f.read_text(encoding='utf-8')
+              assert '<svg ' in svg and '</svg>' in svg and '<image ' not in svg, f'Ungültiges Vektorlogo: {f}'
+          if errors:
+              raise SystemExit('\n'.join(errors))
+          print('JUXILO-Vorschauseite geprüft: keine Demo-Links, keine Spiele-Namen, lokale Dateien vorhanden.')
+          PY
