@@ -36,6 +36,7 @@ jobs:
             demo/assets/mini-apps.css \
             demo/assets/juxilo.css \
             demo/assets/phone-frames.css \
+            demo/assets/cartoon-coffee.css \
             demo/assets/mini-apps.js \
             demo/wm04b-logo.svg \
             demo/assets/juxilo.css \
@@ -75,6 +76,7 @@ jobs:
           for file in \
             demo/assets/mini-apps.css \
             demo/assets/phone-frames.css \
+            demo/assets/cartoon-coffee.css \
             demo/assets/mini-apps.js \
             demo/assets/scroll-ui.css \
             demo/assets/scroll-ui.js \
