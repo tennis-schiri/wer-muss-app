@@ -230,11 +230,6 @@ body[data-game] .mini-lang button[aria-pressed="true"] { background: #ffc700; co
 .juxilo-apps .app-nicht-kleckern { --app-accent: #ffb26e; --app-halo: #ffb26e24; }
 .juxilo-apps .app-nur-noch-einmal { --app-accent: #ff788b; --app-halo: #ff788b24; }
 .juxilo-apps .app-voellig-daneben { --app-accent: #75b8ff; --app-halo: #75b8ff21; }
-.juxilo-apps .app-card.featured {
-  background:
-    radial-gradient(circle at 88% 14%, #9457ba50 0, transparent 42%),
-    linear-gradient(143deg, #492059, #2c103e 76%);
-}
 .juxilo-apps .app-card .card-top { align-items: center; }
 .juxilo-apps .app-card .emblem.is-image {
   width: 76px;
@@ -306,7 +301,6 @@ body[data-game] .mini-lang button[aria-pressed="true"] { background: #ffc700; co
   .hero-art-card { border-radius: 24px; aspect-ratio: 1.18; padding: 11px; }
   .juxilo-apps .app-grid { gap: 13px; }
   .juxilo-apps .app-card { padding: 21px; min-height: 245px; }
-  .juxilo-apps .app-card.featured { min-height: 275px; }
   .juxilo-note { padding: 21px; gap: 12px; margin-bottom: 50px; }
   .juxilo-note .note-spark { font-size: 25px; }
   .juxilo-footer .footer-identity { width: 100%; }
