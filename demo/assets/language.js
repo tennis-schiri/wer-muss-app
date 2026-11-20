@@ -173,7 +173,14 @@
   "Wie viele Sekunden hat ein Tag?": "How many seconds are in a day?",
   "HALTEN!": "HOLD!",
   "LOS GEHT’S!": "LET’S GO!",
-  "9:41": "9:41"
+  "9:41": "9:41",
+  "Eigene Zeit": "Custom time",
+  "Eigene Zielzeit in Sekunden (eine Nachkommastelle)": "Custom target time in seconds (one decimal place)",
+  "0,1 bis 999,9 Sekunden · eine Nachkommastelle": "0.1 to 999.9 seconds · one decimal place",
+  "z. B. 7,5": "e.g. 7.5",
+  "Sek.": "sec",
+  "Bitte eine Zielzeit zwischen 0,1 und 999,9 Sekunden mit maximal einer Nachkommastelle eingeben.": "Please enter a target between 0.1 and 999.9 seconds with at most one decimal place.",
+  "Tipp: Neben 5, 10 und 15 Sekunden kannst du eine eigene Zielzeit auf eine Nachkommastelle eingeben (z. B. 7,5). Auf dem Desktop funktioniert auch die Leertaste. Die Uhr misst mit der Browser-Zeit, nicht mit einem offiziellen Sportzeitmesser. Diese Testversion ist noch keine fertige iPhone- oder Android-App. Sie funktioniert ohne Anmeldung und ohne Datenübertragung durch das Spiel.": "Tip: Alongside 5, 10 and 15 seconds, you can enter your own target with one decimal place (e.g. 7.5). On desktop, the space bar works too. The clock uses browser timing, not an official stopwatch. This is a browser prototype, not a finished iPhone or Android app. No login or game-data transmission."
 };
   const originalNodes = new WeakMap();
   const originalAttributes = new WeakMap();
@@ -190,7 +197,7 @@
       return translations[value];
     }
     const patterns = [
-      [/^Stoppe die Zeit möglichst genau bei (\d+) Sekunden\.$/, (_, n) => 'Stop as close as possible to ' + n + ' seconds.'],
+      [/^Stoppe die Zeit möglichst genau bei ([\d.,]+) Sekunden\.$/, (_, n) => 'Stop as close as possible to ' + n.replace(',', '.') + ' seconds.'],
       [/^Zeit abgelaufen! (\d+) Punkte\.$/, (_, n) => 'Time is up! ' + n + ' points.'],
       [/^Geschafft! (\d+) % Kaffee gerettet\.$/, (_, n) => 'Done! Saved ' + n + '% of the coffee.'],
       [/^PLATZ! Die (\d+) möglichen Punkte sind weg\.$/, (_, n) => 'POP! You lost ' + n + ' potential points.'],
