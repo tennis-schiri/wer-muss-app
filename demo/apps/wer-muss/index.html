@@ -119,8 +119,24 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
 
 </style>
 <link rel="stylesheet" href="../../assets/scroll-ui.css">
+<link rel="stylesheet" href="../../assets/phone-frames.css">
 </head>
-<body>
+<body class="wm-device-page">
+<div class="wm-device-layout">
+  <div class="wm-device-intro">
+    <div class="eyebrow">JUXILO / APP 01 / BROWSER-DEMO</div>
+    <h1>Wer muss?!<br><span>Du entscheidest nicht.</span></h1>
+    <p>Alle legen einen Finger auf das Display. Der Countdown läuft, und der Zufall wählt eine Person. Jetzt direkt im Smartphone ausprobieren.</p>
+    <div class="wm-device-links">
+      <a href="../../index.html#apps">← Alle JUXILO-Apps</a>
+      <a href="?fullscreen=1">Große Touchfläche testen ↗</a>
+    </div>
+  </div>
+  <div class="wm-phone-shell">
+    <div class="wm-phone-outer">
+      <div class="wm-phone-screen">
+        <div class="wm-phone-status" aria-hidden="true"><span>9:41</span><span>▮▮▮ ▰</span></div>
+        <div class="wm-phone-content">
 <section class="welcome" id="welcome" aria-labelledby="welcome-title">
   <div class="welcome-top"><nav class="welcome-actions" aria-label="Spielsteuerung"><button type="button" id="welcome-restart">↻ Neu starten</button><a href="../../index.html">⌂ Alle Apps</a></nav><div class="lang-toggle" role="group" aria-label="Language / Sprache"><button type="button" data-language="de" aria-pressed="true">DE</button><button type="button" data-language="en" aria-pressed="false">EN</button></div><button type="button" id="welcome-info" class="welcome-info" aria-label="Anleitung und rechtliche Hinweise">i</button></div>
   <div class="welcome-middle">
@@ -162,6 +178,13 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
   <button id="action" class="action" type="button">ALLEIN TESTEN · 4 FINGER</button>
   <div class="footer"><a href="../../index.html" style="color:var(--lemon);font-weight:900;text-decoration:none">← ALLE APPS</a><span class="dot">•</span> Kein Login <span class="dot">•</span> Keine Werbung <span class="dot">•</span> Nur eine Entscheidung</div>
 </main>
+        </div>
+        <div class="wm-phone-home" aria-hidden="true"></div>
+      </div>
+    </div>
+    <p class="wm-device-hint"><strong>Mehrfinger-Tipp:</strong> Am besten direkt auf dem Smartphone ausprobieren. Für die größtmögliche Spielfläche kannst du die <a href="?fullscreen=1" style="color:#ffc700">Vollbildansicht ohne Rahmen</a> nutzen.</p>
+  </div>
+</div>
 
 <div class="info-modal" id="info-modal" hidden>
   <section class="info-card" role="dialog" aria-modal="true" aria-labelledby="info-title">
@@ -196,6 +219,11 @@ h1{font-size:clamp(29px,6.3vw,36px);font-weight:950;letter-spacing:-.065em;line-
   </section>
 </div>
 
+<script>
+  if (new URLSearchParams(window.location.search).get('fullscreen') === '1') {
+    document.body.classList.add('wm-fullscreen');
+  }
+</script>
 <script>
 (() => {
   'use strict';
