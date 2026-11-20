@@ -23,3 +23,94 @@
 
 /* Keep the language control visible on narrow workshop-home screens. */
 @media(max-width:560px){body:not([data-game]) .nav .nav-accent{display:none}}
+
+
+/* Punktlandung: three quick presets plus custom target with one decimal place. */
+body[data-game="punktlandung"] .pl-presets {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+}
+body[data-game="punktlandung"] .pl-presets .choice {
+  min-width:0;
+  padding:11px 6px;
+  text-align:center;
+}
+body[data-game="punktlandung"] .pl-custom-target {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  margin:11px 0 0;
+  padding:9px 11px;
+  background:#292640;
+  border:1px solid #666080;
+  border-radius:13px;
+  transition:border-color .16s,background .16s;
+}
+body[data-game="punktlandung"] .pl-custom-target.active,
+body[data-game="punktlandung"] .pl-custom-target:focus-within {
+  background:#3a3151;
+  border-color:var(--lemon);
+  box-shadow:0 0 0 1px #f5f36d42;
+}
+body[data-game="punktlandung"] .pl-custom-label {
+  color:#f2eefb;
+  font-size:12px;
+  font-weight:850;
+  white-space:nowrap;
+  cursor:text;
+}
+body[data-game="punktlandung"] .pl-custom-input-wrap {
+  flex:1;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid #6d6587;
+  border-radius:9px;
+  padding:5px 8px;
+  background:#151429;
+}
+body[data-game="punktlandung"] .pl-custom-input-wrap:focus-within {border-color:var(--lemon);}
+body[data-game="punktlandung"] #custom-target {
+  flex:1;
+  min-width:0;
+  width:100%;
+  padding:4px 0;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#fff;
+  text-align:right;
+  font-size:16px;
+  font-weight:900;
+  font-variant-numeric:tabular-nums;
+}
+body[data-game="punktlandung"] #custom-target::placeholder {color:#b4acc8;font-size:12px;font-weight:650;}
+body[data-game="punktlandung"] #custom-target[aria-invalid="true"]:not(:placeholder-shown) {color:#ffafa9;}
+body[data-game="punktlandung"] #custom-target:disabled {opacity:.55;}
+body[data-game="punktlandung"] .pl-custom-unit {
+  flex:none;
+  color:#d5cce0;
+  font-size:11px;
+  font-weight:800;
+}
+body[data-game="punktlandung"] .pl-target-hint {
+  text-align:center;
+  margin:7px 0 0;
+  color:#aca4c2;
+  font-size:10px;
+  line-height:1.5;
+}
+body[data-game="punktlandung"] .big-digits {margin-top:21px;}
+@media(max-width:520px){
+  body[data-game="punktlandung"] .pl-custom-target{gap:7px;padding:8px;}
+  body[data-game="punktlandung"] .pl-presets{gap:5px;}
+  body[data-game="punktlandung"] .pl-presets .choice{font-size:11px;padding:10px 3px;}
+  body[data-game="punktlandung"] .pl-custom-label{font-size:11px;}
+  body[data-game="punktlandung"] #custom-target{font-size:15px;}
+}
+@media(prefers-reduced-motion:reduce){
+  body[data-game="punktlandung"] .pl-custom-target {transition:none!important;}
+}
