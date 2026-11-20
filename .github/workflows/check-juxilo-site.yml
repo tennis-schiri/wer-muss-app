@@ -22,7 +22,7 @@ jobs:
         run: |
           set -euo pipefail
           node --check site/assets/site.js
-          for file in site/index.html site/impressum.html site/datenschutz.html site/assets/site.css site/assets/juxilo-logo.svg site/assets/juxilo-icon.svg site/assets/juxilo-favicon.svg site/favicon.ico site/assets/favicon-32.png site/robots.txt site/sitemap.xml; do
+          for file in site/index.html site/impressum.html site/datenschutz.html site/assets/site.css site/assets/showcase.css site/assets/juxilo-logo.svg site/assets/juxilo-icon.svg site/assets/juxilo-favicon.svg site/favicon.ico site/assets/favicon-32.png site/robots.txt site/sitemap.xml; do
             test -s "$file"
           done
 
@@ -77,12 +77,21 @@ jobs:
           assert '@keyframes jx04-mascot-hello' in css, 'JUXILO-J-Hover-Animation fehlt'
           assert 'prefers-reduced-motion: reduce' in css, 'Animation muss Bewegung reduzieren respektieren'
           for marker in ['wer muss?!', 'fingerchaos', 'punktlandung', 'nicht kleckern', 'nur noch einmal', 'völlig daneben']:
-              if marker in homepage:
-                  errors.append('Die öffentliche Vorschauseite nennt ein Spiel: ' + marker)
+              if marker not in homepage:
+                  errors.append('App auf der öffentlichen Vorschauseite fehlt: ' + marker)
+          assert homepage.count('class="teaser-card teaser-card--') == 6, 'Alle sechs App-Kacheln müssen angezeigt werden'
+          assert homepage.count('class="teaser-phone"') == 6, 'Jede Kachel benötigt eine kleine Handy-Illustration'
+          assert '<link rel="stylesheet" href="./assets/showcase.css">' in homepage, 'Showcase-CSS nicht eingebunden'
+          assert (root / 'assets' / 'showcase.css').stat().st_size > 2000, 'Showcase-Styles fehlen'
+          icons = ['wer-muss.svg','punktlandung.webp','fingerchaos.webp','nicht-kleckern.webp','nur-noch-einmal.webp','voellig-daneben.webp']
+          for icon in icons:
+              assert (root / 'assets' / 'icons' / icon).is_file(), 'Fehlendes JUXILO-App-Icon: ' + icon
+          assert not any('href="./assets/icons/' in p.read_text(encoding='utf-8') for p in html_files), 'Icons dürfen nicht zu Demo-Links werden'
+          assert not any('href="https://demo.juxilo.de' in p.read_text(encoding='utf-8') for p in html_files), 'Keine öffentlichen Demo-Verweise erlaubt'
           for f in (root / 'assets').glob('*.svg'):
               svg = f.read_text(encoding='utf-8')
               assert '<svg ' in svg and '</svg>' in svg and '<image ' not in svg, f'Ungültiges Vektorlogo: {f}'
           if errors:
               raise SystemExit('\n'.join(errors))
-          print('JUXILO-Vorschauseite geprüft: keine Demo-Links, keine Spiele-Namen, lokale Dateien vorhanden.')
+          print('JUXILO-Website geprüft: sechs App-Kacheln, keine Demo-Links, alle lokalen Dateien vorhanden.')
           PY
