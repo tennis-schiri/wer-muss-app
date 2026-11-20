@@ -1,0 +1,90 @@
+name: JUXILO – juxilo.de live hochladen
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: juxilo-main-site-upload
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Öffentliche Vorschauseite per FTPS veröffentlichen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Nur die öffentliche JUXILO-Vorschauseite prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check site/assets/site.js
+          for file in site/index.html site/impressum.html site/datenschutz.html site/assets/site.css site/assets/juxilo-logo.svg site/assets/juxilo-icon.svg site/assets/juxilo-favicon.svg site/robots.txt site/sitemap.xml; do
+            test -s "$file"
+          done
+          grep -q 'JUXILO' site/index.html
+          if grep -Ein 'demo\.juxilo\.de|test\.wer-muss\.wiedeck\.de|href="[^"]*/apps/' site/*.html; then
+            echo "::error::Auf juxilo.de darf kein Link zur Demo stehen."
+            exit 1
+          fi
+
+      - name: FTP-Zugang für juxilo.de überprüfen
+        shell: bash
+        env:
+          FTP_HOST: ${{ secrets.JUXILO_SITE_FTP_SERVER }}
+          FTP_USER: ${{ secrets.JUXILO_SITE_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.JUXILO_SITE_FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$FTP_HOST" || -z "$FTP_USER" || -z "$FTP_PASSWORD" ]]; then
+            echo "::error::GitHub-Secrets JUXILO_SITE_FTP_SERVER, JUXILO_SITE_FTP_USERNAME oder JUXILO_SITE_FTP_PASSWORD fehlen."
+            exit 1
+          fi
+          if [[ "$FTP_HOST" == *"://"* || "$FTP_HOST" == *"/"* || "$FTP_HOST" == *":"* || "$FTP_HOST" == *[[:space:]]* ]]; then
+            echo "::error::JUXILO_SITE_FTP_SERVER muss nur den Servernamen enthalten, ohne ftp://, Port oder Pfad."
+            exit 1
+          fi
+          if ! getent ahostsv4 "$FTP_HOST" >/dev/null && ! getent ahostsv6 "$FTP_HOST" >/dev/null; then
+            echo "::error::FTP-Server von juxilo.de ist nicht per DNS auflösbar. KAS-FTP-Servernamen prüfen."
+            exit 1
+          fi
+          if ! nc -z -w 15 "$FTP_HOST" 21 >/dev/null 2>&1; then
+            echo "::error::FTP-Server von juxilo.de ist auf Port 21 nicht erreichbar. Server-/Firewall-Konfiguration bei ALL-INKL prüfen."
+            exit 1
+          fi
+          echo "FTP-Server erreichbar – nur site/ wird hochgeladen."
+
+      - name: juxilo.de per FTPS hochladen
+        shell: bash
+        env:
+          FTP_HOST: ${{ secrets.JUXILO_SITE_FTP_SERVER }}
+          FTP_USER: ${{ secrets.JUXILO_SITE_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.JUXILO_SITE_FTP_PASSWORD }}
+          FTP_SUBDIR: ${{ secrets.JUXILO_SITE_FTP_DIRECTORY }}
+        run: |
+          set -euo pipefail
+          FTP_SUBDIR="${FTP_SUBDIR#/}"
+          FTP_SUBDIR="${FTP_SUBDIR%/}"
+          if [[ "$FTP_SUBDIR" == *".."* || "$FTP_SUBDIR" == *"://"* ]]; then
+            echo "::error::Ungültiger FTP-Unterordner."
+            exit 1
+          fi
+          while IFS= read -r -d '' file; do
+            relative="${file#site/}"
+            remote="${FTP_SUBDIR:+$FTP_SUBDIR/}$relative"
+            echo "JUXILO-Website: $relative"
+            curl --fail --silent --show-error --ssl-reqd --ftp-pasv \
+              --ftp-create-dirs --connect-timeout 15 --max-time 90 \
+              --retry 2 --retry-delay 3 \
+              --user "$FTP_USER:$FTP_PASSWORD" \
+              --upload-file "$file" \
+              "ftp://$FTP_HOST:21/$remote"
+          done < <(find site -type f -not -name '.DS_Store' -print0 | sort -z)
+          echo "juxilo.de: Vorschauseite erfolgreich übertragen."
