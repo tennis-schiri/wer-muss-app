@@ -201,7 +201,6 @@ body[data-game="nicht-kleckern"] .cup-scene.coffee-sloshing .coffee-splash-three
   to {translate: 0 -7px;scale: 1}
 }
 /* Detail remains legible inside the browser smartphone mockup. */
-.device-viewport body[data-game="nicht-kleckern"] .cup-scene{height: 218px}
 body[data-game="nicht-kleckern"] .device-viewport .cup-scene {height: 217px;}
 body[data-game="nicht-kleckern"] .device-viewport .cup-assembly {transform: scale(.89) rotate(var(--cup-angle,0deg));}
 @media(max-width: 520px){
