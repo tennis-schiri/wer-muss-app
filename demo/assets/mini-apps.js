@@ -13,24 +13,117 @@
 
   if(game === 'punktlandung') {
     const clock=$('clock'), action=$('main-action'), best=$('best'), diff=$('difference'), blind=$('blind');
+    const customInput=$('custom-target'), customRow=$('custom-target-row');
     const options=[...document.querySelectorAll('[data-target]')];
-    let target=10, start=0, running=false, animation=0, bestGap=Infinity;
-    function showBest(){const v=recall('punktlandung-'+target); best.textContent=v>0?fmt(v)+' s':'–';}
-    function render(){const t=(performance.now()-start)/1000; clock.textContent=blind.checked?'••,••':fmt(t); if(running) animation=requestAnimationFrame(render);}
-    function stop() {
-      running=false;cancelAnimationFrame(animation);
-      const elapsed=(performance.now()-start)/1000; const gap=Math.abs(elapsed-target);
-      clock.textContent=fmt(elapsed);diff.textContent=fmt(gap)+' s';
+    let target=10, usingCustom=false, start=0, running=false, animation=0, bestGap=Infinity;
+    const formatTarget=value=>value.toFixed(1).replace('.',',');
+    // Accept German or English decimal separators. Reject more than one fractional digit.
+    function parseCustom() {
+      const value=customInput.value.trim();
+      if(!/^\d{1,3}(?:[.,]\d)?$/.test(value)) return null;
+      const parsed=Number(value.replace(',','.'));
+      return Number.isFinite(parsed)&&parsed>=.1&&parsed<=999.9 ? parsed : null;
+    }
+    function showBest(){const v=recall('punktlandung-'+target);best.textContent=v>0?fmt(v)+' s':'–';}
+    function showTarget(){status('Stoppe die Zeit möglichst genau bei '+formatTarget(target)+' Sekunden.');}
+    function markSelection(){
+      for(const option of options) {
+        const selected=!usingCustom&&Number(option.dataset.target)===target;
+        option.classList.toggle('active',selected);
+        option.setAttribute('aria-pressed',String(selected));
+      }
+      customRow.classList.toggle('active',usingCustom);
+      customInput.setAttribute('aria-invalid',String(usingCustom&&parseCustom()===null));
+    }
+    function resetReadout(){
+      clock.textContent='00,00';
+      diff.textContent='–';
+      action.textContent='STARTEN';
+    }
+    function setCustom(format=false){
+      if(running)return;
+      usingCustom=true;
+      const next=parseCustom();
+      if(next===null){
+        best.textContent='–';
+        status('Bitte eine Zielzeit zwischen 0,1 und 999,9 Sekunden mit maximal einer Nachkommastelle eingeben.');
+      }else{
+        target=next;
+        if(format)customInput.value=formatTarget(target);
+        showBest();
+        showTarget();
+      }
+      resetReadout();
+      markSelection();
+    }
+    function render(){
+      const t=(performance.now()-start)/1000;
+      clock.textContent=blind.checked?'••,••':fmt(t);
+      if(running)animation=requestAnimationFrame(render);
+    }
+    function stop(){
+      running=false;
+      cancelAnimationFrame(animation);
+      const elapsed=(performance.now()-start)/1000, gap=Math.abs(elapsed-target);
+      clock.textContent=fmt(elapsed);
+      diff.textContent=fmt(gap)+' s';
       status(gap<.05?'Volltreffer! Unglaublich präzise.':gap<.25?'Ganz knapp! Noch eine Runde?':'Knapp vorbei. Versuch es noch einmal!');
-      if(gap<bestGap) bestGap=gap;
+      if(gap<bestGap)bestGap=gap;
       const old=recall('punktlandung-'+target);
       if(old===0||gap<old){remember('punktlandung-'+target,gap);showBest();}
-      options.forEach(o=>o.disabled=false);action.textContent='NOCHMAL STARTEN';
+      options.forEach(option=>option.disabled=false);
+      customInput.disabled=false;
+      action.textContent='NOCHMAL STARTEN';
     }
-    action.addEventListener('click',()=>{if(running){stop();return;}running=true;start=performance.now();diff.textContent='–';status('Warte auf den richtigen Moment …');action.textContent='STOPP!';options.forEach(o=>o.disabled=true);render();});
-    options.forEach(btn=>btn.addEventListener('click',()=>{if(running)return;target=Number(btn.dataset.target);options.forEach(o=>o.classList.toggle('active',o===btn));clock.textContent='00,00';diff.textContent='–';showBest();status('Stoppe die Zeit möglichst genau bei '+target+' Sekunden.');}));
-    document.addEventListener('keydown',e=>{if(e.code==='Space'&&!(e.target instanceof HTMLInputElement)){e.preventDefault();action.click();}});
+    action.addEventListener('click',()=>{
+      if(running){stop();return;}
+      if(usingCustom){
+        const custom=parseCustom();
+        if(custom===null){
+          setCustom();
+          customInput.focus();
+          return;
+        }
+        target=custom;
+        customInput.value=formatTarget(target);
+      }
+      running=true;
+      start=performance.now();
+      diff.textContent='–';
+      status('Warte auf den richtigen Moment …');
+      action.textContent='STOPP!';
+      options.forEach(option=>option.disabled=true);
+      customInput.disabled=true;
+      render();
+    });
+    for(const option of options){
+      option.addEventListener('click',()=>{
+        if(running)return;
+        usingCustom=false;
+        target=Number(option.dataset.target);
+        markSelection();
+        resetReadout();
+        showBest();
+        showTarget();
+      });
+    }
+    customInput.addEventListener('focus',()=>setCustom());
+    customInput.addEventListener('input',()=>setCustom());
+    customInput.addEventListener('blur',()=>{if(usingCustom)setCustom(true);});
+    customInput.addEventListener('keydown',event=>{
+      if(event.key==='Enter'){
+        event.preventDefault();
+        customInput.blur();
+      }
+    });
+    document.addEventListener('keydown',event=>{
+      if(event.code==='Space'&&!(event.target instanceof HTMLInputElement)){
+        event.preventDefault();
+        action.click();
+      }
+    });
     showBest();
+    markSelection();
   }
 
   if(game === 'fingerchaos') {
