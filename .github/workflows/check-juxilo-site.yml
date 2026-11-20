@@ -69,8 +69,8 @@ jobs:
               page_text = page.read_text(encoding='utf-8')
               assert 'favicon.ico?v=2' in page_text, f'ICO-Favicon fehlt: {page.name}'
               assert 'favicon-32.png?v=2' in page_text, f'PNG-Fallback fehlt: {page.name}'
-          assert (root / 'favicon.ico').read_bytes().startswith(b'\\x00\\x00\\x01\\x00'), 'Favicon.ico hat keinen korrekten ICO-Header'
-          assert (root / 'assets' / 'favicon-32.png').read_bytes().startswith(b'\\x89PNG\\r\\n\\x1a\\n'), 'Favicon-PNG fehlt oder ist beschädigt'
+          assert (root / 'favicon.ico').read_bytes().startswith(b'\x00\x00\x01\x00'), 'Favicon.ico hat keinen korrekten ICO-Header'
+          assert (root / 'assets' / 'favicon-32.png').read_bytes().startswith(b'\x89PNG\r\n\x1a\n'), 'Favicon-PNG fehlt oder ist beschädigt'
           homepage = (root / 'index.html').read_text(encoding='utf-8').lower()
           for marker in ['wer muss?!', 'fingerchaos', 'punktlandung', 'nicht kleckern', 'nur noch einmal', 'völlig daneben']:
               if marker in homepage:
