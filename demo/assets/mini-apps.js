@@ -50,11 +50,11 @@
   }
 
   if(game === 'nicht-kleckern') {
-    const action=$('main-action'),coffee=$('coffee'),cup=$('cup'),left=$('left'),level=$('level'),sensor=$('sensor-btn');
+    const action=$('main-action'),coffee=$('coffee'),cup=$('cup'),cupScene=$('cup-scene'),left=$('left'),level=$('level'),sensor=$('sensor-btn');
     let active=false,remaining=100,tilt=0,velocity=0,wind=0,input=0,gamma=null,started=0,last=0,raf=0,windAt=0;
     let best=recall('nicht-kleckern');$('best').textContent=best?Math.round(best)+' %':'–';
-    function render(){cup.style.setProperty('--cup-angle',tilt.toFixed(1)+'deg');coffee.style.setProperty('--coffee-angle',(-tilt*1.4).toFixed(1)+'deg');coffee.style.setProperty('--coffee-level',clamp(remaining*.8,0,80)+'%');level.textContent=Math.round(remaining)+' %';}
-    function done(){active=false;cancelAnimationFrame(raf);action.textContent='NOCHMAL BALANCIEREN';status('Geschafft! '+Math.round(remaining)+' % Kaffee gerettet.');if(remaining>best){best=remaining;remember('nicht-kleckern',best);$('best').textContent=Math.round(best)+' %';}}
+    function render(){cup.style.setProperty('--cup-angle',tilt.toFixed(1)+'deg');coffee.style.setProperty('--coffee-angle',(-tilt*1.4).toFixed(1)+'deg');coffee.style.setProperty('--coffee-level',clamp(remaining*.8,0,80)+'%');cupScene.classList.toggle('coffee-sloshing',active && Math.abs(tilt)>8);level.textContent=Math.round(remaining)+' %';}
+    function done(){active=false;cupScene.classList.remove('coffee-sloshing');cancelAnimationFrame(raf);action.textContent='NOCHMAL BALANCIEREN';status('Geschafft! '+Math.round(remaining)+' % Kaffee gerettet.');if(remaining>best){best=remaining;remember('nicht-kleckern',best);$('best').textContent=Math.round(best)+' %';}}
     function tick(now){if(!active)return;const dt=Math.min((now-last)/1000,.07);last=now;if(now-windAt>1200){wind=Math.random()*2-1;windAt=now;}
       const device=gamma!==null?clamp(gamma/32,-1,1):0;
       velocity=(velocity+((wind*.48)+(input*1.1)+(device*.7))*dt*17)*.95;
