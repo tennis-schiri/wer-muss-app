@@ -133,6 +133,7 @@
 .mini-time-buttons {display:flex;gap:3px;justify-content:center;width:100%}
 .mini-time-buttons span {background:#30304b;border-radius:6px;font-size:7px;padding:5px}
 .mini-time-buttons span:nth-child(2){background:#f5f36d;color:#111224}
+.mini-time-buttons .mini-time-custom{background:#2c263d;border:1px solid #b6a5ff;color:#dbcffa;padding:4px 3px}
 .mini-phone--fingerchaos{--mini-accent:#71e6c8}
 .mini-finger-field {width:100%;flex:1;min-height:105px;position:relative;border-radius:12px;background:#171729;border:1px dashed #4a4566}
 .mini-finger-field i {position:absolute;border-radius:50%;width:29px;height:29px;background:#71e6c8;left:14%;top:21%;box-shadow:0 0 0 5px #71e6c824}
