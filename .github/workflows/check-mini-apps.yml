@@ -48,6 +48,12 @@ jobs:
           from pathlib import Path
 
           demo = Path('demo')
+          credit_pages = [demo/'index.html',demo/'impressum.html',demo/'datenschutz.html',*sorted((demo/'apps').glob('*/index.html'))]
+          assert len(credit_pages) == 9, 'Erwartet neun Demo-Seiten'
+          for page in credit_pages:
+              page_html = page.read_text(encoding='utf-8')
+              assert page_html.count('class="mw-credit"') == 1, f'MW-Credit auf Demo-Seite fehlt oder doppelt: {page}'
+              assert 'href="https://wiedeck.de/"' in page_html, f'MW-Credit ohne Link: {page}'
           home = (demo / 'index.html').read_text(encoding='utf-8')
           assert home.count('class="mini-phone-preview"') == 6, 'Es müssen sechs eigene Handy-Vorschauen erscheinen.'
           assert home.count('class="mini-phone-hardware"') == 6, 'Jede App-Kachel braucht einen Handy-Rahmen.'
