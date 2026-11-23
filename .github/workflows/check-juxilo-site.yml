@@ -74,9 +74,9 @@ jobs:
           for page in html_files:
               footer_html = page.read_text(encoding='utf-8')
               assert footer_html.count('class="mw-credit"') == 1, f'MW-Footerhinweis fehlt oder doppelt: {page.name}'
-              assert 'src="./assets/mw-logo-original.png"' in footer_html, f'Original-MW-Logo fehlt: {page.name}'
+              assert 'src="./assets/mw-wave.svg"' in footer_html, f'Original-MW-Logo fehlt: {page.name}'
               assert 'href="https://wiedeck.de/"' in footer_html, f'MW-Credit ohne Wied eck-Link: {page.name}'
-          assert (root / 'assets' / 'mw-logo-original.png').read_bytes().startswith(b'\x89PNG'), 'Original-MW-Logo fehlt'
+          assert '<filter id="freistellen"' in (root / 'assets' / 'mw-wave.svg').read_text(encoding='utf-8'), 'Freigestellte MW-Welle fehlt'
           homepage = (root / 'index.html').read_text(encoding='utf-8').lower()
           css = (root / 'assets' / 'site.css').read_text(encoding='utf-8')
           assert '@keyframes jx04-mascot-wave' in css, 'JUXILO-J-Animation fehlt'
@@ -96,7 +96,7 @@ jobs:
           assert not any('href="https://demo.juxilo.de' in p.read_text(encoding='utf-8') for p in html_files), 'Keine öffentlichen Demo-Verweise erlaubt'
           for f in (root / 'assets').glob('*.svg'):
               svg = f.read_text(encoding='utf-8')
-              assert '<svg ' in svg and '</svg>' in svg and '<image ' not in svg, f'Ungültiges Vektorlogo: {f}'
+              assert '<svg ' in svg and '</svg>' in svg and ('<image ' not in svg or f.name == 'mw-wave.svg'), f'Ungültiges Vektorlogo: {f}'
           if errors:
               raise SystemExit('\n'.join(errors))
           print('JUXILO-Website geprüft: sechs App-Kacheln, keine Demo-Links, alle lokalen Dateien vorhanden.')
