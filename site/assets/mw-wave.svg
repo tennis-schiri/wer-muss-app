@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 379 155" role="img" aria-label="MW-Monogramm">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 140" role="img" aria-label="MW-Monogramm">
   <defs>
-    <!-- White-to-alpha key: transparent paper, the genuine metallic MW wave remains. -->
+    <!-- Precise white-to-alpha key: preserve the silver highlights of the genuine MW wave. -->
     <filter id="freistellen" x="-1%" y="-1%" width="102%" height="102%" color-interpolation-filters="sRGB">
-      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.6 -1.6 -1.6 0 4.55" result="opaque-mark"/>
+      <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -8 -8 -8 0 23.86" result="opaque-mark"/>
       <feComposite in="SourceGraphic" in2="opaque-mark" operator="in"/>
     </filter>
   </defs>
