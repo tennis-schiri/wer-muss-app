@@ -74,7 +74,9 @@ jobs:
           for page in html_files:
               footer_html = page.read_text(encoding='utf-8')
               assert footer_html.count('class="mw-credit"') == 1, f'MW-Footerhinweis fehlt oder doppelt: {page.name}'
+              assert 'src="./assets/mw-logo-original.png"' in footer_html, f'Original-MW-Logo fehlt: {page.name}'
               assert 'href="https://wiedeck.de/"' in footer_html, f'MW-Credit ohne Wied eck-Link: {page.name}'
+          assert (root / 'assets' / 'mw-logo-original.png').read_bytes().startswith(b'\\x89PNG'), 'Original-MW-Logo fehlt'
           homepage = (root / 'index.html').read_text(encoding='utf-8').lower()
           css = (root / 'assets' / 'site.css').read_text(encoding='utf-8')
           assert '@keyframes jx04-mascot-wave' in css, 'JUXILO-J-Animation fehlt'
