@@ -71,6 +71,10 @@ jobs:
               assert 'favicon-32.png?v=2' in page_text, f'PNG-Fallback fehlt: {page.name}'
           assert (root / 'favicon.ico').read_bytes().startswith(b'\x00\x00\x01\x00'), 'Favicon.ico hat keinen korrekten ICO-Header'
           assert (root / 'assets' / 'favicon-32.png').read_bytes().startswith(b'\x89PNG\r\n\x1a\n'), 'Favicon-PNG fehlt oder ist beschädigt'
+          for page in html_files:
+              footer_html = page.read_text(encoding='utf-8')
+              assert footer_html.count('class="mw-credit"') == 1, f'MW-Footerhinweis fehlt oder doppelt: {page.name}'
+              assert 'href="https://wiedeck.de/"' in footer_html, f'MW-Credit ohne Wied eck-Link: {page.name}'
           homepage = (root / 'index.html').read_text(encoding='utf-8').lower()
           css = (root / 'assets' / 'site.css').read_text(encoding='utf-8')
           assert '@keyframes jx04-mascot-wave' in css, 'JUXILO-J-Animation fehlt'
