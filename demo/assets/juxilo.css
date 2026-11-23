@@ -342,20 +342,17 @@ body.juxilo-legal .footer { border-top-color: #633875; }
   body.juxilo-legal .brand .brand-name { font-size: 22px; }
 }
 
-/* MW webdesign footer credit */
+/* MW original wave credit — naturally freestanding, without an icon tile. */
 .footer .mw-credit{
-  display:inline-flex;align-items:center;gap:8px;
-  white-space:nowrap;text-decoration:none;color:#d5b9e3;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:47px;white-space:nowrap;text-decoration:none;color:#d5b9e3;
   font-size:11px;font-weight:750;letter-spacing:.015em;
 }
 .footer .mw-credit:hover{color:#fff9ff;}
-.footer .mw-credit-mark{
-  display:inline-grid;place-items:center;
-  padding:4px 7px;border:1px solid #9464a8;
-  border-radius:8px;background:#3a1a4d;
-  color:#ffc700;font-size:13px;font-weight:950;line-height:1.2;letter-spacing:-.075em;
+.footer .mw-credit img.mw-credit-mark{
+  display:block;flex:none;width:112px;height:46px;
+  object-fit:contain;border:0;border-radius:0;padding:0;
+  background:none;box-shadow:none;filter:none;opacity:1;
 }
-@media(max-width:650px){.footer .mw-credit{width:100%;justify-content:center;}}
-
-/* Authentic MW icon instead of the old typographic placeholder. */
-.footer img.mw-credit-mark{display:block;width:69px;height:29px;flex:none;object-fit:contain;border:0;border-radius:0;padding:0;background:transparent;box-shadow:none;}
+@media(max-width:650px){.footer .mw-credit{width:100%;}}
+@media(max-width:390px){.footer .mw-credit img.mw-credit-mark{width:100px;height:41px;}}
