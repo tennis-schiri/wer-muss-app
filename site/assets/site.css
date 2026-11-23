@@ -119,3 +119,21 @@ html[lang=de] [data-lang-content=en], html[lang=en] [data-lang-content=de]{displ
   }
   .hero-art .art-card { transform:rotate(5deg); }
 }
+
+/* MW author footer credit */
+.site-footer .mw-credit{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  white-space:nowrap;text-decoration:none;color:#d8bfdc;
+  font-size:11px;font-weight:650;letter-spacing:.01em;
+  transition:color .18s ease;
+}
+.site-footer .mw-credit:hover{color:#fff;}
+.site-footer .mw-credit-mark{
+  display:inline-grid;place-items:center;padding:4px 7px;
+  border:1px solid #a864a9;border-radius:8px;
+  background:linear-gradient(140deg,#51205d,#300e3d);
+  box-shadow:inset 0 1px 0 #fff2;
+  color:#ffc700;font-size:13px;font-weight:950;line-height:1.2;letter-spacing:-.075em;
+}
+@media(max-width:700px){.site-footer{flex-wrap:wrap;justify-content:center;}}
+@media(prefers-reduced-motion:reduce){.site-footer .mw-credit{transition:none;}}
