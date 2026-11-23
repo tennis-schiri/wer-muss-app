@@ -356,3 +356,6 @@ body.juxilo-legal .footer { border-top-color: #633875; }
   color:#ffc700;font-size:13px;font-weight:950;line-height:1.2;letter-spacing:-.075em;
 }
 @media(max-width:650px){.footer .mw-credit{width:100%;justify-content:center;}}
+
+/* Authentic MW icon instead of the old typographic placeholder. */
+.footer img.mw-credit-mark{display:block;width:34px;height:34px;flex:none;object-fit:contain;border:0;border-radius:8px;padding:0;background:transparent;box-shadow:none;}
