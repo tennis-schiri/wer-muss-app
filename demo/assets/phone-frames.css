@@ -535,21 +535,17 @@ body.wm-fullscreen{background:#111224;}
   }
 }
 
-/* Wer muss author credit outside the faux phone: hidden during fullscreen multi-touch. */
-.wm-credit-footer{
-  display:flex;align-items:center;justify-content:center;padding:12px 20px 26px;
-}
+/* MW original wave: visible below the desktop demo, never over the full-screen play field. */
+.wm-credit-footer{display:flex;align-items:center;justify-content:center;padding:12px 20px 26px;}
 .wm-credit-footer .mw-credit{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:47px;
   color:#c9a9d6;text-decoration:none;font-size:11px;font-weight:750;
 }
 .wm-credit-footer .mw-credit:hover{color:#fff;}
-.wm-credit-footer .mw-credit-mark{
-  padding:4px 7px;border:1px solid #9464a8;border-radius:8px;
-  background:#3a1a4d;color:#ffc700;
-  font-size:13px;line-height:1.2;font-weight:950;letter-spacing:-.075em;
+.wm-credit-footer img.mw-credit-mark{
+  display:block;flex:none;width:112px;height:46px;
+  object-fit:contain;border:0;border-radius:0;padding:0;
+  background:none;box-shadow:none;filter:none;opacity:1;
 }
 body.wm-fullscreen .wm-credit-footer{display:none;}
-
-/* Use the same original MW mark on the Wer muss?! desktop footer. */
-.wm-credit-footer img.mw-credit-mark{display:block;width:69px;height:29px;flex:none;object-fit:contain;border:0;border-radius:0;padding:0;background:transparent;box-shadow:none;}
+@media(max-width:390px){.wm-credit-footer img.mw-credit-mark{width:100px;height:41px;}}
