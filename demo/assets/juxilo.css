@@ -341,3 +341,18 @@ body.juxilo-legal .footer { border-top-color: #633875; }
   body.juxilo-legal .juxilo-brand .brand-suffix { display: none; }
   body.juxilo-legal .brand .brand-name { font-size: 22px; }
 }
+
+/* MW webdesign footer credit */
+.footer .mw-credit{
+  display:inline-flex;align-items:center;gap:8px;
+  white-space:nowrap;text-decoration:none;color:#d5b9e3;
+  font-size:11px;font-weight:750;letter-spacing:.015em;
+}
+.footer .mw-credit:hover{color:#fff9ff;}
+.footer .mw-credit-mark{
+  display:inline-grid;place-items:center;
+  padding:4px 7px;border:1px solid #9464a8;
+  border-radius:8px;background:#3a1a4d;
+  color:#ffc700;font-size:13px;font-weight:950;line-height:1.2;letter-spacing:-.075em;
+}
+@media(max-width:650px){.footer .mw-credit{width:100%;justify-content:center;}}
