@@ -552,4 +552,4 @@ body.wm-fullscreen{background:#111224;}
 body.wm-fullscreen .wm-credit-footer{display:none;}
 
 /* Use the same original MW mark on the Wer muss?! desktop footer. */
-.wm-credit-footer img.mw-credit-mark{display:block;width:34px;height:34px;flex:none;object-fit:contain;border:0;border-radius:8px;padding:0;background:transparent;box-shadow:none;}
+.wm-credit-footer img.mw-credit-mark{display:block;width:69px;height:29px;flex:none;object-fit:contain;border:0;border-radius:0;padding:0;background:transparent;box-shadow:none;}
